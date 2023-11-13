@@ -28,7 +28,7 @@
     "commands": [
       {
         "command": "tamagotchi.openGarden",
-        "title": "Open Garden"
+        "title": "Tamagotchi: Open Garden"
       },
       {
         "command": "tamagotchi.updateKeystrokeCount",

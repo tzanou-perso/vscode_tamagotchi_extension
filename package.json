@@ -51,6 +51,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "vscode:package": "tsc -p ./ && vsce package",
+    "vscode:publish:minor": "vsce publish minor",
+    "vscode:publish:major": "vsce publish major",
+    "vscode:publish:patch": "vsce publish patch",
     "compile:panel": "webpack",
     "watch:panel": "webpack --watch",
     "compile": "tsc -p ./",

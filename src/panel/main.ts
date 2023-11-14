@@ -31,6 +31,16 @@ setTimeout(async () => {
   const tamagotchiMoveTicker = app.ticker;
   console.log("pixi app created");
 
+  // on window resize, resize the canvas too
+  window.addEventListener("resize", () => {
+    app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
+    // set all pets y to bottom of screen
+    for (let pet of pets) {
+      pet.animatedSprite.y =
+        app.renderer.height - pets[0].animatedSprite.height;
+    }
+  });
+
   // Adding the application's view to the DOM
   document.body.appendChild(app.view);
 

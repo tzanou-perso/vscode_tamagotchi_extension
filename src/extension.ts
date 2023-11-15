@@ -46,10 +46,28 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeTextDocument((event) => {
       // console.log('onDidChangeTextDocument', event);
       // Send the keystroke count to the webview
+      // file number of characters
+      let numberOfCharacters = event.document.getText().length;
       vscode.commands.executeCommand(
         "tamagotchi.updateKeystrokeCount",
-        keystrokeCount
+        numberOfCharacters
       );
+    })
+  );
+  // on new file opened or created, send message to webview to create new pet
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor((event) => {
+      console.log("onDidChangeActiveTextEditor", event);
+      let numberOfCharacters;
+      let fileId;
+      if (event) {
+        fileId = event.document.uri.path;
+        numberOfCharacters = event.document.getText().length;
+      }
+      vscode.commands.executeCommand("tamagotchi.documentOpened", {
+        numberOfCharacters,
+        fileId,
+      });
     })
   );
 }
@@ -70,10 +88,20 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
     // Send a message to the webview
     // webviewView.webview.postMessage({ tamagotchiImages: imageDataUrl });
     // let stroke = 0;
-    // vscode.commands.registerCommand("tamagotchi.updateKeystrokeCount", () => {
-    //   stroke += 1;
-    //   webviewView.webview.postMessage({ stroke: stroke });
-    // });
+    vscode.commands.registerCommand(
+      "tamagotchi.updateKeystrokeCount",
+      (numberOfCharacters) => {
+        webviewView.webview.postMessage({ stroke: numberOfCharacters });
+      }
+    );
+    vscode.commands.registerCommand(
+      "tamagotchi.documentOpened",
+      (numberOfCharacter) => {
+        webviewView.webview.postMessage({
+          fileOpened: numberOfCharacter,
+        });
+      }
+    );
 
     this._view = webviewView;
     webviewView.webview.options = {
@@ -82,6 +110,16 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
     };
     const webview = webviewView.webview;
     webviewView.webview.html = this.getHtmlForWebview(webview);
+    setTimeout(() => {
+      if (vscode.window.activeTextEditor != null) {
+        let activeDocument = vscode.window.activeTextEditor.document;
+        let numberOfCharacters = activeDocument.getText().length;
+        let fileId = activeDocument.uri.path;
+        webview.postMessage({
+          fileOpened: { numberOfCharacters, fileId },
+        });
+      }
+    }, 1000);
   }
 
   private getHtmlForWebview(webview: vscode.Webview) {

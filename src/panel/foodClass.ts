@@ -43,7 +43,6 @@ export default class FoodClass {
     x: number;
     y: number;
   }) {
-    console.log("addFoodToStage", app, app.stage);
     const foodSheetLoaded = await PIXI.Assets.load(foodSheet);
     // const foodSheetTexture = PIXI.Texture.from(foodSheetLoaded.baseTexture);
     let foodPosition = this._foodList[this.type];
@@ -81,7 +80,7 @@ export default class FoodClass {
   };
 
   public async removeFoodFromStage({ app }: { app: PIXI.Application }) {
-    console.log("removeFoodFromStage", app, app.stage);
+    // console.log("removeFoodFromStage", app, app.stage);
     let t: PIXI.DisplayObject;
     return app.stage.removeChild(this.foodSprite as PIXI.DisplayObject);
   }

@@ -23,7 +23,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:explorer"
+    "onView:explorer",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -45,7 +46,11 @@
       },
       {
         "command": "tamagotchi.updateKeystrokeCount",
-        "title": "updateKeystrokeCount"
+        "title": "Tamagotchi: Update Keystroke Count"
+      },
+      {
+        "command": "tamagotchi.documentOpened",
+        "title": "Tamagotchi: Document Opened"
       }
     ]
   },

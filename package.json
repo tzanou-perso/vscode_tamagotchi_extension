@@ -2,7 +2,7 @@
   "name": "tamagotchi",
   "displayName": "tamagotchi",
   "description": "Welcome to the Tamagotchi VS-Code Extension, a fun and interactive game that brings the joy of raising Tamagotchi pets right into your favorite code editor.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "publisher": "Tzanou",
   "engines": {
     "vscode": "^1.84.0"

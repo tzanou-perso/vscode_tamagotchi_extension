@@ -44,12 +44,16 @@ Initial beta release of Tamagotchi VS-Code Extension
 
 ### 0.0.3
 
-Added one more pet sprite
-Added one pet family for each file edited
-When switching between files, if the file focused as already a pet family, the pet family is loaded
-Support Copy and Paste
-When opening a new file, the pet family is reset and a pets are created and feeded with the file content
+- Added one more pet sprite
+- Added one pet family for each file edited
+- When switching between files, if the file focused as already a pet family, the pet family is loaded
+- Support Copy and Paste
+- When opening a new file, the pet family is reset and a pets are created and feeded with the file content
 
+### 0.0.4
+
+- Change the decoration of the scene
+- Small bug fixes
 
 ---
 

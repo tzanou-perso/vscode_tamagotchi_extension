@@ -135,7 +135,7 @@ export default class PetClass {
       this.animatedSprite.x =
         app.renderer.width / 2 - this.animatedSprite.width / 2;
       this.animatedSprite.y =
-        app.renderer.height / 2 - this.animatedSprite.height / 2;
+        app.renderer.height / 2 - this.animatedSprite.height / 2 - 5;
     }
     if (
       this.growth === IPetGrowth.old &&
@@ -144,7 +144,8 @@ export default class PetClass {
     ) {
       this.isFallen = true;
       // let fall slowlly the pet from his current position to the bottom of the screen
-      this.animatedSprite.y += 0.3;
+      this.animatedSprite.y += 3;
+      this.animatedSprite.scale.set(1, 1);
     } else {
       this.isFallen = false;
     }
@@ -208,6 +209,7 @@ export default class PetClass {
               animations: this.animationsPossibility[this.growth].walk,
               app: app,
             });
+            this.animatedSprite.scale.set(1, 1);
           } else {
             await this.updateAnimatedSprite({
               animations: this.animationsPossibility[this.growth].idle,
@@ -220,7 +222,7 @@ export default class PetClass {
           (app.view.width - this.animatedSprite.width) / 2;
         if (!this.isFallen)
           this.animatedSprite.y =
-            app.view.height / 2 - this.animatedSprite.height / 2;
+            app.view.height / 2 - this.animatedSprite.height / 2 - 5;
         this.moveDir = +1;
       }, time);
     }

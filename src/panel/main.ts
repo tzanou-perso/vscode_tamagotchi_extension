@@ -1,6 +1,9 @@
 import * as PIXI from "pixi.js";
 import * as tamagotchiJson from "../media/images/pets/tamagotchi/tamagotchi.json";
-import tamagotchiImages from "../media/images/pets/tamagotchi/tamagotchi.png";
+import backgroundImageTop from "../media/images/background/first/top.png";
+import backgroundImageBottom from "../media/images/background/first/bottom.png";
+import backgroundImageFull from "../media/images/background/first/full.png";
+import platformImage from "../media/images/background/first/platform.png";
 import PetClass from "./pet_class";
 import { IPet, IPetGrowth, petState, IAnimation } from "./pet_class";
 import { FoodList } from "./foodClass";
@@ -10,6 +13,11 @@ type FilesSaved = {
   fileId: string;
   pets: PetClass[];
   keystrokeCount: number;
+};
+
+type BgCover = {
+  container: PIXI.Container<PIXI.DisplayObject>;
+  doResize: () => void;
 };
 
 console.log("main.js loaded");
@@ -35,8 +43,12 @@ basicText.style = new PIXI.TextStyle({
 });
 
 setTimeout(async () => {
+  let backgroundCoverTop: BgCover;
+  let backgroundCoverBottom: BgCover;
+  let backgroundCoverFull: BgCover;
+  let platformSpriteInited: PIXI.Sprite;
   let app: PIXI.Application<HTMLCanvasElement>;
-  const initApp = () => {
+  const initApp = async () => {
     // background color same as theme background color
     app = new PIXI.Application<HTMLCanvasElement>({
       backgroundColor: 0x1e1e1e,
@@ -47,36 +59,44 @@ setTimeout(async () => {
 
     const line = new PIXI.Graphics();
     //line color
-    line.lineStyle(4, 0x00ccffff, 1);
+    line.lineStyle(4, 0x00ccffff, 0.1);
     line.moveTo(0, app.renderer.height / 2);
     line.lineTo(app.renderer.width, app.renderer.height / 2);
-    app.stage.addChild(line as PIXI.DisplayObject);
+    // app.stage.addChild(line as PIXI.DisplayObject);
 
+    // clear document body
+    document.body.innerHTML = "";
+    // Adding the application's view to the DOM
+    document.body.appendChild(app.view);
+    await setBackgroundImage();
     // on window resize, resize the canvas too
-    window.addEventListener("resize", () => {
+    window.addEventListener("resize", async () => {
+      // app.stage.removeChild(backgroundCoverTop.container);
+      // app.stage.removeChild(backgroundCoverBottom.container);
+      app.stage.removeChild(backgroundCoverFull.container);
+      app.stage.removeChild(platformSpriteInited);
       app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
+      await setBackgroundImage();
+
       // move line to middle of screen
       line.clear();
       line.lineStyle(4, 0x00ccffff, 1);
       line.moveTo(0, app.renderer.height / 2);
       line.lineTo(app.renderer.width, app.renderer.height / 2);
-      app.stage.addChild(line as PIXI.DisplayObject);
+      // app.stage.addChild(line as PIXI.DisplayObject);
       // set all pets y to bottom of screen
       for (let pet of activeFile.pets) {
         if (pet.growth === IPetGrowth.old) {
           pet.animatedSprite.y =
             app.renderer.height - pet.animatedSprite.height / 2;
         } else {
+          pet.animatedSprite.x =
+            (app.renderer.width - pet.animatedSprite.width) / 2;
           pet.animatedSprite.y =
-            app.renderer.height / 2 -
-            activeFile.pets[0].animatedSprite.height / 2;
+            app.renderer.height / 2 - pet.animatedSprite.height / 2 - 5;
         }
       }
     });
-    // clear document body
-    document.body.innerHTML = "";
-    // Adding the application's view to the DOM
-    document.body.appendChild(app.view);
 
     // Add a variable to count up the seconds our demo has been running
     let elapsed = 0.0;
@@ -95,6 +115,68 @@ setTimeout(async () => {
       // Update the sprite's to let him walk across the screen horizontally
       // from left to right if he is not at the right side of the screen
     });
+  };
+
+  let setBackgroundImage = async () => {
+    // const backgroundSpriteTop = await PIXI.Assets.load(backgroundImageTop);
+    // const containerSize = {
+    //   x: app.renderer.width,
+    //   y: app.renderer.height / 2,
+    // };
+
+    // backgroundCoverTop = background(
+    //   containerSize,
+    //   new PIXI.Sprite(backgroundSpriteTop),
+    //   "cover"
+    // );
+    // app.stage.addChildAt(backgroundCoverTop.container, 0);
+    // backgroundCoverTop.container.alpha = 0.3;
+    // const backgroundSpriteBottom = await PIXI.Assets.load(
+    //   backgroundImageBottom
+    // );
+    // const containerSizeBottom = {
+    //   x: app.renderer.width,
+    //   y: app.renderer.height / 2,
+    // };
+    // backgroundCoverBottom = background(
+    //   containerSizeBottom,
+    //   new PIXI.Sprite(backgroundSpriteBottom),
+    //   "cover"
+    // );
+    // app.stage.addChildAt(backgroundCoverBottom.container, 0);
+    // backgroundCoverBottom.container.y = app.renderer.height / 2;
+    // backgroundCoverBottom.container.alpha = 1;
+
+    // add platform to center of screen in width and height
+
+    const backgroundSpriteFull = await PIXI.Assets.load(backgroundImageFull);
+    const containerSize = {
+      x: app.renderer.width,
+      y: app.renderer.height,
+    };
+
+    backgroundCoverFull = background(
+      containerSize,
+      new PIXI.Sprite(backgroundSpriteFull),
+      "coverFromBottom"
+    );
+    app.stage.addChildAt(backgroundCoverFull.container, 0);
+    backgroundCoverFull.container.alpha = 1;
+
+    const platformSprite = await PIXI.Assets.load(platformImage);
+    platformSpriteInited = new PIXI.Sprite(platformSprite);
+    platformSpriteInited.width =
+      app.renderer.width / 3 <= 180 ? 180 : app.renderer.width / 3;
+    // keep ratio for height with the new width
+    platformSpriteInited.height =
+      (platformSpriteInited.height * platformSpriteInited.width) /
+      platformSprite.width;
+    platformSpriteInited.anchor.set(0, -0.5);
+    app.stage.addChildAt(platformSpriteInited, 1);
+    platformSpriteInited.x =
+      (app.renderer.width - platformSpriteInited.width) / 2;
+    platformSpriteInited.y =
+      app.renderer.height / 2 - platformSpriteInited.height / 2 - 20;
   };
 
   const saveFile = ({ file }: { file: FilesSaved }) => {
@@ -153,11 +235,13 @@ setTimeout(async () => {
           // else upate it
           if (app !== undefined)
             app.stage.addChild(newPet.animatedSprite as PIXI.DisplayObject);
+          newPet.animatedSprite.scale.set(2, 2);
           // y in middle of screen
           activeFile.pets[activeFile.pets.length - 1].animatedSprite.y =
             app.renderer.height / 2 -
             activeFile.pets[activeFile.pets.length - 1].animatedSprite.height /
-              2;
+              2 -
+            5;
           // set pet to center of screen
           activeFile.pets[activeFile.pets.length - 1].animatedSprite.x =
             (appWidth -
@@ -295,12 +379,15 @@ setTimeout(async () => {
       });
 
       app.stage.addChild(firstPet.animatedSprite as PIXI.DisplayObject);
+      firstPet.animatedSprite.scale.set(2, 2);
 
       activeFile.pets.push(firstPet);
       saveFile({ file: activeFile });
 
       activeFile.pets[0].animatedSprite.y =
-        app.renderer.height / 2 - activeFile.pets[0].animatedSprite.height / 2;
+        app.renderer.height / 2 -
+        activeFile.pets[0].animatedSprite.height / 2 -
+        5;
 
       // set pet to center of screen
       activeFile.pets[0].animatedSprite.x =
@@ -321,4 +408,74 @@ setTimeout(async () => {
       app.stage.addChild(basicText as PIXI.DisplayObject);
     }
   });
+
+  /*
+   *  PixiJS Background Cover/Contain Script
+   *   Returns object
+   * . {
+   *       container: PixiJS Container
+   * .     doResize: Resize callback
+   *   }
+   *   ARGS:
+   *   bgSize: Object with x and y representing the width and height of background. Example: {x:1280,y:720}
+   *   inputSprite: Pixi Sprite containing a loaded image or other asset.  Make sure you preload assets into this sprite.
+   *   type: String, either "cover" or "contain".
+   *   forceSize: Optional object containing the width and height of the source sprite, example:  {x:1280,y:720}
+   */
+  function background(
+    bgSize: { x: number; y: number },
+    inputSprite: PIXI.Sprite,
+    type: string,
+    forceSize: { x: number; y: number } | undefined = undefined
+  ): BgCover {
+    var sprite = inputSprite;
+    var bgContainer = new PIXI.Container();
+    var mask = new PIXI.Graphics()
+      .beginFill(0x8bc5ff)
+      .drawRect(0, 0, bgSize.x, bgSize.y)
+      .endFill();
+    bgContainer.mask = mask;
+    bgContainer.addChild(mask);
+    bgContainer.addChild(sprite);
+
+    function resize() {
+      var sp = { x: sprite.width, y: sprite.height };
+      if (forceSize) sp = forceSize;
+      var winratio = bgSize.x / bgSize.y;
+      var spratio = sp.x / sp.y;
+      var scale = 1;
+      var pos = new PIXI.Point(0, 0);
+
+      if (type === "coverFromBottom") {
+        if (winratio > spratio) {
+          scale = bgSize.x / sp.x;
+        } else {
+          scale = bgSize.y / sp.y;
+          pos.x = (bgSize.x - sp.x * scale) / 2;
+        }
+        pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
+        // sprite.anchor.set(1, 1);
+      }
+      if (type === "cover") {
+        if (type == "cover" ? winratio > spratio : winratio < spratio) {
+          //photo is wider than background
+          scale = bgSize.x / sp.x;
+          pos.y = -(sp.y * scale - bgSize.y) / 2;
+        } else {
+          //photo is taller than background
+          scale = 1;
+          pos.x = -(sp.x * scale - bgSize.x) / 2;
+        }
+      }
+      sprite.scale = new PIXI.Point(scale, scale);
+      sprite.position = pos;
+    }
+
+    resize();
+    const res: BgCover = {
+      container: bgContainer,
+      doResize: resize,
+    };
+    return res;
+  }
 }, 0);

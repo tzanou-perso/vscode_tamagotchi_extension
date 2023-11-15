@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import * as tamagotchiJson from "../../media/images/pets/tamagotchi/tamagotchi.json";
-import tamagotchiImages from "../../media/images/pets/tamagotchi/tamagotchi.png";
+import * as tamagotchiJson from "../media/images/pets/tamagotchi/tamagotchi.json";
+import tamagotchiImages from "../media/images/pets/tamagotchi/tamagotchi.png";
 import PetClass from "./pet_class";
 import { IPet, IPetGrowth, petState, IAnimation } from "./pet_class";
 import { FoodList } from "./foodClass";

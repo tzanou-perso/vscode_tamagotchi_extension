@@ -1,5 +1,5 @@
-import * as tamagotchiJson from "../../media/images/pets/tamagotchi/tamagotchi.json";
-import tamagotchiImages from "../../media/images/pets/tamagotchi/tamagotchi.png";
+import * as tamagotchiJson from "../media/images/pets/tamagotchi/tamagotchi.json";
+import tamagotchiImages from "../media/images/pets/tamagotchi/tamagotchi.png";
 import * as PIXI from "pixi.js";
 import { FoodList, FoodClassType } from "./foodClass";
 import FoodClass from "./foodClass";

@@ -73,8 +73,10 @@ setTimeout(async () => {
     window.addEventListener("resize", async () => {
       // app.stage.removeChild(backgroundCoverTop.container);
       // app.stage.removeChild(backgroundCoverBottom.container);
-      app.stage.removeChild(backgroundCoverFull.container);
-      app.stage.removeChild(platformSpriteInited);
+      app.stage.removeChild(
+        backgroundCoverFull.container as PIXI.DisplayObject
+      );
+      app.stage.removeChild(platformSpriteInited as PIXI.DisplayObject);
       app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
       await setBackgroundImage();
 
@@ -160,7 +162,10 @@ setTimeout(async () => {
       new PIXI.Sprite(backgroundSpriteFull),
       "coverFromBottom"
     );
-    app.stage.addChildAt(backgroundCoverFull.container, 0);
+    app.stage.addChildAt(
+      backgroundCoverFull.container as PIXI.DisplayObject,
+      0
+    );
     backgroundCoverFull.container.alpha = 1;
 
     const platformSprite = await PIXI.Assets.load(platformImage);
@@ -172,7 +177,7 @@ setTimeout(async () => {
       (platformSpriteInited.height * platformSpriteInited.width) /
       platformSprite.width;
     platformSpriteInited.anchor.set(0, -0.5);
-    app.stage.addChildAt(platformSpriteInited, 1);
+    app.stage.addChildAt(platformSpriteInited as PIXI.DisplayObject, 1);
     platformSpriteInited.x =
       (app.renderer.width - platformSpriteInited.width) / 2;
     platformSpriteInited.y =
@@ -435,8 +440,8 @@ setTimeout(async () => {
       .drawRect(0, 0, bgSize.x, bgSize.y)
       .endFill();
     bgContainer.mask = mask;
-    bgContainer.addChild(mask);
-    bgContainer.addChild(sprite);
+    bgContainer.addChild(mask as PIXI.DisplayObject);
+    bgContainer.addChild(sprite as PIXI.DisplayObject);
 
     function resize() {
       var sp = { x: sprite.width, y: sprite.height };

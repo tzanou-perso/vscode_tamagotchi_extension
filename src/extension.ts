@@ -125,7 +125,7 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
   private getHtmlForWebview(webview: vscode.Webview) {
     const scriptUriMain = webview.asWebviewUri(
       vscode.Uri.file(
-        path.join(this._extensionUri.fsPath, "src/media", "main-bundle.js")
+        path.join(this._extensionUri.fsPath, "media", "main-bundle.js")
       )
     );
 

@@ -67,8 +67,8 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "publish:patch": "npm version patch && git push",
-    "publish:minor": "npm version minor && git push",
+    "publish:patch": "npm version patch && git push && git push origin --tags",
+    "publish:minor": "npm version minor && git push && git push origin --tags",
     "publish:major": "npm version major && git push && git push origin --tags"
   },
   "devDependencies": {

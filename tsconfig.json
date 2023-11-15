@@ -7,7 +7,7 @@
 		],
 		"resolveJsonModule": true,
 		"sourceMap": true,
-		"rootDir": "src",
+		"rootDirs": ["src", "media"],
 		"strict": true,   /* enable all strict type-checking options */
 		"skipLibCheck": true,
 		/* Additional Checks */

@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/Tzanou123/vscode_tamagotchi_extension"
   },
-  "icon": "icon.png",
+  "icon": "media/icon.png",
   "keywords": [
     "tamagotchi",
     "game",
@@ -35,7 +35,7 @@
           "id": "tamagotchi_garden",
           "name": "Tamagotchi",
           "when": "tamagotchi.position == 'explorer'",
-          "icon": "src/media/dog.svg"
+          "icon": "media/dog.svg"
         }
       ]
     },

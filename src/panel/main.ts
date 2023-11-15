@@ -1,9 +1,9 @@
 import * as PIXI from "pixi.js";
-import * as tamagotchiJson from "../media/images/pets/tamagotchi/tamagotchi.json";
-import backgroundImageTop from "../media/images/background/first/top.png";
-import backgroundImageBottom from "../media/images/background/first/bottom.png";
-import backgroundImageFull from "../media/images/background/first/full.png";
-import platformImage from "../media/images/background/first/platform.png";
+import * as tamagotchiJson from "../../media/images/pets/tamagotchi/tamagotchi.json";
+import backgroundImageTop from "../../media/images/background/first/top.png";
+import backgroundImageBottom from "../../media/images/background/first/bottom.png";
+import backgroundImageFull from "../../media/images/background/first/full.png";
+import platformImage from "../../media/images/background/first/platform.png";
 import PetClass from "./pet_class";
 import { IPet, IPetGrowth, petState, IAnimation } from "./pet_class";
 import { FoodList } from "./foodClass";

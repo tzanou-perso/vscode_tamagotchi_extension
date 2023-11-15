@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import foodSheet from "../media/images/foods/Food.png";
+import foodSheet from "../../media/images/foods/Food.png";
 import { type } from "os";
 
 export enum FoodList {

@@ -15,7 +15,7 @@ With this extension, every single character you write helps you grow your very o
 
 For example if there is an image subfolder under your extension project workspace:
 
-![feature X](https://github.com/Tzanou123/vscode_tamagotchi_extension/blob/master/src/media/demo.gif?raw=true)
+![feature X](https://github.com/Tzanou123/vscode_tamagotchi_extension/blob/master/media/demo.gif?raw=true)
 
 > Tip: Keep an eye on your pets as you code. You never know when they might evolve next!
 

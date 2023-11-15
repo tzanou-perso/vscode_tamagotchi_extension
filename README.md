@@ -21,6 +21,7 @@ For example if there is an image subfolder under your extension project workspac
 
 ## Requirements
 
+
 No special requirements or dependencies. Just install the extension and start growing your Tamagotchi pet family.
 
 ## How To Use

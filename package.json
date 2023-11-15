@@ -69,7 +69,7 @@
     "test": "node ./out/test/runTest.js",
     "publish:patch": "npm version patch && git push",
     "publish:minor": "npm version minor && git push",
-    "publish:major": "npm version major && git push"
+    "publish:major": "npm version major && git push && git push origin --tags"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",

@@ -1,19 +1,7 @@
-on: 
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
-      tags:
-        description: 'Test scenario tags'
-        required: false
-        type: boolean
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 
 name: Deploy Extension

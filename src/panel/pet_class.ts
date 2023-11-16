@@ -32,6 +32,7 @@ export type IPet = {
   moveDir: number;
   eachKeyCountBeforeEat: number;
   growth: IPetGrowth;
+  xpMultiplicator: number;
 };
 
 export type IPetClass = {
@@ -44,6 +45,7 @@ export type IPetClass = {
   xp: number;
   xpBarContainer: PIXI.Graphics;
   xpBarFill: PIXI.Graphics;
+  xpMultiplicator: number;
 };
 
 export type IAnimation = {
@@ -64,6 +66,7 @@ export default class PetClass {
   public xp: number = 0;
   public xpBarContainer: PIXI.Graphics;
   public xpBarFill: PIXI.Graphics;
+  public xpMultiplicator: number;
 
   constructor(pet: IPetClass) {
     this.state = pet.state;
@@ -75,6 +78,7 @@ export default class PetClass {
     this.xp = pet.xp;
     this.xpBarContainer = pet.xpBarContainer;
     this.xpBarFill = pet.xpBarFill;
+    this.xpMultiplicator = pet.xpMultiplicator;
   }
 
   public eatingFood: FoodClass[] = [];
@@ -253,21 +257,34 @@ export default class PetClass {
       this.xpBarFill.width = 0;
     } else {
       this.xp += food.xpValue;
-      if (this.xp <= this.animationsPossibility[IPetGrowth.egg].xpToLevelUp) {
+      if (
+        this.xp <=
+        this.animationsPossibility[IPetGrowth.egg].xpToLevelUp *
+          this.xpMultiplicator
+      ) {
         this.xpBarFill.width =
           (this.xp * this.xpBarContainer.width) /
-          this.animationsPossibility[growth].xpToLevelUp;
+          (this.animationsPossibility[growth].xpToLevelUp *
+            this.xpMultiplicator);
       } else {
         // get the grotwth preceding the current growth
         let lastGrowth: IPetGrowth =
           this.growth == 0 ? this.growth : this.growth - 1;
-        const xp = this.xp - this.animationsPossibility[lastGrowth].xpToLevelUp;
+        const xp =
+          this.xp -
+          this.animationsPossibility[lastGrowth].xpToLevelUp *
+            this.xpMultiplicator;
         this.xpBarFill.width =
           (xp * this.xpBarContainer.width) /
-          (this.animationsPossibility[growth].xpToLevelUp -
-            this.animationsPossibility[lastGrowth].xpToLevelUp);
+          (this.animationsPossibility[growth].xpToLevelUp *
+            this.xpMultiplicator -
+            this.animationsPossibility[lastGrowth].xpToLevelUp *
+              this.xpMultiplicator);
       }
-      if (this.xp === this.animationsPossibility[growth].xpToLevelUp) {
+      if (
+        this.xp ===
+        this.animationsPossibility[growth].xpToLevelUp * this.xpMultiplicator
+      ) {
         this.xpBarFill.width = 0;
         this.nextGrowth({ app: app });
       }
@@ -347,6 +364,7 @@ export default class PetClass {
       xp: 0,
       xpBarContainer: new PIXI.Graphics(),
       xpBarFill: new PIXI.Graphics(),
+      xpMultiplicator: pet.xpMultiplicator,
     });
 
     petClass.animatedSprite = await this.createAnimatedSprite({

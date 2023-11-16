@@ -56,6 +56,11 @@ Initial beta release of Tamagotchi VS-Code Extension
 - Change the decoration of the scene
 - Small bug fixes
 
+### 0.2.5
+
+- Add a logaritmic scale for the pet growth to avoid having to much pets with very large files and for more fun ^^
+- Some bug fixes
+
 ---
 
 **Enjoy!**

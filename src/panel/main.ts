@@ -231,11 +231,8 @@ setTimeout(async () => {
     if (newCharacterCount > 0) {
       isInFeed = true;
     }
-    for (
-      let i = 0;
-      i < (newCharacterCount > 5000 ? 5000 : newCharacterCount);
-      i++
-    ) {
+    newCharacterCount = newCharacterCount > 100000 ? 100000 : newCharacterCount;
+    for (let i = 0; i < newCharacterCount; i++) {
       // stop the for loop if event with name newWindowOpened is received
       setTimeout(async () => {
         const isThereNotAnyPetToFeed: boolean =
@@ -244,12 +241,17 @@ setTimeout(async () => {
           (activeFile.pets.length === 1 &&
             activeFile.pets[0].growth === IPetGrowth.old);
         if (isThereNotAnyPetToFeed) {
+          const xpMultiplicator = calculateLevelMultiplier(
+            activeFile.pets.length
+          );
+
           let newPet: PetClass = await PetClass.create({
             state: petState.idle,
             elapsed: 0.0,
             moveDir: 0,
             eachKeyCountBeforeEat: 1,
             growth: IPetGrowth.egg,
+            xpMultiplicator: xpMultiplicator,
           });
           activeFile.pets.push(newPet);
           // add activeFiles in savedFiles id not already there
@@ -295,6 +297,26 @@ setTimeout(async () => {
       // if last iteration, save file
     }
   };
+
+  function calculateLevelMultiplier(level: number) {
+    // Adjust the base value for the initial growth
+    const initialBase = 1;
+
+    const laterBase = 1.08;
+
+    // Threshold level after which the multiplier remains constant
+    const thresholdLevel = 50;
+
+    // Calculate the level multiplier using different formulas before and after the threshold
+    let multiplier;
+    if (level <= thresholdLevel) {
+      multiplier = Math.round(Math.pow(level / 50 + 1, initialBase));
+    } else {
+      multiplier = Math.round(Math.pow(level, laterBase));
+    }
+
+    return multiplier;
+  }
 
   window.addEventListener("message", async (event) => {
     console.log("event received", event.data);
@@ -395,13 +417,13 @@ setTimeout(async () => {
         pets: [],
         keystrokeCount: numberOfCharacters,
       };
-
       let firstPet: PetClass = await PetClass.create({
         state: petState.idle,
         elapsed: 0.0,
         moveDir: 0,
         eachKeyCountBeforeEat: 1,
         growth: IPetGrowth.egg,
+        xpMultiplicator: 1,
       });
 
       app.stage.addChild(firstPet.animatedSprite as PIXI.DisplayObject);

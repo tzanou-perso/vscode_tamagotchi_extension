@@ -15,6 +15,8 @@ declare namespace GlobalMixins {
   }
 }
 
+let fileId = "";
+
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -54,6 +56,8 @@ export function activate(context: vscode.ExtensionContext) {
       );
     })
   );
+  // save config
+
   // on new file opened or created, send message to webview to create new pet
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((event) => {
@@ -109,6 +113,27 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     };
     const webview = webviewView.webview;
+    webview.onDidReceiveMessage((data) => {
+      if (data.command === "isInitialized") {
+        console.log("isInitialized", data.text);
+        let fileFromFileId = vscode.workspace.textDocuments.find(
+          (file) => file.uri.path === fileId
+        );
+        // get number of characters in file
+        let numberOfCharacters = fileFromFileId?.getText().length;
+        // send the file id to the webview
+        webview.postMessage({
+          initialised: {
+            numberOfCharacters,
+            fileId,
+          },
+        });
+      } else if (data.command === "setInitialised") {
+        console.log("setInitialised", data.text);
+        fileId = data.text;
+        // save the file id to the config
+      }
+    });
     webviewView.webview.html = this.getHtmlForWebview(webview);
     setTimeout(() => {
       if (vscode.window.activeTextEditor != null) {
@@ -128,7 +153,6 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
         path.join(this._extensionUri.fsPath, "media", "main-bundle.js")
       )
     );
-
     // const styleUri = webview.asWebviewUri(vscode.Uri.file(
     // 	path.join(this._extensionUri.fsPath, 'media', 'styles.css')
     // ));
@@ -136,12 +160,15 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
             <!DOCTYPE html>
             <html lang="en">
             <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Tamagotchi Garden</title>
-                </head>
-                <body>
-				<script src="${scriptUriMain}"></script>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Tamagotchi Garden</title>
+            </head>
+            <body>
+              <script src="${scriptUriMain}"></script>
+              <script>
+                const vscode = acquireVsCodeApi();
+              </script>
             </body>
             </html>`;
   }

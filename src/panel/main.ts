@@ -7,6 +7,13 @@ import platformImage from "../../media/images/background/first/platform.png";
 import PetClass from "./pet_class";
 import { IPet, IPetGrowth, petState, IAnimation } from "./pet_class";
 import { FoodList } from "./foodClass";
+import { WebviewMessage } from "../types/types";
+declare global {
+  interface VscodeStateApi {
+    postMessage(message: WebviewMessage): void;
+  }
+  const vscode: VscodeStateApi;
+}
 
 type FilesSaved = {
   numberOfCharacters: number;
@@ -21,6 +28,7 @@ type BgCover = {
 };
 
 console.log("main.js loaded");
+let stateApi: VscodeStateApi;
 let filesSaved: FilesSaved[] = [];
 let activeFile: FilesSaved = {
   numberOfCharacters: 0,
@@ -43,6 +51,10 @@ basicText.style = new PIXI.TextStyle({
 });
 
 setTimeout(async () => {
+  vscode.postMessage({
+    text: "isInitialized",
+    command: "isInitialized",
+  });
   let backgroundCoverTop: BgCover;
   let backgroundCoverBottom: BgCover;
   let backgroundCoverFull: BgCover;
@@ -219,7 +231,11 @@ setTimeout(async () => {
     if (newCharacterCount > 0) {
       isInFeed = true;
     }
-    for (let i = 0; i < newCharacterCount; i++) {
+    for (
+      let i = 0;
+      i < (newCharacterCount > 5000 ? 5000 : newCharacterCount);
+      i++
+    ) {
       // stop the for loop if event with name newWindowOpened is received
       setTimeout(async () => {
         const isThereNotAnyPetToFeed: boolean =
@@ -281,7 +297,8 @@ setTimeout(async () => {
   };
 
   window.addEventListener("message", async (event) => {
-    console.log("event received", event.data); // Outputs: Hello, world!
+    console.log("event received", event.data);
+
     if (event.data.stroke !== undefined) {
       do {
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -308,12 +325,24 @@ setTimeout(async () => {
     }
 
     if (
-      event.data.fileOpened !== undefined &&
-      event.data.fileOpened.fileId !== undefined
+      (event.data.fileOpened !== undefined &&
+        event.data.fileOpened.fileId !== undefined) ||
+      (event.data.initialised !== undefined &&
+        event.data.initialised.fileId !== undefined &&
+        event.data.initialised.numberOfCharacters !== undefined)
     ) {
+      let fileId =
+        event.data.fileOpened?.fileId ?? event.data.initialised.fileId;
+      let numberOfCharacters =
+        event.data.fileOpened?.numberOfCharacters ??
+        event.data.initialised.numberOfCharacters;
       do {
         await new Promise((resolve) => setTimeout(resolve, 100));
       } while (isInFeed);
+      vscode.postMessage({
+        text: fileId,
+        command: "setInitialised",
+      });
       if (event.data.backgroundColor !== undefined) {
         // set app background color
         app.renderer.background.color = event.data.backgroundColor;
@@ -323,29 +352,23 @@ setTimeout(async () => {
         app.destroy();
       }
       initApp();
-      basicText.text = `code typed: ${event.data.fileOpened.numberOfCharacters}`;
+      basicText.text = `code typed: ${numberOfCharacters}`;
       // remove all pets
       activeFile.pets.forEach((pet) => {
         app.stage.removeChild(pet.animatedSprite as PIXI.DisplayObject);
       });
       // if file already opened, do nothing
-      if (
-        filesSaved.filter(
-          (file) => file.fileId === event.data.fileOpened.fileId
-        ).length > 0
-      ) {
+      if (filesSaved.filter((file) => file.fileId === fileId).length > 0) {
         // get file from savedFiles
         const fileFromSaved = filesSaved.filter(
-          (file) => file.fileId === event.data.fileOpened.fileId
+          (file) => file.fileId === fileId
         )[0];
         // if any pet of activeFile eatingFood array is not empty remove the activeFile from savedFiles
         if (
           fileFromSaved.pets.filter((pet) => pet.eatingFood.length > 0)
             .length === 0
         ) {
-          activeFile = filesSaved.filter(
-            (file) => file.fileId === event.data.fileOpened.fileId
-          )[0];
+          activeFile = filesSaved.filter((file) => file.fileId === fileId)[0];
           activeFile.pets.forEach((pet) => {
             app.stage.addChild(pet.animatedSprite as PIXI.DisplayObject);
             if (pet.growth === IPetGrowth.old) {
@@ -363,16 +386,14 @@ setTimeout(async () => {
           return;
         } else {
           // remove file from savedFiles
-          filesSaved = filesSaved.filter(
-            (file) => file.fileId !== event.data.fileOpened.fileId
-          );
+          filesSaved = filesSaved.filter((file) => file.fileId !== fileId);
         }
       }
       activeFile = {
-        numberOfCharacters: event.data.fileOpened.numberOfCharacters,
-        fileId: event.data.fileOpened.fileId,
+        numberOfCharacters: numberOfCharacters,
+        fileId: fileId,
         pets: [],
-        keystrokeCount: event.data.fileOpened.numberOfCharacters,
+        keystrokeCount: numberOfCharacters,
       };
 
       let firstPet: PetClass = await PetClass.create({

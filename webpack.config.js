@@ -53,7 +53,7 @@ const desktopConfig = {
     main: "./src/panel/main.ts",
   },
   output: {
-    path: path.resolve(__dirname, './src/media'),
+    path: path.resolve(__dirname, './media'),
     filename: "[name]-bundle.js", // <--- Will be compiled to this single file
     library: {
       name: 'tamagotchiApp',
@@ -154,4 +154,4 @@ const webExtensionConfig = {
   },
   devtool: 'nosources-source-map', // create a source map that points to the original source file
 };
-module.exports = [extensionConfig, desktopConfig, webExtensionConfig];
+module.exports = [extensionConfig, desktopConfig,];

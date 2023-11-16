@@ -3,6 +3,8 @@
   "displayName": "tamagotchi",
   "description": "Welcome to the Tamagotchi VS-Code Extension, a fun and interactive game that brings the joy of raising Tamagotchi pets right into your favorite code editor.",
   "version": "0.2.5",
+  "homepage": "https://github.com/Tzanou123/vscode_tamagotchi_extension",
+  "bugs": "https://github.com/Tzanou123/vscode_tamagotchi_extension/issues",
   "publisher": "Tzanou",
   "engines": {
     "vscode": "^1.84.0"
@@ -12,12 +14,28 @@
     "url": "https://github.com/Tzanou123/vscode_tamagotchi_extension"
   },
   "icon": "media/icon.png",
+  "license": "MIT",
   "keywords": [
     "tamagotchi",
     "game",
     "pet",
     "fun",
-    "interactive"
+    "interactive",
+    "pet",
+    "monster",
+    "pokemon",
+    "creature",
+    "motivation",
+    "productivity",
+    "animal",
+    "friend",
+    "companion",
+    "cat",
+    "chicken",
+    "dog",
+    "pets",
+    "clippy",
+    "rubber duck"
   ],
   "categories": [
     "Other"

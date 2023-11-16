@@ -399,7 +399,8 @@ setTimeout(async () => {
             } else {
               pet.animatedSprite.y =
                 app.renderer.height / 2 -
-                activeFile.pets[0].animatedSprite.height / 2;
+                activeFile.pets[0].animatedSprite.height / 2 -
+                10;
             }
             // set pet to center of screen
             pet.animatedSprite.x =

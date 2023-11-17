@@ -4,9 +4,9 @@ import backgroundImageTop from "../../media/images/background/first/top.png";
 import backgroundImageBottom from "../../media/images/background/first/bottom.png";
 import backgroundImageFull from "../../media/images/background/first/full.png";
 import platformImage from "../../media/images/background/first/platform.png";
-import PetClass from "./pet_class";
-import { IPet, IPetGrowth, petState, IAnimation } from "./pet_class";
-import { FoodList } from "./foodClass";
+import PetClass from "./chill/pet/pet_class";
+import { IPet, IPetGrowth, petState, IAnimation } from "./chill/pet/pet_class";
+import { FoodList } from "./chill/food/foodClass";
 import { WebviewMessage } from "../types/types";
 declare global {
   interface VscodeStateApi {
@@ -26,6 +26,8 @@ type BgCover = {
   container: PIXI.Container<PIXI.DisplayObject>;
   doResize: () => void;
 };
+
+const petXpToLevelUp = 60;
 
 console.log("main.js loaded");
 let stateApi: VscodeStateApi;
@@ -235,45 +237,8 @@ setTimeout(async () => {
     for (let i = 0; i < newCharacterCount; i++) {
       // stop the for loop if event with name newWindowOpened is received
       setTimeout(async () => {
-        const isThereNotAnyPetToFeed: boolean =
-          activeFile.pets.every((pet) => pet.growth === IPetGrowth.old) ||
-          activeFile.pets.length === 0 ||
-          (activeFile.pets.length === 1 &&
-            activeFile.pets[0].growth === IPetGrowth.old);
-        if (isThereNotAnyPetToFeed) {
-          const xpMultiplicator = calculateLevelMultiplier(
-            activeFile.pets.length
-          );
+        console.log("isdsdsdsdsdsd", activeFile.pets);
 
-          let newPet: PetClass = await PetClass.create({
-            state: petState.idle,
-            elapsed: 0.0,
-            moveDir: 0,
-            eachKeyCountBeforeEat: 1,
-            growth: IPetGrowth.egg,
-            xpMultiplicator: xpMultiplicator,
-          });
-          activeFile.pets.push(newPet);
-          // add activeFiles in savedFiles id not already there
-          // else upate it
-          if (app !== undefined)
-            app.stage.addChild(newPet.animatedSprite as PIXI.DisplayObject);
-          newPet.animatedSprite.scale.set(2, 2);
-          // y in middle of screen
-          activeFile.pets[activeFile.pets.length - 1].animatedSprite.y =
-            app.renderer.height / 2 -
-            activeFile.pets[activeFile.pets.length - 1].animatedSprite.height /
-              2 -
-            5;
-          // set pet to center of screen
-          activeFile.pets[activeFile.pets.length - 1].animatedSprite.x =
-            (appWidth -
-              activeFile.pets[activeFile.pets.length - 2].animatedSprite
-                .width) /
-              2 +
-            offsetX;
-          saveFile({ file: activeFile });
-        }
         for (let pet of activeFile.pets) {
           if (
             activeFile.keystrokeCount % pet.eachKeyCountBeforeEat === 0 &&
@@ -282,9 +247,53 @@ setTimeout(async () => {
             await pet.feedPet({
               app,
               x: pet.animatedSprite.x,
-              y: pet.animatedSprite.y - 10,
+              y: 0,
               speed: animationSpeed,
             });
+            const isThereNotAnyPetToFeed: boolean =
+              activeFile.pets.every((pet) => pet.growth === IPetGrowth.old) ||
+              activeFile.pets.length === 0 ||
+              (activeFile.pets.length === 1 &&
+                activeFile.pets[0].growth === IPetGrowth.old);
+            if (isThereNotAnyPetToFeed) {
+              const xpMultiplicator = calculateLevelMultiplier(
+                activeFile.pets.length
+              );
+
+              let newPet: PetClass = PetClass.create({
+                state: petState.idle,
+                elapsed: 0.0,
+                moveDir: 0,
+                eachKeyCountBeforeEat: 1,
+                growth: IPetGrowth.egg,
+                xpMultiplicator: xpMultiplicator,
+                xpToLevelUp: petXpToLevelUp,
+                petVersion: Math.floor(Math.random() * 2),
+                xp: 0,
+              });
+              console.log("1");
+              activeFile.pets.push(newPet);
+              // add activeFiles in savedFiles id not already there
+              // else upate it
+              if (app !== undefined)
+                app.stage.addChild(newPet.animatedSprite as PIXI.DisplayObject);
+              newPet.animatedSprite.scale.set(2, 2);
+              // y in middle of screen
+              activeFile.pets[activeFile.pets.length - 1].animatedSprite.y =
+                app.renderer.height / 2 -
+                activeFile.pets[activeFile.pets.length - 1].animatedSprite
+                  .height /
+                  2 -
+                5;
+              // set pet to center of screen
+              activeFile.pets[activeFile.pets.length - 1].animatedSprite.x =
+                (appWidth -
+                  activeFile.pets[activeFile.pets.length - 2].animatedSprite
+                    .width) /
+                  2 +
+                offsetX;
+              saveFile({ file: activeFile });
+            }
           }
 
           // if any pet is old and closer than 10px of an other pet set this pet x to 10px of the other pet
@@ -292,11 +301,109 @@ setTimeout(async () => {
         if (i === newCharacterCount - 1) {
           isInFeed = false;
           let index = 0;
+          console.log("activeFile.pets", activeFile.pets.length);
         }
       }, timebetweenFeed * i);
       // if last iteration, save file
     }
   };
+
+  function calculatePetsAndLastAge(characters: number): {
+    numberOfPets: number;
+    lastPetAge: number;
+    xpMultiplier: number;
+    growth: number;
+  } {
+    let totalXP = 0;
+    let petCount = 0;
+    let lastPetAge = 0;
+    let xpMultiplier = 1;
+    let growth = 0;
+    characters = characters > 100000 ? 100000 : characters;
+    console.log("characters", characters, petXpToLevelUp - petXpToLevelUp / 6);
+    if (characters < petXpToLevelUp - petXpToLevelUp / 6) {
+      const matches = String(characters).match(/\d/);
+      // 2: convert matched item to integer
+      const digit = Number(matches != null ? matches[0] : "0");
+      return {
+        numberOfPets: 1,
+        lastPetAge: characters,
+        xpMultiplier: 1,
+        growth: characters < 10 ? 0 : digit,
+      };
+    }
+    while (totalXP <= characters) {
+      petCount++;
+      xpMultiplier = calculateLevelMultiplier(petCount); // You need to define this function
+      lastPetAge = (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier;
+      totalXP += lastPetAge;
+      console.log("xpMultiplier", xpMultiplier, petCount, totalXP);
+      // const scalingFactor = 1 - 1 / (petCount + 1); // Adjust this formula based on your specific requirements
+      // const XPMultiplier = 0.8 * scalingFactor; // Initial multiplier multiplied by the scaling factor
+      // lastPetAge =
+      //   60 * ((Math.log10(petCount) + 1) / (Math.log10(XPMultiplier) + 1));
+      // console.log("lastPetAge", lastPetAge);
+      // totalXP += lastPetAge;
+    }
+    // 2: convert matched item to integer
+    growth = lastPetAge / 6;
+    lastPetAge =
+      characters -
+        (totalXP - (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier) ===
+      50
+        ? 0
+        : characters -
+          (totalXP - (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier);
+
+    const matches = String(lastPetAge).match(/\d/);
+    const digit = Number(matches != null ? matches[0] : "0");
+
+    growth = lastPetAge < 10 ? 0 : digit === 5 ? 0 : digit;
+    return {
+      numberOfPets: petCount,
+      lastPetAge: lastPetAge,
+      xpMultiplier: xpMultiplier,
+      growth: growth,
+    };
+  }
+
+  /// This function calculate with a formula (no loop) how many pet to add in stage
+  /// depending on the number of characters typed the xp multiplier and the xp to level up
+  function calculatePetsToAdd(numberOfCharacters: number) {
+    const xpToLevelUp = 60;
+    const xpMultiplier = calculateLevelMultiplier(activeFile.pets.length); // You need to define this function
+
+    // Adjust the xp needed for the next pet based on the multiplier
+    const xpToLevelUpWithMultiplier = xpToLevelUp * xpMultiplier;
+
+    // Adjust the number of characters based on the multiplier
+    const numberOfCharactersWithMultiplier = numberOfCharacters * xpMultiplier;
+
+    // Calculate the number of pets to add
+    const numberOfPetsToAdd =
+      numberOfCharactersWithMultiplier / xpToLevelUpWithMultiplier;
+
+    // Cap the number of pets to add at 500
+    const petsToAdd =
+      Math.floor(numberOfPetsToAdd) > 500 ? 500 : Math.floor(numberOfPetsToAdd);
+
+    return petsToAdd;
+  }
+
+  // function calculatePetsToAddInStageWithPetXpToLevelUp(
+  //   numberOfCharacters: number
+  // ) {
+  //   let petsToAdd = 0;
+  //   let xpMultiplicator = calculateLevelMultiplier(activeFile.pets.length);
+  //   let xpToLevelUp = petXpToLevelUp;
+  //   let xpToLevelUpWithMultiplicator = xpToLevelUp * xpMultiplicator;
+  //   let numberOfCharactersWithMultiplicator =
+  //     numberOfCharacters * xpMultiplicator;
+  //   let numberOfPetToAdd =
+  //     numberOfCharactersWithMultiplicator / xpToLevelUpWithMultiplicator;
+  //   petsToAdd = Math.floor(numberOfPetToAdd);
+  //   return petsToAdd > 500 ? 500 : petsToAdd;
+  // }
 
   function calculateLevelMultiplier(level: number) {
     // Adjust the base value for the initial growth
@@ -313,6 +420,7 @@ setTimeout(async () => {
       multiplier = Math.round(Math.pow(level / 50 + 1, initialBase));
     } else {
       multiplier = Math.round(Math.pow(level, laterBase));
+      // console.log("multiplier", multiplier);
     }
 
     return multiplier;
@@ -327,7 +435,44 @@ setTimeout(async () => {
       } while (isInFeed);
       const newCharacterCount = event.data.stroke - activeFile.keystrokeCount;
       activeFile.keystrokeCount = event.data.stroke;
+
       basicText.text = `code typed: ${activeFile.keystrokeCount}`;
+
+      // const petsCalculated = calculatePetsAndLastAge(activeFile.keystrokeCount);
+      // const petsToAdd = petsCalculated.numberOfPets;
+      // const lastPetAge = petsCalculated.lastPetAge;
+
+      // const newPets = Array.from({ length: petsToAdd }, (_, i) => {
+      //   let petCreated = PetClass.create({
+      //     state: petState.walk,
+      //     elapsed: 0.0,
+      //     moveDir: 0,
+      //     eachKeyCountBeforeEat: 1,
+      //     growth: IPetGrowth.old,
+      //     xpMultiplicator: 1,
+      //     xpToLevelUp: petXpToLevelUp,
+      //     petVersion: Math.floor(Math.random() * 2),
+      //     xp: 0,
+      //   });
+      //   app.stage.addChild(petCreated.animatedSprite as PIXI.DisplayObject);
+      //   petCreated.animatedSprite.x = app.renderer.width / 2;
+      //   petCreated.animatedSprite.y =
+      //     (app.renderer.height - petCreated.animatedSprite.height) / 2;
+      //   petCreated.animatedSprite.play();
+      //   petCreated.updateAnimatedSprite({
+      //     animations: petCreated.getAnimationPossibility()[IPetGrowth.old].walk,
+      //     app,
+      //   });
+      //   petCreated.xpBarFill.width = 0;
+      //   petCreated.xpBarContainer.width = 0;
+      //   petCreated.moveDir = 1;
+      //   return petCreated;
+      // });
+
+      // newPets[newPets.length - 1].xpToLevelUp = lastPetAge;
+
+      // activeFile.pets.push(...newPets);
+
       // if keystrokeCount is in ten multiple
       let timebetweenFeed = 200;
       let animationSpeed = 3;
@@ -418,20 +563,43 @@ setTimeout(async () => {
         pets: [],
         keystrokeCount: numberOfCharacters,
       };
-      let firstPet: PetClass = await PetClass.create({
+
+      // let timebetweenFeed = 0.01;
+      // let animationSpeed = 500;
+      // feedPet({
+      //   newCharacterCount: activeFile.keystrokeCount,
+      //   timebetweenFeed,
+      //   file: activeFile,
+      //   appHeight: app.renderer.height,
+      //   appWidth: app.renderer.width,
+      //   animationSpeed,
+      // });
+
+      console.log("yo", calculatePetsAndLastAge(activeFile.keystrokeCount));
+
+      const petsCalculated = calculatePetsAndLastAge(activeFile.keystrokeCount);
+      const petsToAdd = petsCalculated.numberOfPets;
+      const lastPetAge = petsCalculated.lastPetAge;
+      const xpMultiplierCalculated = petsCalculated.xpMultiplier;
+      const growth = petsCalculated.growth;
+
+      let firstPet: PetClass = PetClass.create({
         state: petState.idle,
         elapsed: 0.0,
         moveDir: 0,
         eachKeyCountBeforeEat: 1,
-        growth: IPetGrowth.egg,
-        xpMultiplicator: 1,
+        growth: growth,
+        xpMultiplicator: xpMultiplierCalculated,
+        xpToLevelUp: petXpToLevelUp,
+        petVersion: 1,
+        xp: lastPetAge,
       });
 
       app.stage.addChild(firstPet.animatedSprite as PIXI.DisplayObject);
       firstPet.animatedSprite.scale.set(2, 2);
 
+      console.log("2");
       activeFile.pets.push(firstPet);
-      saveFile({ file: activeFile });
 
       activeFile.pets[0].animatedSprite.y =
         app.renderer.height / 2 -
@@ -442,17 +610,57 @@ setTimeout(async () => {
       activeFile.pets[0].animatedSprite.x =
         (app.renderer.width - activeFile.pets[0].animatedSprite.width) / 2;
       activeFile.pets[0].animatedSprite.play();
-
-      let timebetweenFeed = 0.01;
-      let animationSpeed = 500;
-      feedPet({
-        newCharacterCount: activeFile.keystrokeCount,
-        timebetweenFeed,
-        file: activeFile,
-        appHeight: app.renderer.height,
-        appWidth: app.renderer.width,
-        animationSpeed,
+      activeFile.pets[0].updateAnimatedSprite({
+        animations:
+          activeFile.pets[0].getAnimationPossibility()[
+            activeFile.keystrokeCount === 0 ? 0 : (growth as IPetGrowth)
+          ].idle,
+        app,
       });
+
+      if (activeFile.keystrokeCount >= petXpToLevelUp - petXpToLevelUp / 6) {
+        const newPets = Array.from(
+          { length: petsToAdd === 1 ? 1 : petsToAdd - 1 },
+          (_, i) => {
+            let petCreated = PetClass.create({
+              state: petState.walk,
+              elapsed: 0.0,
+              moveDir: 0,
+              eachKeyCountBeforeEat: 1,
+              growth: IPetGrowth.old,
+              xpMultiplicator: 1,
+              xpToLevelUp: petXpToLevelUp,
+              petVersion: Math.floor(Math.random() * 2),
+              xp: 0,
+            });
+            app.stage.addChild(petCreated.animatedSprite as PIXI.DisplayObject);
+            petCreated.animatedSprite.x = app.renderer.width / 2;
+            petCreated.animatedSprite.y =
+              (app.renderer.height - petCreated.animatedSprite.height) / 2;
+            petCreated.animatedSprite.play();
+            petCreated.updateAnimatedSprite({
+              animations:
+                petCreated.getAnimationPossibility()[IPetGrowth.old].walk,
+              app,
+            });
+            petCreated.xpBarFill.width = 0;
+            petCreated.xpBarContainer.width = 0;
+            petCreated.moveDir = 1;
+            return petCreated;
+          }
+        );
+
+        newPets[newPets.length - 1].xpToLevelUp = lastPetAge;
+
+        console.log("3");
+        activeFile.pets.push(...newPets);
+      }
+      console.log(
+        "activeFile.pets",
+        activeFile.pets.length,
+        app.stage.children
+      );
+      saveFile({ file: activeFile });
 
       app.stage.addChild(basicText as PIXI.DisplayObject);
     }

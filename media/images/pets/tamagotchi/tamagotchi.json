@@ -890,53 +890,55 @@
                 ]
             },
             "eat": {
-                "name": "eat",
+                "isReverse": true,
+                "name": "walk",
                 "animation": [
                     {
-                        "time": 200,
-                        "x": 417,
-                        "y": 290,
-                        "width": 25,
+                        "time": 150,
+                        "x": 706,
+                        "y": 450,
+                        "width": 30,
                         "height": 30
                     },
                     {
-                        "time": 200,
-                        "x": 160,
-                        "y": 290,
-                        "width": 24,
+                        "time": 150,
+                        "x": 738,
+                        "y": 450,
+                        "width": 30,
+                        "height": 30
+                    },
+                    {
+                        "time": 150,
+                        "x": 899,
+                        "y": 450,
+                        "width": 30,
                         "height": 30
                     }
                 ]
             },
             "idle": {
-                "name": "idle",
+                "isReverse": true,
+                "name": "walk",
                 "animation": [
                     {
                         "time": 150,
-                        "x": 1,
-                        "y": 290,
-                        "width": 26,
+                        "x": 706,
+                        "y": 450,
+                        "width": 30,
                         "height": 30
                     },
                     {
                         "time": 150,
-                        "x": 32,
-                        "y": 290,
-                        "width": 26,
+                        "x": 738,
+                        "y": 450,
+                        "width": 30,
                         "height": 30
                     },
                     {
                         "time": 150,
-                        "x": 261,
-                        "y": 290,
-                        "width": 26,
-                        "height": 30
-                    },
-                    {
-                        "time": 150,
-                        "x": 385,
-                        "y": 290,
-                        "width": 26,
+                        "x": 899,
+                        "y": 450,
+                        "width": 30,
                         "height": 30
                     }
                 ]

@@ -16,7 +16,7 @@ declare namespace GlobalMixins {
 }
 
 let fileId = "";
-
+let filesSaved: string;
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -46,14 +46,16 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument((event) => {
-      // console.log('onDidChangeTextDocument', event);
+      console.log("onDidChangeTextDocument", event);
       // Send the keystroke count to the webview
       // file number of characters
-      let numberOfCharacters = event.document.getText().length;
-      vscode.commands.executeCommand(
-        "tamagotchi.updateKeystrokeCount",
-        numberOfCharacters
-      );
+      let numberOfCharacters = 1;
+      if (event.contentChanges.length > 0) {
+        vscode.commands.executeCommand(
+          "tamagotchi.updateKeystrokeCount",
+          numberOfCharacters
+        );
+      }
     })
   );
   // save config
@@ -107,6 +109,12 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
       }
     );
 
+    vscode.commands.registerCommand("tamagotchi.resetState", () => {
+      webviewView.webview.postMessage({
+        resetState: true,
+      });
+    });
+
     this._view = webviewView;
     webviewView.webview.options = {
       enableScripts: true,
@@ -125,7 +133,7 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
         webview.postMessage({
           initialised: {
             numberOfCharacters,
-            fileId,
+            filesSaved,
           },
         });
       } else if (data.command === "setInitialised") {

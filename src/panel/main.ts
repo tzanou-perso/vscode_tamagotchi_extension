@@ -4,24 +4,31 @@ import backgroundImageTop from "../../media/images/background/first/top.png";
 import backgroundImageBottom from "../../media/images/background/first/bottom.png";
 import backgroundImageFull from "../../media/images/background/first/full.png";
 import platformImage from "../../media/images/background/first/platform.png";
-import PetClass from "./chill/pet/pet_class";
-import { IPet, IPetGrowth, petState, IAnimation } from "./chill/pet/pet_class";
-import { FoodList } from "./chill/food/foodClass";
+import Pet from "./competitive/characters/pets/pet";
+import CommonsCompetitiveSingleton, {
+  FilesSaved,
+  DEFAULT_PET,
+  COOLDOWN_COMBO,
+} from "./competitive/commons";
 import { WebviewMessage } from "../types/types";
+import { EPetState } from "./competitive/characters/commons";
+import Portal, { EPortalState } from "./competitive/portal/portal";
+import { SpriteElement } from "./competitive/sprite/sprite_element";
+import TextTimer from "./competitive/text_timer";
+import { stat } from "fs";
 declare global {
   interface VscodeStateApi {
     postMessage(message: WebviewMessage): void;
+    setState(state: any): void;
+    getState(): any;
   }
   const vscode: VscodeStateApi;
 }
 
-type FilesSaved = {
-  numberOfCharacters: number;
-  fileId: string;
-  pets: PetClass[];
-  keystrokeCount: number;
-};
-
+let lastComboText: TextTimer | undefined;
+let portal: Portal;
+let activeFile: FilesSaved;
+let inResetState: boolean = false;
 type BgCover = {
   container: PIXI.Container<PIXI.DisplayObject>;
   doResize: () => void;
@@ -32,139 +39,25 @@ const petXpToLevelUp = 60;
 console.log("main.js loaded");
 let stateApi: VscodeStateApi;
 let filesSaved: FilesSaved[] = [];
-let activeFile: FilesSaved = {
-  numberOfCharacters: 0,
-  fileId: "",
-  pets: [],
-  keystrokeCount: 0,
-};
-let isInFeed: boolean = false;
-const basicText = new PIXI.Text("code typed: " + activeFile.keystrokeCount);
-basicText.x = 10;
-basicText.y = 10;
-basicText.style = new PIXI.TextStyle({
-  fill: 0xffffff,
-  fontSize: 18,
-  fontFamily: "Arial",
-  stroke: 0x000000,
-  strokeThickness: 4,
-  wordWrap: true,
-  wordWrapWidth: 440,
-});
+let timer: NodeJS.Timeout;
+
+let basicText: PIXI.Text;
+
+let comboCharacter: PIXI.Text;
 
 setTimeout(async () => {
   vscode.postMessage({
     text: "isInitialized",
     command: "isInitialized",
   });
+
   let backgroundCoverTop: BgCover;
   let backgroundCoverBottom: BgCover;
   let backgroundCoverFull: BgCover;
   let platformSpriteInited: PIXI.Sprite;
   let app: PIXI.Application<HTMLCanvasElement>;
-  const initApp = async () => {
-    // background color same as theme background color
-    app = new PIXI.Application<HTMLCanvasElement>({
-      backgroundColor: 0x1e1e1e,
-      width: window.innerWidth - 50,
-      height: window.innerHeight - 50,
-    });
-    const tamagotchiMoveTicker = app.ticker;
-
-    const line = new PIXI.Graphics();
-    //line color
-    line.lineStyle(4, 0x00ccffff, 0.1);
-    line.moveTo(0, app.renderer.height / 2);
-    line.lineTo(app.renderer.width, app.renderer.height / 2);
-    // app.stage.addChild(line as PIXI.DisplayObject);
-
-    // clear document body
-    document.body.innerHTML = "";
-    // Adding the application's view to the DOM
-    document.body.appendChild(app.view);
-    await setBackgroundImage();
-    // on window resize, resize the canvas too
-    window.addEventListener("resize", async () => {
-      // app.stage.removeChild(backgroundCoverTop.container);
-      // app.stage.removeChild(backgroundCoverBottom.container);
-      app.stage.removeChild(
-        backgroundCoverFull.container as PIXI.DisplayObject
-      );
-      app.stage.removeChild(platformSpriteInited as PIXI.DisplayObject);
-      app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
-      await setBackgroundImage();
-
-      // move line to middle of screen
-      line.clear();
-      line.lineStyle(4, 0x00ccffff, 1);
-      line.moveTo(0, app.renderer.height / 2);
-      line.lineTo(app.renderer.width, app.renderer.height / 2);
-      // app.stage.addChild(line as PIXI.DisplayObject);
-      // set all pets y to bottom of screen
-      for (let pet of activeFile.pets) {
-        if (pet.growth === IPetGrowth.old) {
-          pet.animatedSprite.y =
-            app.renderer.height - pet.animatedSprite.height / 2;
-        } else {
-          pet.animatedSprite.x =
-            (app.renderer.width - pet.animatedSprite.width) / 2;
-          pet.animatedSprite.y =
-            app.renderer.height / 2 - pet.animatedSprite.height / 2 - 5;
-        }
-      }
-    });
-
-    // Add a variable to count up the seconds our demo has been running
-    let elapsed = 0.0;
-    // Tell our application's ticker to run a new callback every frame, passing
-    // in the amount of time that has passed since the last tick
-    app.stage.addChild(basicText as PIXI.DisplayObject);
-
-    // add line to middle of screen wich have 100% width
-
-    tamagotchiMoveTicker.add((delta) => {
-      // Add the time to our total elapsed time
-      elapsed += delta;
-      for (let pet of activeFile.pets) {
-        pet.tickAnimPet({ app, delta });
-      }
-      // Update the sprite's to let him walk across the screen horizontally
-      // from left to right if he is not at the right side of the screen
-    });
-  };
 
   let setBackgroundImage = async () => {
-    // const backgroundSpriteTop = await PIXI.Assets.load(backgroundImageTop);
-    // const containerSize = {
-    //   x: app.renderer.width,
-    //   y: app.renderer.height / 2,
-    // };
-
-    // backgroundCoverTop = background(
-    //   containerSize,
-    //   new PIXI.Sprite(backgroundSpriteTop),
-    //   "cover"
-    // );
-    // app.stage.addChildAt(backgroundCoverTop.container, 0);
-    // backgroundCoverTop.container.alpha = 0.3;
-    // const backgroundSpriteBottom = await PIXI.Assets.load(
-    //   backgroundImageBottom
-    // );
-    // const containerSizeBottom = {
-    //   x: app.renderer.width,
-    //   y: app.renderer.height / 2,
-    // };
-    // backgroundCoverBottom = background(
-    //   containerSizeBottom,
-    //   new PIXI.Sprite(backgroundSpriteBottom),
-    //   "cover"
-    // );
-    // app.stage.addChildAt(backgroundCoverBottom.container, 0);
-    // backgroundCoverBottom.container.y = app.renderer.height / 2;
-    // backgroundCoverBottom.container.alpha = 1;
-
-    // add platform to center of screen in width and height
-
     const backgroundSpriteFull = await PIXI.Assets.load(backgroundImageFull);
     const containerSize = {
       x: app.renderer.width,
@@ -176,6 +69,7 @@ setTimeout(async () => {
       new PIXI.Sprite(backgroundSpriteFull),
       "coverFromBottom"
     );
+
     app.stage.addChildAt(
       backgroundCoverFull.container as PIXI.DisplayObject,
       0
@@ -196,473 +90,390 @@ setTimeout(async () => {
       (app.renderer.width - platformSpriteInited.width) / 2;
     platformSpriteInited.y =
       app.renderer.height / 2 - platformSpriteInited.height / 2 - 20;
+    // Portal
+    const portalTaxture = await Portal.createAnimations();
+    portal = new Portal({
+      textures: portalTaxture,
+      state: EPortalState.IDLE,
+      moveDir: 0,
+      health: 100,
+      speed: 0,
+      app: app,
+    });
+    app.stage.addChild(portal as PIXI.DisplayObject);
   };
 
-  const saveFile = ({ file }: { file: FilesSaved }) => {
-    if (
-      filesSaved.filter((fileToFilter) => fileToFilter.fileId === file.fileId)
-        .length === 0
-    ) {
-      filesSaved.push(file);
-    } else {
-      filesSaved = filesSaved.map((file) => {
-        if (file.fileId === file.fileId) {
-          return file;
-        }
-        return file;
-      });
-    }
-  };
+  const initApp = async () => {
+    app = new PIXI.Application<HTMLCanvasElement>({
+      backgroundColor: 0x1e1e1e,
+      width: window.innerWidth - 50,
+      height: window.innerHeight - 50,
+    });
 
-  const feedPet = async ({
-    newCharacterCount,
-    timebetweenFeed,
-    appHeight,
-    appWidth,
-    offsetX = 0,
-    animationSpeed = 6,
-  }: {
-    newCharacterCount: number;
-    timebetweenFeed: number;
-    animationSpeed?: number;
-    file: FilesSaved;
-    appHeight: number;
-    appWidth: number;
-    offsetX?: number;
-  }) => {
-    if (newCharacterCount > 0) {
-      isInFeed = true;
-    }
-    newCharacterCount = newCharacterCount > 100000 ? 100000 : newCharacterCount;
-    for (let i = 0; i < newCharacterCount; i++) {
-      // stop the for loop if event with name newWindowOpened is received
-      setTimeout(async () => {
-        console.log("isdsdsdsdsdsd", activeFile.pets);
+    let state = vscode.getState();
+    console.log("state", state?.activeFile);
+    if (state && state.activeFile !== undefined) {
+      let fileFromFileSaved = JSON.parse(state.activeFile);
+      const pets = [];
 
-        for (let pet of activeFile.pets) {
-          if (
-            activeFile.keystrokeCount % pet.eachKeyCountBeforeEat === 0 &&
-            pet.growth !== IPetGrowth.old
-          ) {
-            await pet.feedPet({
-              app,
-              x: pet.animatedSprite.x,
-              y: 0,
-              speed: animationSpeed,
-            });
-            const isThereNotAnyPetToFeed: boolean =
-              activeFile.pets.every((pet) => pet.growth === IPetGrowth.old) ||
-              activeFile.pets.length === 0 ||
-              (activeFile.pets.length === 1 &&
-                activeFile.pets[0].growth === IPetGrowth.old);
-            if (isThereNotAnyPetToFeed) {
-              const xpMultiplicator = calculateLevelMultiplier(
-                activeFile.pets.length
-              );
+      let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, app);
 
-              let newPet: PetClass = PetClass.create({
-                state: petState.idle,
-                elapsed: 0.0,
-                moveDir: 0,
-                eachKeyCountBeforeEat: 1,
-                growth: IPetGrowth.egg,
-                xpMultiplicator: xpMultiplicator,
-                xpToLevelUp: petXpToLevelUp,
-                petVersion: Math.floor(Math.random() * 2),
-                xp: 0,
-              });
-              console.log("1");
-              activeFile.pets.push(newPet);
-              // add activeFiles in savedFiles id not already there
-              // else upate it
-              if (app !== undefined)
-                app.stage.addChild(newPet.animatedSprite as PIXI.DisplayObject);
-              newPet.animatedSprite.scale.set(2, 2);
-              // y in middle of screen
-              activeFile.pets[activeFile.pets.length - 1].animatedSprite.y =
-                app.renderer.height / 2 -
-                activeFile.pets[activeFile.pets.length - 1].animatedSprite
-                  .height /
-                  2 -
-                5;
-              // set pet to center of screen
-              activeFile.pets[activeFile.pets.length - 1].animatedSprite.x =
-                (appWidth -
-                  activeFile.pets[activeFile.pets.length - 2].animatedSprite
-                    .width) /
-                  2 +
-                offsetX;
-              saveFile({ file: activeFile });
-            }
-          }
+      for (let pet of fileFromFileSaved.pets) {
+        const petToImport = await Pet.fromJson(pet, app);
+        // // set pos in random position inside the screen
+        // petToImport.setPos({
+        //   x: pet.x,
+        //   y: pet.y,
+        // });
 
-          // if any pet is old and closer than 10px of an other pet set this pet x to 10px of the other pet
-        }
-        if (i === newCharacterCount - 1) {
-          isInFeed = false;
-          let index = 0;
-          console.log("activeFile.pets", activeFile.pets.length);
-        }
-      }, timebetweenFeed * i);
-      // if last iteration, save file
-    }
-  };
+        pets.push(petToImport);
+      }
 
-  function calculatePetsAndLastAge(characters: number): {
-    numberOfPets: number;
-    lastPetAge: number;
-    xpMultiplier: number;
-    growth: number;
-  } {
-    let totalXP = 0;
-    let petCount = 0;
-    let lastPetAge = 0;
-    let xpMultiplier = 1;
-    let growth = 0;
-    characters = characters > 100000 ? 100000 : characters;
-    console.log("characters", characters, petXpToLevelUp - petXpToLevelUp / 6);
-    if (characters < petXpToLevelUp - petXpToLevelUp / 6) {
-      const matches = String(characters).match(/\d/);
-      // 2: convert matched item to integer
-      const digit = Number(matches != null ? matches[0] : "0");
-      return {
-        numberOfPets: 1,
-        lastPetAge: characters,
-        xpMultiplier: 1,
-        growth: characters < 10 ? 0 : digit,
+      activeFile = {
+        numberOfCharacters: fileFromFileSaved.numberOfCharacters,
+        fileId: fileFromFileSaved.fileId,
+        pets: pets,
+        petInGrow: petToInsert,
+        keystrokeCount: fileFromFileSaved.keystrokeCount,
       };
     }
-    while (totalXP <= characters) {
-      petCount++;
-      xpMultiplier = calculateLevelMultiplier(petCount); // You need to define this function
-      lastPetAge = (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier;
-      totalXP += lastPetAge;
-      console.log("xpMultiplier", xpMultiplier, petCount, totalXP);
-      // const scalingFactor = 1 - 1 / (petCount + 1); // Adjust this formula based on your specific requirements
-      // const XPMultiplier = 0.8 * scalingFactor; // Initial multiplier multiplied by the scaling factor
-      // lastPetAge =
-      //   60 * ((Math.log10(petCount) + 1) / (Math.log10(XPMultiplier) + 1));
-      // console.log("lastPetAge", lastPetAge);
-      // totalXP += lastPetAge;
+
+    // clear document body
+    document.body.innerHTML = "";
+
+    // Adding the application's view to the DOM
+    document.body.appendChild(app.view);
+
+    // Set all the background of the app
+    await setBackgroundImage();
+
+    // on window resize, resize the canvas too
+    window.removeEventListener("resize", windowResizeEvent);
+    window.addEventListener("resize", windowResizeEvent);
+
+    basicText = new PIXI.Text("All: " + 0);
+    basicText.x = 5;
+    basicText.y = 5;
+    basicText.style = new PIXI.TextStyle({
+      fill: 0xffffff,
+      fontSize: 10,
+      fontFamily: "Arial",
+      stroke: 0x000000,
+      strokeThickness: 4,
+      wordWrap: true,
+      wordWrapWidth: 440,
+    });
+
+    comboCharacter = new PIXI.Text("Combo: " + 0);
+    comboCharacter.x = 5;
+    comboCharacter.y = 15;
+    comboCharacter.style = new PIXI.TextStyle({
+      fill: 0xffffff,
+      fontSize: 10,
+      fontFamily: "Arial",
+      stroke: 0x000000,
+      strokeThickness: 4,
+      wordWrap: true,
+      wordWrapWidth: 440,
+    });
+
+    if (activeFile !== undefined && activeFile.keystrokeCount > 0) {
+      basicText.text = `All: ${activeFile.keystrokeCount}`;
     }
-    // 2: convert matched item to integer
-    growth = lastPetAge / 6;
-    lastPetAge =
-      characters -
-        (totalXP - (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier) ===
-      50
-        ? 0
-        : characters -
-          (totalXP - (petXpToLevelUp - petXpToLevelUp / 6) * xpMultiplier);
 
-    const matches = String(lastPetAge).match(/\d/);
-    const digit = Number(matches != null ? matches[0] : "0");
+    app.stage.addChild(basicText as PIXI.DisplayObject);
 
-    growth = lastPetAge < 10 ? 0 : digit === 5 ? 0 : digit;
-    return {
-      numberOfPets: petCount,
-      lastPetAge: lastPetAge,
-      xpMultiplier: xpMultiplier,
-      growth: growth,
-    };
-  }
+    if (activeFile !== undefined && activeFile.numberOfCharacters > 0) {
+      comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
+    }
 
-  /// This function calculate with a formula (no loop) how many pet to add in stage
-  /// depending on the number of characters typed the xp multiplier and the xp to level up
-  function calculatePetsToAdd(numberOfCharacters: number) {
-    const xpToLevelUp = 60;
-    const xpMultiplier = calculateLevelMultiplier(activeFile.pets.length); // You need to define this function
+    app.stage.addChild(comboCharacter as PIXI.DisplayObject);
 
-    // Adjust the xp needed for the next pet based on the multiplier
-    const xpToLevelUpWithMultiplier = xpToLevelUp * xpMultiplier;
+    let newPet: Pet;
 
-    // Adjust the number of characters based on the multiplier
-    const numberOfCharactersWithMultiplier = numberOfCharacters * xpMultiplier;
-
-    // Calculate the number of pets to add
-    const numberOfPetsToAdd =
-      numberOfCharactersWithMultiplier / xpToLevelUpWithMultiplier;
-
-    // Cap the number of pets to add at 500
-    const petsToAdd =
-      Math.floor(numberOfPetsToAdd) > 500 ? 500 : Math.floor(numberOfPetsToAdd);
-
-    return petsToAdd;
-  }
-
-  // function calculatePetsToAddInStageWithPetXpToLevelUp(
-  //   numberOfCharacters: number
-  // ) {
-  //   let petsToAdd = 0;
-  //   let xpMultiplicator = calculateLevelMultiplier(activeFile.pets.length);
-  //   let xpToLevelUp = petXpToLevelUp;
-  //   let xpToLevelUpWithMultiplicator = xpToLevelUp * xpMultiplicator;
-  //   let numberOfCharactersWithMultiplicator =
-  //     numberOfCharacters * xpMultiplicator;
-  //   let numberOfPetToAdd =
-  //     numberOfCharactersWithMultiplicator / xpToLevelUpWithMultiplicator;
-  //   petsToAdd = Math.floor(numberOfPetToAdd);
-  //   return petsToAdd > 500 ? 500 : petsToAdd;
-  // }
-
-  function calculateLevelMultiplier(level: number) {
-    // Adjust the base value for the initial growth
-    const initialBase = 1;
-
-    const laterBase = 1.08;
-
-    // Threshold level after which the multiplier remains constant
-    const thresholdLevel = 50;
-
-    // Calculate the level multiplier using different formulas before and after the threshold
-    let multiplier;
-    if (level <= thresholdLevel) {
-      multiplier = Math.round(Math.pow(level / 50 + 1, initialBase));
+    // if there is already a pet in grow in the file, load it
+    if (activeFile !== undefined && activeFile.petInGrow !== undefined) {
+      newPet = activeFile.petInGrow;
     } else {
-      multiplier = Math.round(Math.pow(level, laterBase));
-      // console.log("multiplier", multiplier);
+      let textures = await Pet.createAnimation({
+        state: DEFAULT_PET.state,
+        growth: DEFAULT_PET.growth,
+      });
+
+      newPet = new Pet({
+        textures: textures,
+        ...DEFAULT_PET,
+        app: app,
+      });
+      // random speed between 0.5 and 1.5
+      newPet.speed = 0.5 + Math.random();
+      console.log("new random speed", newPet.speed);
     }
 
-    return multiplier;
-  }
+    app.stage.addChild(newPet as PIXI.DisplayObject);
+
+    // add the pet in grow to the central platform
+    newPet.setPos({
+      x: app.renderer.width / 2,
+      y: app.renderer.height / 2 - 5,
+    });
+
+    // if there is pets from the activefile load them
+    // Activefile can have pet when the file was already saved and we are reopening it
+    if (
+      activeFile !== undefined &&
+      activeFile.pets !== undefined &&
+      activeFile.pets.length > 0
+    ) {
+      for (let pet of activeFile.pets) {
+        app.stage.addChild(pet as PIXI.DisplayObject);
+
+        pet.petHeader.xpBarContainer.visible = false;
+
+        pet.removeChild(pet.petHeader.xpBarContainer as PIXI.DisplayObject);
+
+        pet.petHeader.xpBarContainer.destroy({
+          children: true,
+          texture: true,
+          baseTexture: true,
+        });
+      }
+    } else {
+      activeFile = {
+        numberOfCharacters: 0,
+        fileId: "",
+        pets: [],
+        petInGrow: newPet,
+        keystrokeCount: 0,
+      };
+    }
+  };
+  initApp();
+
+  const windowResizeEvent = async () => {
+    app.stage.removeChild(backgroundCoverFull.container as PIXI.DisplayObject);
+
+    app.stage.removeChild(platformSpriteInited as PIXI.DisplayObject);
+
+    app.stage.removeChild(portal as PIXI.DisplayObject);
+
+    app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
+
+    await setBackgroundImage();
+
+    // set all adult pets y to bottom of screen
+    for (let pet of activeFile.pets) {
+      pet.x = (app.renderer.width - pet.width) / 2;
+      pet.y = app.renderer.height;
+    }
+    activeFile.petInGrow.x = app.renderer.width / 2;
+    activeFile.petInGrow.y = app.renderer.height / 2 - 5;
+  };
+
+  const setAdult = async ({ withTransition }: { withTransition: boolean }) => {
+    if (withTransition) {
+      activeFile.petInGrow.petHeader.xpBarContainer.visible = false;
+
+      if (activeFile.petInGrow !== undefined) {
+        activeFile.petInGrow.y =
+          activeFile.petInGrow.y - activeFile.petInGrow.height / 2;
+      }
+
+      activeFile.petInGrow.state = EPetState.ADULTTRANSITION;
+    } else {
+      activeFile.petInGrow.setToAdult();
+    }
+
+    activeFile.pets.push(activeFile.petInGrow);
+
+    const lastPet = activeFile.petInGrow;
+
+    let textures = await Pet.createAnimation({
+      state: DEFAULT_PET.state,
+      growth: DEFAULT_PET.growth,
+    });
+
+    activeFile.petInGrow = new Pet({
+      textures: textures,
+      ...DEFAULT_PET,
+      app: app,
+    });
+
+    activeFile.petInGrow.speed = 0.5 + Math.random();
+
+    console.log("new random speed", activeFile.petInGrow.speed);
+
+    activeFile.petInGrow.play();
+
+    app.stage.addChild(activeFile.petInGrow as PIXI.DisplayObject);
+
+    app.stage.swapChildren(
+      activeFile.petInGrow as PIXI.DisplayObject,
+      lastPet as PIXI.DisplayObject
+    );
+
+    activeFile.petInGrow.setPos({
+      x: app.renderer.width / 2,
+      y: app.renderer.height / 2 - 5,
+    });
+  };
+
+  const activeFileToJson = () => {
+    let petsJson = activeFile.pets.map((pet) => pet.toJson());
+
+    let petJson = activeFile.petInGrow.toJson();
+
+    let activeFileJson = JSON.stringify({
+      numberOfCharacters: 0,
+      pets: petsJson,
+      petInGrow: petJson,
+      keystrokeCount: activeFile.keystrokeCount,
+    });
+
+    console.log("file saved", activeFileJson);
+    return activeFileJson;
+  };
+
+  setInterval(() => {
+    if (activeFile === undefined) return;
+    let petsJson = activeFile.pets.map((pet) => pet.toJson());
+
+    let petJson = activeFile.petInGrow.toJson();
+
+    let activeFileJson = JSON.stringify({
+      numberOfCharacters: 0,
+      pets: petsJson,
+      petInGrow: petJson,
+      keystrokeCount: activeFile.keystrokeCount,
+    });
+    // Update the saved state
+    vscode.setState({ activeFile: activeFileJson });
+  }, 100);
 
   window.addEventListener("message", async (event) => {
     console.log("event received", event.data);
+    if (event.data.stroke !== undefined && activeFile !== undefined) {
+      if (activeFile.petInGrow.isAdult) {
+        console.log("what the fuck");
+        let textures = await Pet.createAnimation({
+          state: DEFAULT_PET.state,
+          growth: DEFAULT_PET.growth,
+        });
 
-    if (event.data.stroke !== undefined) {
-      do {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      } while (isInFeed);
-      const newCharacterCount = event.data.stroke - activeFile.keystrokeCount;
-      activeFile.keystrokeCount = event.data.stroke;
+        let newPet: Pet = new Pet({
+          textures: textures,
+          ...DEFAULT_PET,
+          app: app,
+        });
 
-      basicText.text = `code typed: ${activeFile.keystrokeCount}`;
+        newPet.speed = 0.5 + Math.random();
 
-      // const petsCalculated = calculatePetsAndLastAge(activeFile.keystrokeCount);
-      // const petsToAdd = petsCalculated.numberOfPets;
-      // const lastPetAge = petsCalculated.lastPetAge;
+        app.stage.addChild(newPet as PIXI.DisplayObject);
 
-      // const newPets = Array.from({ length: petsToAdd }, (_, i) => {
-      //   let petCreated = PetClass.create({
-      //     state: petState.walk,
-      //     elapsed: 0.0,
-      //     moveDir: 0,
-      //     eachKeyCountBeforeEat: 1,
-      //     growth: IPetGrowth.old,
-      //     xpMultiplicator: 1,
-      //     xpToLevelUp: petXpToLevelUp,
-      //     petVersion: Math.floor(Math.random() * 2),
-      //     xp: 0,
-      //   });
-      //   app.stage.addChild(petCreated.animatedSprite as PIXI.DisplayObject);
-      //   petCreated.animatedSprite.x = app.renderer.width / 2;
-      //   petCreated.animatedSprite.y =
-      //     (app.renderer.height - petCreated.animatedSprite.height) / 2;
-      //   petCreated.animatedSprite.play();
-      //   petCreated.updateAnimatedSprite({
-      //     animations: petCreated.getAnimationPossibility()[IPetGrowth.old].walk,
-      //     app,
-      //   });
-      //   petCreated.xpBarFill.width = 0;
-      //   petCreated.xpBarContainer.width = 0;
-      //   petCreated.moveDir = 1;
-      //   return petCreated;
-      // });
-
-      // newPets[newPets.length - 1].xpToLevelUp = lastPetAge;
-
-      // activeFile.pets.push(...newPets);
-
-      // if keystrokeCount is in ten multiple
-      let timebetweenFeed = 200;
-      let animationSpeed = 3;
-      if (newCharacterCount > 1) {
-        timebetweenFeed = 0.01;
-        animationSpeed = 500;
+        newPet.setPos({
+          x: app.renderer.width / 2,
+          y: app.renderer.height / 2 - 5,
+        });
       }
-      if (newCharacterCount < 1) return;
-      feedPet({
-        newCharacterCount,
-        timebetweenFeed,
-        file: activeFile,
-        appHeight: app.renderer.height,
-        appWidth: app.renderer.width,
-        animationSpeed: 3,
-      });
+
+      activeFile.numberOfCharacters += event.data.stroke;
+
+      activeFile.keystrokeCount += event.data.stroke;
+
+      basicText.text = `All: ${activeFile.keystrokeCount}`;
+
+      comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
+
+      if (activeFile.numberOfCharacters > 0) {
+        comboCharacter.alpha = 1;
+
+        comboCharacter.style.fontSize = 20;
+
+        activeFile.petInGrow.giveXp(1);
+
+        if (lastComboText !== undefined) {
+          lastComboText.finish(0);
+        }
+
+        const comboText = new TextTimer({
+          app,
+          text: `+ ${activeFile.numberOfCharacters}`,
+          timeToAnimInSeconds: COOLDOWN_COMBO / 1000,
+          animScale: { start: 0.5, end: 1 },
+          animAlpha: false,
+          translateAnim: { x: 60, y: -50 },
+          style: new PIXI.TextStyle({
+            fill: "#e4e425", // yellow
+            fontSize: 40,
+            fontFamily: "Arial",
+            stroke: 0x000000,
+            strokeThickness: 4,
+            wordWrap: true,
+            wordWrapWidth: 440,
+          }),
+        });
+
+        comboText.anchor.set(0.5, 0.5);
+
+        comboText.x = activeFile.petInGrow.x;
+
+        comboText.y = activeFile.petInGrow.y - activeFile.petInGrow.height;
+
+        lastComboText = comboText;
+
+        if (activeFile.petInGrow.isAdult) {
+          setAdult({ withTransition: false });
+        }
+
+        // if no new event detected in 2 seconds reset combo else reset the timer
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+          activeFile.numberOfCharacters = 0;
+
+          comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
+
+          (comboCharacter.style.fontSize = 10), (comboCharacter.alpha = 0.5);
+
+          if (activeFile.petInGrow.growth !== 0) {
+            setAdult({ withTransition: true });
+          }
+        }, COOLDOWN_COMBO);
+      }
     }
 
-    if (
-      (event.data.fileOpened !== undefined &&
-        event.data.fileOpened.fileId !== undefined) ||
-      (event.data.initialised !== undefined &&
-        event.data.initialised.fileId !== undefined &&
-        event.data.initialised.numberOfCharacters !== undefined)
-    ) {
-      let fileId =
-        event.data.fileOpened?.fileId ?? event.data.initialised.fileId;
-      let numberOfCharacters =
-        event.data.fileOpened?.numberOfCharacters ??
-        event.data.initialised.numberOfCharacters;
-      do {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      } while (isInFeed);
-      vscode.postMessage({
-        text: fileId,
-        command: "setInitialised",
+    if (event.data.resetState !== undefined) {
+      activeFile.petInGrow.destroy;
+      for (let pet of activeFile.pets) {
+        pet.destroy;
+      }
+      app.destroy(true, { children: true, texture: true, baseTexture: true });
+      let newPet: Pet;
+      let textures = await Pet.createAnimation({
+        state: DEFAULT_PET.state,
+        growth: DEFAULT_PET.growth,
       });
-      if (event.data.backgroundColor !== undefined) {
-        // set app background color
-        app.renderer.background.color = event.data.backgroundColor;
-      }
-      if (app !== undefined) {
-        app.stage.removeChildren();
-        app.destroy();
-      }
-      initApp();
-      basicText.text = `code typed: ${numberOfCharacters}`;
-      // remove all pets
-      activeFile.pets.forEach((pet) => {
-        app.stage.removeChild(pet.animatedSprite as PIXI.DisplayObject);
+
+      newPet = new Pet({
+        textures: textures,
+        ...DEFAULT_PET,
+        app: app,
       });
-      // if file already opened, do nothing
-      if (filesSaved.filter((file) => file.fileId === fileId).length > 0) {
-        // get file from savedFiles
-        const fileFromSaved = filesSaved.filter(
-          (file) => file.fileId === fileId
-        )[0];
-        // if any pet of activeFile eatingFood array is not empty remove the activeFile from savedFiles
-        if (
-          fileFromSaved.pets.filter((pet) => pet.eatingFood.length > 0)
-            .length === 0
-        ) {
-          activeFile = filesSaved.filter((file) => file.fileId === fileId)[0];
-          activeFile.pets.forEach((pet) => {
-            app.stage.addChild(pet.animatedSprite as PIXI.DisplayObject);
-            if (pet.growth === IPetGrowth.old) {
-              pet.animatedSprite.y =
-                app.renderer.height - pet.animatedSprite.height / 2;
-            } else {
-              pet.animatedSprite.y =
-                app.renderer.height / 2 -
-                activeFile.pets[0].animatedSprite.height / 2 -
-                10;
-            }
-            // set pet to center of screen
-            pet.animatedSprite.x =
-              (app.renderer.width - pet.animatedSprite.width) / 2;
-          });
-          return;
-        } else {
-          // remove file from savedFiles
-          filesSaved = filesSaved.filter((file) => file.fileId !== fileId);
-        }
-      }
+      // random speed between 0.5 and 1.5
+      newPet.speed = 0.5 + Math.random();
       activeFile = {
-        numberOfCharacters: numberOfCharacters,
-        fileId: fileId,
+        numberOfCharacters: 0,
+        fileId: "",
         pets: [],
-        keystrokeCount: numberOfCharacters,
+        petInGrow: newPet,
+        keystrokeCount: 0,
       };
 
-      // let timebetweenFeed = 0.01;
-      // let animationSpeed = 500;
-      // feedPet({
-      //   newCharacterCount: activeFile.keystrokeCount,
-      //   timebetweenFeed,
-      //   file: activeFile,
-      //   appHeight: app.renderer.height,
-      //   appWidth: app.renderer.width,
-      //   animationSpeed,
-      // });
+      let activeFileJSON = activeFileToJson();
 
-      console.log("yo", calculatePetsAndLastAge(activeFile.keystrokeCount));
+      vscode.setState({ activeFile: activeFileJSON });
 
-      const petsCalculated = calculatePetsAndLastAge(activeFile.keystrokeCount);
-      const petsToAdd = petsCalculated.numberOfPets;
-      const lastPetAge = petsCalculated.lastPetAge;
-      const xpMultiplierCalculated = petsCalculated.xpMultiplier;
-      const growth = petsCalculated.growth;
-
-      let firstPet: PetClass = PetClass.create({
-        state: petState.idle,
-        elapsed: 0.0,
-        moveDir: 0,
-        eachKeyCountBeforeEat: 1,
-        growth: growth,
-        xpMultiplicator: xpMultiplierCalculated,
-        xpToLevelUp: petXpToLevelUp,
-        petVersion: 1,
-        xp: lastPetAge,
-      });
-
-      app.stage.addChild(firstPet.animatedSprite as PIXI.DisplayObject);
-      firstPet.animatedSprite.scale.set(2, 2);
-
-      console.log("2");
-      activeFile.pets.push(firstPet);
-
-      activeFile.pets[0].animatedSprite.y =
-        app.renderer.height / 2 -
-        activeFile.pets[0].animatedSprite.height / 2 -
-        5;
-
-      // set pet to center of screen
-      activeFile.pets[0].animatedSprite.x =
-        (app.renderer.width - activeFile.pets[0].animatedSprite.width) / 2;
-      activeFile.pets[0].animatedSprite.play();
-      activeFile.pets[0].updateAnimatedSprite({
-        animations:
-          activeFile.pets[0].getAnimationPossibility()[
-            activeFile.keystrokeCount === 0 ? 0 : (growth as IPetGrowth)
-          ].idle,
-        app,
-      });
-
-      if (activeFile.keystrokeCount >= petXpToLevelUp - petXpToLevelUp / 6) {
-        const newPets = Array.from(
-          { length: petsToAdd === 1 ? 1 : petsToAdd - 1 },
-          (_, i) => {
-            let petCreated = PetClass.create({
-              state: petState.walk,
-              elapsed: 0.0,
-              moveDir: 0,
-              eachKeyCountBeforeEat: 1,
-              growth: IPetGrowth.old,
-              xpMultiplicator: 1,
-              xpToLevelUp: petXpToLevelUp,
-              petVersion: Math.floor(Math.random() * 2),
-              xp: 0,
-            });
-            app.stage.addChild(petCreated.animatedSprite as PIXI.DisplayObject);
-            petCreated.animatedSprite.x = app.renderer.width / 2;
-            petCreated.animatedSprite.y =
-              (app.renderer.height - petCreated.animatedSprite.height) / 2;
-            petCreated.animatedSprite.play();
-            petCreated.updateAnimatedSprite({
-              animations:
-                petCreated.getAnimationPossibility()[IPetGrowth.old].walk,
-              app,
-            });
-            petCreated.xpBarFill.width = 0;
-            petCreated.xpBarContainer.width = 0;
-            petCreated.moveDir = 1;
-            return petCreated;
-          }
-        );
-
-        newPets[newPets.length - 1].xpToLevelUp = lastPetAge;
-
-        console.log("3");
-        activeFile.pets.push(...newPets);
-      }
-      console.log(
-        "activeFile.pets",
-        activeFile.pets.length,
-        app.stage.children
-      );
-      saveFile({ file: activeFile });
-
-      app.stage.addChild(basicText as PIXI.DisplayObject);
+      initApp();
     }
   });
 

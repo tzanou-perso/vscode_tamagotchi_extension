@@ -57,6 +57,15 @@
         }
       ]
     },
+    "menus": {
+      "view/title": [
+        {
+          "command": "tamagotchi.resetState",
+          "when": "tamagotchi.position == 'explorer'",
+          "group": "navigation@1"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "tamagotchi.openGarden",
@@ -69,6 +78,15 @@
       {
         "command": "tamagotchi.documentOpened",
         "title": "Tamagotchi: Document Opened"
+      },
+      {
+        "command": "tamagotchi.resetState",
+        "title": "Reset the game",
+        "category": "tamagotchi",
+        "icon": {
+          "dark": "media/icon/dark-reset.svg",
+          "light": "media/icon/light-reset.svg"
+        }
       }
     ]
   },

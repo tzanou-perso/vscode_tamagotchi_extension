@@ -1,0 +1,130 @@
+{ "frames": [
+   {
+    "filename": "affraid.0",
+    "frame": { "x": 78, "y": 43, "w": 26, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 20 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "affraid.1",
+    "frame": { "x": 26, "y": 0, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "affraid.2",
+    "frame": { "x": 0, "y": 0, "w": 26, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 23 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "dead.0",
+    "frame": { "x": 0, "y": 44, "w": 26, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 20 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.0",
+    "frame": { "x": 52, "y": 0, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 9, "w": 26, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.1",
+    "frame": { "x": 78, "y": 0, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 9, "w": 26, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.2",
+    "frame": { "x": 52, "y": 44, "w": 20, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 9, "w": 20, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.3",
+    "frame": { "x": 26, "y": 22, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.4",
+    "frame": { "x": 52, "y": 22, "w": 26, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 22 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.0",
+    "frame": { "x": 78, "y": 22, "w": 26, "h": 21 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 21 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.1",
+    "frame": { "x": 0, "y": 23, "w": 26, "h": 21 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 9, "w": 26, "h": 21 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.2",
+    "frame": { "x": 26, "y": 44, "w": 26, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 9, "w": 26, "h": 20 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.40-x64",
+  "image": "tamagotchi.png",
+  "format": "I8",
+  "size": { "w": 104, "h": 66 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "affraid", "from": 0, "to": 2, "direction": "forward" },
+   { "name": "dead", "from": 3, "to": 3, "direction": "forward" },
+   { "name": "idle", "from": 4, "to": 8, "direction": "forward" },
+   { "name": "walk", "from": 9, "to": 11, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

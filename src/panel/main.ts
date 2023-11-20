@@ -150,6 +150,7 @@ setTimeout(async () => {
         petInGrow: petToInsert,
         keystrokeCount: fileFromFileSaved.keystrokeCount,
         bosses: bosses,
+        bestCombo: fileFromFileSaved.bestCombo,
       };
     }
 
@@ -179,7 +180,7 @@ setTimeout(async () => {
       wordWrapWidth: 440,
     });
 
-    comboCharacter = new PIXI.Text("Combo: " + 0);
+    comboCharacter = new PIXI.Text("Best combo: " + activeFile.bestCombo ?? 0);
     comboCharacter.x = 5;
     comboCharacter.y = 15;
     comboCharacter.style = new PIXI.TextStyle({
@@ -199,7 +200,7 @@ setTimeout(async () => {
     app.stage.addChild(basicText as PIXI.DisplayObject);
 
     if (activeFile !== undefined && activeFile.numberOfCharacters > 0) {
-      comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
+      comboCharacter.text = `Best combo: ${activeFile.bestCombo}`;
     }
 
     app.stage.addChild(comboCharacter as PIXI.DisplayObject);
@@ -266,6 +267,7 @@ setTimeout(async () => {
         petInGrow: newPet,
         keystrokeCount: 0,
         bosses: [],
+        bestCombo: 0,
       };
     }
   };
@@ -365,6 +367,7 @@ setTimeout(async () => {
       petInGrow: petJson,
       keystrokeCount: activeFile.keystrokeCount,
       bosses: bossJson,
+      bestCombo: activeFile.bestCombo,
     });
 
     console.log("file saved", activeFileJson);
@@ -455,6 +458,7 @@ setTimeout(async () => {
       petInGrow: petJson,
       keystrokeCount: activeFile.keystrokeCount,
       bosses: bossJson,
+      bestCombo: activeFile.bestCombo,
     });
     // Update the saved state
     vscode.setState({ activeFile: activeFileJson });
@@ -492,7 +496,15 @@ setTimeout(async () => {
 
       basicText.text = `All: ${activeFile.keystrokeCount}`;
 
-      comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
+      if (activeFile.numberOfCharacters > activeFile.bestCombo) {
+        activeFile.bestCombo = activeFile.numberOfCharacters;
+        comboCharacter.text = `Best Combo: ${activeFile.bestCombo}`;
+      }
+      console.log(
+        "slfksdflksdflskfsmlfksdmflksdfmskfm",
+        activeFile.numberOfCharacters,
+        activeFile.bestCombo
+      );
 
       if (activeFile.numberOfCharacters > 0) {
         // dont add boss if the last one spawned less than timeBetweenBossSpawnInSeconds
@@ -514,10 +526,6 @@ setTimeout(async () => {
             pet.giveBackHealth(1);
           }
         }
-
-        comboCharacter.alpha = 1;
-
-        comboCharacter.style.fontSize = 20;
 
         activeFile.petInGrow.giveXp(1);
 
@@ -561,10 +569,6 @@ setTimeout(async () => {
         timer = setTimeout(() => {
           activeFile.numberOfCharacters = 0;
 
-          comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
-
-          (comboCharacter.style.fontSize = 10), (comboCharacter.alpha = 0.5);
-
           if (activeFile.petInGrow.growth !== 0) {
             setAdult({ withTransition: true });
           }
@@ -598,6 +602,7 @@ setTimeout(async () => {
         petInGrow: newPet,
         keystrokeCount: 0,
         bosses: [],
+        bestCombo: 0,
       };
 
       let activeFileJSON = activeFileToJson();

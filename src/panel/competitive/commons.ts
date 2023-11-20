@@ -11,6 +11,7 @@ export type FilesSaved = {
   pets: Pet[];
   bosses: Boss[];
   keystrokeCount: number;
+  bestCombo: number;
 };
 
 export const DEFAULT_PET = {

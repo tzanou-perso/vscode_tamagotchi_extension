@@ -1,8 +1,34 @@
 import * as PIXI from "pixi.js";
 import { Character } from "../character";
 import { EPetState, IPetHeader } from "../commons";
-import tamagotchyArray from "../../../../../media/images/pets/tamagotchi/tamagotchi_array.json";
-import tamagotchiImages from "../../../../../media/images/pets/tamagotchi/tamagotchi.png";
+
+import tamagotchiSheet0 from "../../../../../media/images/pets/tamagotchi/singles/0/tamagotchi.png";
+import tamagotchiJson0 from "../../../../../media/images/pets/tamagotchi/singles/0/tamagotchi.json";
+
+import tamagotchiSheet1 from "../../../../../media/images/pets/tamagotchi/singles/1/tamagotchi.png";
+import tamagotchiJson1 from "../../../../../media/images/pets/tamagotchi/singles/1/tamagotchi.json";
+
+import tamagotchiSheet2 from "../../../../../media/images/pets/tamagotchi/singles/2/tamagotchi.png";
+import tamagotchiJson2 from "../../../../../media/images/pets/tamagotchi/singles/2/tamagotchi.json";
+
+import tamagotchiSheet3 from "../../../../../media/images/pets/tamagotchi/singles/3/tamagotchi.png";
+import tamagotchiJson3 from "../../../../../media/images/pets/tamagotchi/singles/3/tamagotchi.json";
+
+import tamagotchiSheet4 from "../../../../../media/images/pets/tamagotchi/singles/4/tamagotchi.png";
+import tamagotchiJson4 from "../../../../../media/images/pets/tamagotchi/singles/4/tamagotchi.json";
+
+import tamagotchiSheet5 from "../../../../../media/images/pets/tamagotchi/singles/5/tamagotchi.png";
+import tamagotchiJson5 from "../../../../../media/images/pets/tamagotchi/singles/5/tamagotchi.json";
+
+import tamagotchiSheet6 from "../../../../../media/images/pets/tamagotchi/singles/6/tamagotchi.png";
+import tamagotchiJson6 from "../../../../../media/images/pets/tamagotchi/singles/6/tamagotchi.json";
+
+import tamagotchiSheet7 from "../../../../../media/images/pets/tamagotchi/singles/7/tamagotchi.png";
+import tamagotchiJson7 from "../../../../../media/images/pets/tamagotchi/singles/7/tamagotchi.json";
+
+import tamagotchiSheet8 from "../../../../../media/images/pets/tamagotchi/singles/8/tamagotchi.png";
+import tamagotchiJson8 from "../../../../../media/images/pets/tamagotchi/singles/8/tamagotchi.json";
+
 import { ITexture, SpriteElement } from "../../sprite/sprite_element";
 import PetHeader from "./pet_header";
 import SimpleListener, {
@@ -10,6 +36,46 @@ import SimpleListener, {
 } from "../../../commons/simple_listener";
 import CommonsCompetitiveSingleton, { DEFAULT_PET } from "../../commons";
 import { activeFile } from "../../../main";
+import { t } from "@vscode/l10n";
+
+export const tamagotchiesAnimation = [
+  {
+    animation: tamagotchiJson0,
+    sheet: tamagotchiSheet0,
+  },
+  {
+    animation: tamagotchiJson1,
+    sheet: tamagotchiSheet1,
+  },
+  {
+    animation: tamagotchiJson2,
+    sheet: tamagotchiSheet2,
+  },
+  {
+    animation: tamagotchiJson3,
+    sheet: tamagotchiSheet3,
+  },
+  {
+    animation: tamagotchiJson4,
+    sheet: tamagotchiSheet4,
+  },
+  {
+    animation: tamagotchiJson5,
+    sheet: tamagotchiSheet5,
+  },
+  {
+    animation: tamagotchiJson6,
+    sheet: tamagotchiSheet6,
+  },
+  {
+    animation: tamagotchiJson7,
+    sheet: tamagotchiSheet7,
+  },
+  {
+    animation: tamagotchiJson8,
+    sheet: tamagotchiSheet8,
+  },
+];
 
 export default class Pet extends PIXI.AnimatedSprite implements Character {
   growth: number;
@@ -75,12 +141,13 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.xp = xp;
     this.elapsed = elapsed;
     this.maxXp = maxXp;
+    this.maxXp = this.maxXpLogarithm;
     this.maxHealth = maxHealth;
     this.health = health;
     this.petHeader = new PetHeader({
       height: 3,
       width: 50,
-      maxXp: maxXp,
+      maxXp: this.maxXp,
       health: health,
       maxHealth: maxHealth,
     });
@@ -127,6 +194,31 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     console.log("petheader", this.health, this.maxHealth);
     this.ticker.start();
     this.play();
+  }
+
+  get maxXpLogarithm(): number {
+    return Math.round(this.calculateLevelMultiplier(this.growth) * this.maxXp);
+  }
+
+  calculateLevelMultiplier(level: number) {
+    // Adjust the base value for the initial growth
+    const initialBase = 1;
+
+    const laterBase = 0.26;
+
+    // Threshold level after which the multiplier remains constant
+    const thresholdLevel = 0;
+
+    // Calculate the level multiplier using different formulas before and after the threshold
+    let multiplier;
+    if (level <= thresholdLevel) {
+      multiplier = Math.round(Math.pow(level / 50 + 1, initialBase));
+    } else {
+      multiplier = Math.round(Math.pow(level, laterBase));
+      // console.log("multiplier", multiplier);
+    }
+
+    return multiplier;
   }
 
   giveBackHealth(amount: number): void {
@@ -296,14 +388,14 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
 
   giveXp(xp: number): void {
     this.xp += xp;
-    if (this.xp >= this.maxXp) {
+    if (this.xp > this.maxXp) {
       this.growth += 1;
       this.maxHealth =
         this.growth === 0 ? 0 : this.growth * DEFAULT_PET.maxHealth;
       this.health = this.growth === 0 ? 0 : this.growth * DEFAULT_PET.health;
       console.log("giveXp", this.health, this.maxHealth);
 
-      if (tamagotchyArray.length <= this.growth) {
+      if (tamagotchiesAnimation.length <= this.growth) {
         this.petHeader.xpBarContainer.visible = false;
         if (this.health === this.maxHealth) {
           this.petHeader.healthBarContainer.visible = false;
@@ -312,21 +404,17 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
           this.petHeader.healthBarContainer.visible = true;
           this.petHeader.headerContainer.visible = true;
         }
-        console.log(
-          "start update health bar fill",
-          this.health,
-          this.maxHealth
-        );
         this.petHeader.updateHealthBarFill(this.health, this.maxHealth);
         this.replacePetHeader(20, -5);
         this.state = EPetState.ADULTTRANSITION;
         this.isAdult = true;
       } else {
+        this.maxXp = this.maxXpLogarithm;
         this.xp = 0;
         this.updateAnimations();
       }
     }
-    this.petHeader.updateXpBarFill(this.xp);
+    this.petHeader.updateXpBarFill(this.xp, this.maxXp);
   }
 
   setToAdult(): void {
@@ -375,22 +463,31 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
         ? "walk"
         : "idle";
     const textureArray: ITexture[] = [];
-    if (growth >= tamagotchyArray.length) {
-      growth = tamagotchyArray.length - 1;
+    if (growth >= tamagotchiesAnimation.length) {
+      growth = tamagotchiesAnimation.length - 1;
     }
-    let animations = tamagotchyArray[growth][type].animation;
-    for (let animation of animations) {
-      const textLoaded = await PIXI.Assets.load(tamagotchiImages);
-      let frame = new PIXI.Rectangle(
-        animation.x,
-        animation.y,
-        animation.width,
-        animation.height
+    const animationJson = tamagotchiesAnimation[growth].animation;
+    let frameTag = animationJson.meta.frameTags.find(
+      (tag) => tag.name === type
+    );
+    if (frameTag !== undefined) {
+      const textLoaded = await PIXI.Assets.load(
+        tamagotchiesAnimation[growth].sheet
       );
-
-      let text = new PIXI.Texture(textLoaded.baseTexture, frame);
-      textureArray.push({ texture: text, time: animation.time });
+      for (let i = frameTag.from; i <= frameTag.to; i++) {
+        // const row = `${type}.${i}` as keyof typeof bossArray.frames;
+        const bossArrayFrame = animationJson.frames[i];
+        let frame = new PIXI.Rectangle(
+          bossArrayFrame.frame.x,
+          bossArrayFrame.frame.y,
+          bossArrayFrame.frame.w,
+          bossArrayFrame.frame.h
+        );
+        let text = new PIXI.Texture(textLoaded.baseTexture, frame);
+        textureArray.push({ texture: text, time: bossArrayFrame.duration });
+      }
     }
+    console.log("createAnimations", textureArray);
     return textureArray;
   }
 
@@ -404,24 +501,33 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
         ? "walk"
         : "idle";
     const textureArray: ITexture[] = [];
-    if (this.growth >= tamagotchyArray.length) {
-      this.growth = tamagotchyArray.length - 1;
+    if (this.growth >= tamagotchiesAnimation.length) {
+      this.growth = tamagotchiesAnimation.length - 1;
     }
-    let animations = tamagotchyArray[this.growth][type].animation;
-    const textLoaded = await PIXI.Assets.load(tamagotchiImages);
-    for (let animation of animations) {
-      let frame = new PIXI.Rectangle(
-        animation.x,
-        animation.y,
-        animation.width,
-        animation.height
+    const animationJson = tamagotchiesAnimation[this.growth].animation;
+    let frameTag = animationJson.meta.frameTags.find(
+      (tag) => tag.name === type
+    );
+    if (frameTag !== undefined) {
+      const textLoaded = await PIXI.Assets.load(
+        tamagotchiesAnimation[this.growth].sheet
       );
-
-      let text = new PIXI.Texture(textLoaded.baseTexture, frame);
-      textureArray.push({ texture: text, time: animation.time });
+      for (let i = frameTag.from; i <= frameTag.to; i++) {
+        // const row = `${type}.${i}` as keyof typeof bossArray.frames;
+        const bossArrayFrame = animationJson.frames[i];
+        let frame = new PIXI.Rectangle(
+          bossArrayFrame.frame.x,
+          bossArrayFrame.frame.y,
+          bossArrayFrame.frame.w,
+          bossArrayFrame.frame.h
+        );
+        let text = new PIXI.Texture(textLoaded.baseTexture, frame);
+        textureArray.push({ texture: text, time: bossArrayFrame.duration });
+      }
     }
-    this.textures = textureArray;
 
+    console.log("updateAnimations", textureArray);
+    this.textures = textureArray;
     this.play();
   }
 

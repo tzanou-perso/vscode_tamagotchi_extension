@@ -1,5 +1,4 @@
 import * as PIXI from "pixi.js";
-import * as tamagotchiJson from "../../media/images/pets/tamagotchi/tamagotchi.json";
 import backgroundImageTop from "../../media/images/background/first/top.png";
 import backgroundImageBottom from "../../media/images/background/first/bottom.png";
 import backgroundImageFull from "../../media/images/background/first/full.png";
@@ -500,7 +499,7 @@ setTimeout(async () => {
         let currentTime = Date.now() / 1000; // Convert to seconds
         if (currentTime >= bossSpawnTime + timeBetweenBossSpawnInSeconds) {
           if (
-            activeFile.pets.length > 1 &&
+            activeFile.pets.length > 9 &&
             activeFile.bosses.length === 0 &&
             activeFile.pets.filter((pet) => pet.health < pet.maxHealth)
               .length === 0

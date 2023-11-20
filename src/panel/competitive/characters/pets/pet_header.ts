@@ -68,8 +68,19 @@ export default class PetHeader {
     this.xpBarContainer.y = 0;
   }
 
-  updateXpBarFill(xp: number) {
+  updateXpBarFill(xp: number, newMaxXp?: number) {
+    this.maxXp = newMaxXp || this.maxXp;
+
     this.xpBarFill.width = this.width * (xp / this.maxXp);
+    // this.xpBarContainer.width = this.width;
+    console.log(
+      "xp bar fill width",
+      this.xpBarFill.width,
+      this.xpBarContainer.width,
+      this.width,
+      xp,
+      this.maxXp
+    );
   }
 
   updateHealthBarFill(health: number, newMaxHealth?: number) {

@@ -18,7 +18,7 @@ export const DEFAULT_PET = {
   moveDir: 0,
   growth: 0,
   xp: 0,
-  maxXp: 10,
+  maxXp: 2,
   health: 1,
   maxHealth: 1,
   speed: 1,

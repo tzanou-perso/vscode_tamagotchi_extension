@@ -1,3 +1,4 @@
+import Boss from "./characters/boss/boss";
 import { EPetState } from "./characters/commons";
 import Pet from "./characters/pets/pet";
 import Portal, { EPortalState } from "./portal/portal";
@@ -8,6 +9,7 @@ export type FilesSaved = {
   fileId: string;
   petInGrow: Pet;
   pets: Pet[];
+  bosses: Boss[];
   keystrokeCount: number;
 };
 
@@ -17,11 +19,15 @@ export const DEFAULT_PET = {
   growth: 0,
   xp: 0,
   maxXp: 10,
-  health: 100,
+  health: 1,
+  maxHealth: 1,
   speed: 1,
   state: EPetState.IDLE,
   isAdult: false,
   speedFall: 1,
+  attackSpeed: 1,
+  strength: 1,
+  indexInActiveFile: 0,
 };
 
 export const COOLDOWN_COMBO = 800;

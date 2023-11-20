@@ -5,6 +5,7 @@ import backgroundImageBottom from "../../media/images/background/first/bottom.pn
 import backgroundImageFull from "../../media/images/background/first/full.png";
 import platformImage from "../../media/images/background/first/platform.png";
 import Pet from "./competitive/characters/pets/pet";
+import Boss from "./competitive/characters/boss/boss";
 import CommonsCompetitiveSingleton, {
   FilesSaved,
   DEFAULT_PET,
@@ -16,6 +17,8 @@ import Portal, { EPortalState } from "./competitive/portal/portal";
 import { SpriteElement } from "./competitive/sprite/sprite_element";
 import TextTimer from "./competitive/text_timer";
 import { stat } from "fs";
+
+export let activeFile: FilesSaved;
 declare global {
   interface VscodeStateApi {
     postMessage(message: WebviewMessage): void;
@@ -27,18 +30,16 @@ declare global {
 
 let lastComboText: TextTimer | undefined;
 let portal: Portal;
-let activeFile: FilesSaved;
-let inResetState: boolean = false;
+const timeBetweenBossSpawnInSeconds = 60;
+let bossSpawnTime: number = 0;
+const queuePetToKill: { index: number; pet: Pet }[] = [];
+const queueBossToKill: { index: number; boss: Boss }[] = [];
 type BgCover = {
   container: PIXI.Container<PIXI.DisplayObject>;
   doResize: () => void;
 };
 
-const petXpToLevelUp = 60;
-
 console.log("main.js loaded");
-let stateApi: VscodeStateApi;
-let filesSaved: FilesSaved[] = [];
 let timer: NodeJS.Timeout;
 
 let basicText: PIXI.Text;
@@ -97,8 +98,11 @@ setTimeout(async () => {
       state: EPortalState.IDLE,
       moveDir: 0,
       health: 100,
+      maxHealth: 100,
       speed: 0,
       app: app,
+      attackSpeed: 0,
+      strength: 0,
     });
     app.stage.addChild(portal as PIXI.DisplayObject);
   };
@@ -114,10 +118,13 @@ setTimeout(async () => {
     console.log("state", state?.activeFile);
     if (state && state.activeFile !== undefined) {
       let fileFromFileSaved = JSON.parse(state.activeFile);
+      console.log("fileFromFileSaved", fileFromFileSaved);
       const pets = [];
+      const bosses = [];
 
       let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, app);
 
+      if (fileFromFileSaved.pets === undefined) fileFromFileSaved.pets = [];
       for (let pet of fileFromFileSaved.pets) {
         const petToImport = await Pet.fromJson(pet, app);
         // // set pos in random position inside the screen
@@ -125,9 +132,17 @@ setTimeout(async () => {
         //   x: pet.x,
         //   y: pet.y,
         // });
-
+        petToImport.indexInActiveFile = pets.length;
         pets.push(petToImport);
       }
+      if (fileFromFileSaved.bosses === undefined) fileFromFileSaved.bosses = [];
+      for (let boss of fileFromFileSaved.bosses) {
+        const bossToImport = await Boss.fromJson(boss, app);
+        bossToImport.indexInActiveFile = bosses.length;
+        bossToImport.enemies = pets;
+        bosses.push(bossToImport);
+      }
+      console.log("bossToImport", bosses);
 
       activeFile = {
         numberOfCharacters: fileFromFileSaved.numberOfCharacters,
@@ -135,6 +150,7 @@ setTimeout(async () => {
         pets: pets,
         petInGrow: petToInsert,
         keystrokeCount: fileFromFileSaved.keystrokeCount,
+        bosses: bosses,
       };
     }
 
@@ -223,20 +239,25 @@ setTimeout(async () => {
     if (
       activeFile !== undefined &&
       activeFile.pets !== undefined &&
-      activeFile.pets.length > 0
+      (activeFile.pets.length > 0 || activeFile.bosses.length > 0)
     ) {
       for (let pet of activeFile.pets) {
         app.stage.addChild(pet as PIXI.DisplayObject);
 
         pet.petHeader.xpBarContainer.visible = false;
-
-        pet.removeChild(pet.petHeader.xpBarContainer as PIXI.DisplayObject);
-
-        pet.petHeader.xpBarContainer.destroy({
-          children: true,
-          texture: true,
-          baseTexture: true,
-        });
+        if (pet.health === pet.maxHealth) {
+          pet.petHeader.healthBarContainer.visible = false;
+          pet.petHeader.headerContainer.visible = false;
+        } else {
+          pet.petHeader.healthBarContainer.visible = true;
+          pet.petHeader.headerContainer.visible = true;
+        }
+        pet.petHeader.headerContainer.width = 20;
+        pet.replacePetHeader(20, -5);
+        pet.petHeader.updateHealthBarFill(pet.health);
+      }
+      for (let boss of activeFile.bosses) {
+        app.stage.addChild(boss as PIXI.DisplayObject);
       }
     } else {
       activeFile = {
@@ -245,6 +266,7 @@ setTimeout(async () => {
         pets: [],
         petInGrow: newPet,
         keystrokeCount: 0,
+        bosses: [],
       };
     }
   };
@@ -273,6 +295,19 @@ setTimeout(async () => {
   const setAdult = async ({ withTransition }: { withTransition: boolean }) => {
     if (withTransition) {
       activeFile.petInGrow.petHeader.xpBarContainer.visible = false;
+      if (activeFile.petInGrow.health === activeFile.petInGrow.maxHealth) {
+        activeFile.petInGrow.petHeader.healthBarContainer.visible = false;
+        activeFile.petInGrow.petHeader.headerContainer.visible = false;
+      } else {
+        activeFile.petInGrow.petHeader.healthBarContainer.visible = true;
+        activeFile.petInGrow.petHeader.headerContainer.visible = true;
+      }
+      activeFile.petInGrow.petHeader.headerContainer.width = 20;
+      activeFile.petInGrow.replacePetHeader(20, -5);
+      activeFile.petInGrow.petHeader.updateHealthBarFill(
+        activeFile.petInGrow.health,
+        activeFile.petInGrow.maxHealth
+      );
 
       if (activeFile.petInGrow !== undefined) {
         activeFile.petInGrow.y =
@@ -283,7 +318,7 @@ setTimeout(async () => {
     } else {
       activeFile.petInGrow.setToAdult();
     }
-
+    activeFile.petInGrow.indexInActiveFile = activeFile.pets.length;
     activeFile.pets.push(activeFile.petInGrow);
 
     const lastPet = activeFile.petInGrow;
@@ -323,15 +358,88 @@ setTimeout(async () => {
 
     let petJson = activeFile.petInGrow.toJson();
 
+    let bossJson = activeFile.bosses.map((boss) => boss.toJson());
+
     let activeFileJson = JSON.stringify({
       numberOfCharacters: 0,
       pets: petsJson,
       petInGrow: petJson,
       keystrokeCount: activeFile.keystrokeCount,
+      bosses: bossJson,
     });
 
     console.log("file saved", activeFileJson);
     return activeFileJson;
+  };
+
+  const addBoss = async () => {
+    let bossText = await Boss.createAnimation({
+      state: EPetState.WALK,
+    });
+    const boss = new Boss({
+      textures: bossText,
+      state: EPetState.WALK,
+      moveDir: 1,
+      health: 10,
+      maxHealth: 10,
+      speed: Math.random() + 0.5,
+      app: app,
+      attackSpeed: 0,
+      strength: 0,
+      enemies: activeFile.pets,
+      decreaseHealthMultiplier: 1,
+      indexInActiveFile: activeFile.bosses.length,
+    });
+    activeFile.bosses.push(boss);
+    app.stage.addChild(boss as PIXI.DisplayObject);
+    boss.x = app.renderer.width / 2 - boss.width;
+    boss.y = app.renderer.height;
+  };
+
+  const launchQueuePetToKill = () => {
+    if (queuePetToKill.length > 0) {
+      console.log("launching queue pet to kill", queuePetToKill);
+      let petToKill = queuePetToKill[0].pet;
+      if (petToKill === undefined) {
+        queuePetToKill.shift();
+        launchQueuePetToKill();
+        return;
+      }
+      petToKill.ticker.stop();
+      let index = queuePetToKill[0].index;
+      activeFile.pets.splice(index, 1);
+      // give to other pets the right index
+      for (let pet of activeFile.pets) {
+        pet.indexInActiveFile = activeFile.pets.indexOf(pet);
+      }
+      app.stage.removeChild(petToKill as PIXI.DisplayObject);
+      petToKill.destroy();
+      queuePetToKill.shift();
+      launchQueuePetToKill();
+    }
+  };
+
+  const launchQueueBossToKill = () => {
+    if (queueBossToKill.length > 0) {
+      console.log("launching queue boss to kill", queueBossToKill);
+      let bossToKill = queueBossToKill[0].boss;
+      if (bossToKill === undefined) {
+        queueBossToKill.shift();
+        launchQueueBossToKill();
+        return;
+      }
+      bossToKill.ticker.stop();
+      let index = queueBossToKill[0].index;
+      activeFile.bosses.splice(index, 1);
+      // give to other pets the right index
+      for (let boss of activeFile.bosses) {
+        boss.indexInActiveFile = activeFile.bosses.indexOf(boss);
+      }
+      app.stage.removeChild(bossToKill as PIXI.DisplayObject);
+      bossToKill.destroy();
+      queueBossToKill.shift();
+      launchQueueBossToKill();
+    }
   };
 
   setInterval(() => {
@@ -340,11 +448,14 @@ setTimeout(async () => {
 
     let petJson = activeFile.petInGrow.toJson();
 
+    let bossJson = activeFile.bosses.map((boss) => boss.toJson());
+
     let activeFileJson = JSON.stringify({
       numberOfCharacters: 0,
       pets: petsJson,
       petInGrow: petJson,
       keystrokeCount: activeFile.keystrokeCount,
+      bosses: bossJson,
     });
     // Update the saved state
     vscode.setState({ activeFile: activeFileJson });
@@ -385,6 +496,26 @@ setTimeout(async () => {
       comboCharacter.text = `Combo: ${activeFile.numberOfCharacters}`;
 
       if (activeFile.numberOfCharacters > 0) {
+        // dont add boss if the last one spawned less than timeBetweenBossSpawnInSeconds
+        let currentTime = Date.now() / 1000; // Convert to seconds
+        if (currentTime >= bossSpawnTime + timeBetweenBossSpawnInSeconds) {
+          if (
+            activeFile.pets.length > 1 &&
+            activeFile.bosses.length === 0 &&
+            activeFile.pets.filter((pet) => pet.health < pet.maxHealth)
+              .length === 0
+          ) {
+            addBoss();
+            bossSpawnTime = currentTime;
+          }
+        }
+
+        if (activeFile.bosses.length === 0) {
+          for (let pet of activeFile.pets) {
+            pet.giveBackHealth(1);
+          }
+        }
+
         comboCharacter.alpha = 1;
 
         comboCharacter.style.fontSize = 20;
@@ -467,6 +598,7 @@ setTimeout(async () => {
         pets: [],
         petInGrow: newPet,
         keystrokeCount: 0,
+        bosses: [],
       };
 
       let activeFileJSON = activeFileToJson();
@@ -474,6 +606,28 @@ setTimeout(async () => {
       vscode.setState({ activeFile: activeFileJSON });
 
       initApp();
+    } else if (
+      event.data.type !== undefined &&
+      event.data.type === "petDeath"
+    ) {
+      console.log("pet deathin", event.data);
+      let petToKill = activeFile.pets[Number(event.data.message)];
+      queuePetToKill.push({
+        pet: petToKill,
+        index: Number(event.data.message),
+      });
+      launchQueuePetToKill();
+    } else if (
+      event.data.type !== undefined &&
+      event.data.type === "bossDeath"
+    ) {
+      console.log("boss deathin", event.data);
+      let bossToKill = activeFile.bosses[Number(event.data.message)];
+      queueBossToKill.push({
+        boss: bossToKill,
+        index: Number(event.data.message),
+      });
+      launchQueueBossToKill();
     }
   });
 

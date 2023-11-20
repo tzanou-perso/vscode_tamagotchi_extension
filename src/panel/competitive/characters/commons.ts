@@ -7,6 +7,8 @@ export enum EPetState {
   DEAD,
   WALK,
   ADULTTRANSITION,
+  ATTACK,
+  HIT,
 }
 export type IPetHeader = {
   xpBarContainer: PIXI.Graphics;

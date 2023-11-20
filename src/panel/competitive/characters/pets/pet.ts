@@ -8,7 +8,8 @@ import PetHeader from "./pet_header";
 import SimpleListener, {
   ComposedListener,
 } from "../../../commons/simple_listener";
-import CommonsCompetitiveSingleton from "../../commons";
+import CommonsCompetitiveSingleton, { DEFAULT_PET } from "../../commons";
+import { activeFile } from "../../../main";
 
 export default class Pet extends PIXI.AnimatedSprite implements Character {
   growth: number;
@@ -21,14 +22,19 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   state: EPetState;
   moveDir: number;
   health: number;
+  maxHealth: number;
   speed: number;
   app: PIXI.Application<HTMLCanvasElement>;
+  attackSpeed: number;
+  strength: number;
+  indexInActiveFile: number;
   constructor({
     textures,
     autoUpdate,
     state,
     moveDir,
     health,
+    maxHealth,
     speed,
     growth,
     xp,
@@ -39,12 +45,16 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     app,
     savedX,
     savedY,
+    attackSpeed,
+    strength,
+    indexInActiveFile,
   }: {
     textures: ITexture[];
     autoUpdate?: boolean;
     state: EPetState;
     moveDir: number;
     health: number;
+    maxHealth: number;
     speed: number;
     growth: number;
     xp: number;
@@ -55,6 +65,9 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     app: PIXI.Application<HTMLCanvasElement>;
     savedX?: number;
     savedY?: number;
+    attackSpeed: number;
+    strength: number;
+    indexInActiveFile: number;
   }) {
     super(textures, autoUpdate);
 
@@ -62,17 +75,24 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.xp = xp;
     this.elapsed = elapsed;
     this.maxXp = maxXp;
+    this.maxHealth = maxHealth;
+    this.health = health;
     this.petHeader = new PetHeader({
       height: 3,
       width: 50,
       maxXp: maxXp,
+      health: health,
+      maxHealth: maxHealth,
     });
     this.isAdult = isAdult;
     this.speedFall = speedFall;
     this.state = state;
     this.moveDir = moveDir;
-    this.health = health;
     this.speed = speed;
+    this.indexInActiveFile = indexInActiveFile;
+
+    this.attackSpeed = attackSpeed;
+    this.strength = strength;
 
     this.app = app;
 
@@ -86,13 +106,63 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       this.y = savedY;
     }
 
-    this.addChild(this.petHeader.getContainer() as PIXI.DisplayObject);
-    this.petHeader.xpBarContainer.x = -this.petHeader.xpBarContainer.width / 2;
-    2;
-    this.petHeader.xpBarContainer.y = -this.height;
+    this.addChild(this.petHeader.headerContainer as PIXI.DisplayObject);
+    this.replacePetHeader();
+    if (this.isAdult) {
+      this.petHeader.xpBarContainer.visible = false;
+      if (this.health === this.maxHealth) {
+        this.petHeader.healthBarContainer.visible = false;
+        this.petHeader.headerContainer.visible = false;
+      } else {
+        this.petHeader.healthBarContainer.visible = true;
+        this.petHeader.headerContainer.visible = true;
+      }
+      this.petHeader.headerContainer.width = 20;
+    } else {
+      this.petHeader.xpBarContainer.visible = true;
+      this.petHeader.healthBarContainer.visible = false;
+    }
     this.petHeader.updateXpBarFill(this.xp);
+    this.petHeader.updateHealthBarFill(this.health);
+    console.log("petheader", this.health, this.maxHealth);
     this.ticker.start();
     this.play();
+  }
+
+  giveBackHealth(amount: number): void {
+    if (this.health === this.maxHealth) return;
+    if (this.health + amount > this.maxHealth) {
+      this.health = this.maxHealth;
+    } else {
+      this.health += amount;
+    }
+    this.petHeader.updateHealthBarFill(this.health);
+    if (this.health === this.maxHealth) {
+      this.petHeader.healthBarContainer.visible = false;
+      this.petHeader.headerContainer.visible = false;
+    }
+  }
+
+  replacePetHeader(newWidth?: number, offsetY: number = 0): void {
+    if (newWidth !== undefined) this.petHeader.headerContainer.width = newWidth;
+    this.petHeader.headerContainer.x =
+      -this.petHeader.headerContainer.width / 2;
+    2;
+    this.petHeader.headerContainer.y = -this.height + offsetY;
+  }
+  onHitByAttack(): void {
+    this.health -= 1;
+    if (this.health > 0) {
+      this.petHeader.healthBarContainer.visible = true;
+      this.petHeader.headerContainer.visible = true;
+      this.petHeader.updateHealthBarFill(this.health);
+    } else {
+      window.postMessage({
+        type: "petDeath",
+        message: this.indexInActiveFile,
+      });
+    }
+    console.log("onHitByAttack", this.health, this.maxHealth);
   }
 
   private _events: string[] = [];
@@ -228,10 +298,27 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.xp += xp;
     if (this.xp >= this.maxXp) {
       this.growth += 1;
+      this.maxHealth =
+        this.growth === 0 ? 0 : this.growth * DEFAULT_PET.maxHealth;
+      this.health = this.growth === 0 ? 0 : this.growth * DEFAULT_PET.health;
+      console.log("giveXp", this.health, this.maxHealth);
 
       if (tamagotchyArray.length <= this.growth) {
         this.petHeader.xpBarContainer.visible = false;
-        this.removeChild(this.petHeader.xpBarContainer as PIXI.DisplayObject);
+        if (this.health === this.maxHealth) {
+          this.petHeader.healthBarContainer.visible = false;
+          this.petHeader.headerContainer.visible = false;
+        } else {
+          this.petHeader.healthBarContainer.visible = true;
+          this.petHeader.headerContainer.visible = true;
+        }
+        console.log(
+          "start update health bar fill",
+          this.health,
+          this.maxHealth
+        );
+        this.petHeader.updateHealthBarFill(this.health, this.maxHealth);
+        this.replacePetHeader(20, -5);
         this.state = EPetState.ADULTTRANSITION;
         this.isAdult = true;
       } else {
@@ -258,13 +345,17 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       this.state = EPetState.WALK;
       this._isInTransition = false;
       this.moveDir = +1;
-      this.petHeader.getContainer().visible = false;
+      this.petHeader.xpBarContainer.visible = false;
+      if (this.health === this.maxHealth) {
+        this.petHeader.healthBarContainer.visible = false;
+        this.petHeader.headerContainer.visible = false;
+      } else {
+        this.petHeader.healthBarContainer.visible = true;
+        this.petHeader.headerContainer.visible = true;
+      }
+      this.replacePetHeader(20, -5);
+      this.petHeader.updateHealthBarFill(this.health);
       this.updateAnimations();
-      this.petHeader.xpBarContainer.destroy({
-        children: true,
-        texture: true,
-        baseTexture: true,
-      });
     }, 1000);
   }
 
@@ -348,6 +439,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       state: this.state,
       moveDir: this.moveDir,
       health: this.health,
+      maxHealth: this.maxHealth,
       speed: this.speed,
       growth: this.growth,
       xp: this.xp,

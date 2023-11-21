@@ -105,7 +105,8 @@
     "test": "node ./out/test/runTest.js",
     "publish:patch": "npm version patch && git push && git push origin --tags",
     "publish:minor": "npm version minor && git push && git push origin --tags",
-    "publish:major": "npm version major && git push && git push origin --tags"
+    "publish:major": "npm version major && git push && git push origin --tags",
+    "changelog": "git cliff -o CHANGELOG.md"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",

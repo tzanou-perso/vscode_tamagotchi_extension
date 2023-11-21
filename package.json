@@ -138,6 +138,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8",
     "@vscode/l10n": "^0.0.10",
     "path": "^0.12.7",
     "pixi.js": "^7.3.2"

@@ -63,7 +63,7 @@ export default class Portal extends PIXI.AnimatedSprite implements Character {
 
   ticker: PIXI.Ticker = new PIXI.Ticker().add((delta) => {});
 
-  move(): void {
+  updateLoop(): void {
     throw new Error("Method not implemented.");
   }
   eat(): void {

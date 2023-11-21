@@ -58,6 +58,7 @@ export default class TextTimer extends PIXI.Text {
   }
 
   private ticker: PIXI.Ticker = new PIXI.Ticker().add((delta) => {
+    if (this.destroyed) return;
     this.timer += delta;
     if (this.timer <= this.timeToAnimInSeconds * 60) {
       if (this.animAlpha) {
@@ -86,8 +87,8 @@ export default class TextTimer extends PIXI.Text {
     setTimeout(
       () => {
         this.ticker.stop();
-        this.ticker.destroy();
         this.app.stage.removeChild(this as PIXI.DisplayObject);
+        this.ticker.destroy();
         this.destroy();
       },
       timeout !== undefined ? timeout : this.timeToAnimInSeconds

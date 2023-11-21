@@ -37,7 +37,7 @@ export abstract class Character {
 
   abstract ticker: PIXI.Ticker;
 
-  abstract move(): void;
+  abstract updateLoop(): void;
 
   abstract eat(): void;
 

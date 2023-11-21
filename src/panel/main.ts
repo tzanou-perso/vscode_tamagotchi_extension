@@ -186,8 +186,13 @@ setTimeout(async () => {
       wordWrap: true,
       wordWrapWidth: 440,
     });
-
-    comboCharacter = new PIXI.Text("Best combo: " + activeFile.bestCombo ?? 0);
+    if (activeFile !== undefined) {
+      comboCharacter = new PIXI.Text(
+        "Best combo: " + activeFile.bestCombo ?? 0
+      );
+    } else {
+      comboCharacter = new PIXI.Text("Best combo: " + 0);
+    }
     comboCharacter.x = 5;
     comboCharacter.y = 15;
     comboCharacter.style = new PIXI.TextStyle({
@@ -328,7 +333,7 @@ setTimeout(async () => {
         activeFile.petInGrow.y =
           activeFile.petInGrow.y - activeFile.petInGrow.height / 2;
       }
-
+      activeFile.petInGrow.startTimeToPosAnim = Date.now();
       activeFile.petInGrow.state = EPetState.ADULTTRANSITION;
     } else {
       activeFile.petInGrow.setToAdult();

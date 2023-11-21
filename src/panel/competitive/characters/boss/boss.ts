@@ -81,7 +81,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
   private lastUpdateTime;
   ticker: PIXI.Ticker = new PIXI.Ticker().add((delta) => {
     this.elapsed += delta;
-    this.move();
+    this.updateLoop();
 
     let currentTime = Date.now();
     let deltaTime = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
@@ -95,7 +95,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     }
   });
 
-  move(): void {
+  updateLoop(): void {
     let maxWidth = Math.max(
       ...this.textures.map((texture) => {
         // console.log("texture", texture);

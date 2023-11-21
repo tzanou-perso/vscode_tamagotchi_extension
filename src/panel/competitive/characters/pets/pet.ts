@@ -269,7 +269,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       }),
     });
 
-    this.app.stage.addChild(comboText);
+    this.app.stage.addChild(comboText as PIXI.DisplayObject);
 
     comboText.x = this.x;
     comboText.y = this.y - this.height;
@@ -304,7 +304,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       }),
     });
 
-    this.app.stage.addChild(comboText);
+    this.app.stage.addChild(comboText as PIXI.DisplayObject);
 
     comboText.x = this.x;
     comboText.y = this.y - this.height;

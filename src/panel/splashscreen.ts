@@ -26,9 +26,13 @@ export default class Splashscreen {
   public async resize(): Promise<void> {
     if (this.loaded) return;
     if (this._cloudResized1 && this._cloudResized2 && this._title) {
-      this.app.stage.removeChild(this._cloudResized1.container);
-      this.app.stage.removeChild(this._cloudResized2.container);
-      this.app.stage.removeChild(this._title.container);
+      this.app.stage.removeChild(
+        this._cloudResized1.container as PIXI.DisplayObject
+      );
+      this.app.stage.removeChild(
+        this._cloudResized2.container as PIXI.DisplayObject
+      );
+      this.app.stage.removeChild(this._title.container as PIXI.DisplayObject);
       this._cloudResized1.container.destroy();
       this._cloudResized2.container.destroy();
     }
@@ -66,9 +70,13 @@ export default class Splashscreen {
     this._title = background(containerSize, titleSpritePixi, "cover");
 
     if (!this._cloudResized1 || !this._cloudResized2 || !this._title) return;
-    this.app.stage.addChild(this._cloudResized1.container);
-    this.app.stage.addChild(this._cloudResized2.container);
-    this.app.stage.addChild(this._title.container);
+    this.app.stage.addChild(
+      this._cloudResized1.container as PIXI.DisplayObject
+    );
+    this.app.stage.addChild(
+      this._cloudResized2.container as PIXI.DisplayObject
+    );
+    this.app.stage.addChild(this._title.container as PIXI.DisplayObject);
     this._cloudResized1.container.position.y = 0;
     this._cloudResized1.container.position.x = 0;
     this._cloudResized2.container.position.x = 0;
@@ -103,18 +111,22 @@ export default class Splashscreen {
     ticker.stop();
     ticker.destroy();
     if (this._title !== undefined) {
-      this.app.stage.removeChild(this._title.container);
+      this.app.stage.removeChild(this._title.container as PIXI.DisplayObject);
       this._title.container.destroy();
       this._title = undefined;
     }
     if (this._cloudResized1 !== undefined) {
-      this.app.stage.removeChild(this._cloudResized1!.container);
+      this.app.stage.removeChild(
+        this._cloudResized1!.container as PIXI.DisplayObject
+      );
       this._cloudResized1.container.destroy();
       this._cloudResized1 = undefined;
     }
 
     if (this._cloudResized2 !== undefined) {
-      this.app.stage.removeChild(this._cloudResized2!.container);
+      this.app.stage.removeChild(
+        this._cloudResized2!.container as PIXI.DisplayObject
+      );
       this._cloudResized2.container.destroy();
       this._cloudResized2 = undefined;
     }

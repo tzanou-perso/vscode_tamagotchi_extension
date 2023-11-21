@@ -278,7 +278,10 @@ setTimeout(async () => {
       };
     }
     await splashscreen.resize();
-    app.stage.addChildAt(portal, app.stage.children.length - 1);
+    app.stage.addChildAt(
+      portal as PIXI.DisplayObject,
+      app.stage.children.length - 1
+    );
   };
   initApp();
 

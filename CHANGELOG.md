@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.3.0] - 2023-11-21
 
 ### Bug Fixes
 
 - Pet y when switching editor
+- New release bugs
 
 ### Features
 
@@ -17,10 +18,12 @@ All notable changes to this project will be documented in this file.
 - Pet growth in an logrith way to need more xp when they have a mor higher level
 - Add best combo in text layer
 - Pet go bigger more user type quick on the keyboard
+- Add changelog.md generating by cliff to project
 
 ### Update
 
 - Readme.md
+- Change demo.gif
 
 ## [0.2.5] - 2023-11-16
 

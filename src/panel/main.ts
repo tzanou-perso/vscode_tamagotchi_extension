@@ -9,6 +9,8 @@ import CommonsCompetitiveSingleton, {
   FilesSaved,
   DEFAULT_PET,
   COOLDOWN_COMBO,
+  BgCover,
+  background,
 } from "./competitive/commons";
 import { WebviewMessage } from "../types/types";
 import { EPetState } from "./competitive/characters/commons";
@@ -16,6 +18,7 @@ import Portal, { EPortalState } from "./competitive/portal/portal";
 import { SpriteElement } from "./competitive/sprite/sprite_element";
 import TextTimer from "./competitive/text_timer";
 import { stat } from "fs";
+import Splashscreen from "./splashscreen";
 
 export let activeFile: FilesSaved;
 declare global {
@@ -26,17 +29,19 @@ declare global {
   }
   const vscode: VscodeStateApi;
 }
-
+const timeBetweenCombo: {
+  startTime: number | undefined;
+  endTime: number | undefined;
+} = {
+  startTime: undefined,
+  endTime: undefined,
+};
 let lastComboText: TextTimer | undefined;
 let portal: Portal;
 const timeBetweenBossSpawnInSeconds = 60;
 let bossSpawnTime: number = 0;
 const queuePetToKill: { index: number; pet: Pet }[] = [];
 const queueBossToKill: { index: number; boss: Boss }[] = [];
-type BgCover = {
-  container: PIXI.Container<PIXI.DisplayObject>;
-  doResize: () => void;
-};
 
 console.log("main.js loaded");
 let timer: NodeJS.Timeout;
@@ -44,7 +49,7 @@ let timer: NodeJS.Timeout;
 let basicText: PIXI.Text;
 
 let comboCharacter: PIXI.Text;
-
+let splashscreen: Splashscreen;
 setTimeout(async () => {
   vscode.postMessage({
     text: "isInitialized",
@@ -159,8 +164,10 @@ setTimeout(async () => {
 
     // Adding the application's view to the DOM
     document.body.appendChild(app.view);
-
     // Set all the background of the app
+    splashscreen = new Splashscreen({ app, timeToLoad: 600 });
+    await splashscreen.init();
+
     await setBackgroundImage();
 
     // on window resize, resize the canvas too
@@ -270,6 +277,8 @@ setTimeout(async () => {
         bestCombo: 0,
       };
     }
+    await splashscreen.resize();
+    app.stage.addChildAt(portal, app.stage.children.length - 1);
   };
   initApp();
 
@@ -281,6 +290,8 @@ setTimeout(async () => {
     app.stage.removeChild(portal as PIXI.DisplayObject);
 
     app.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
+
+    splashscreen.resize();
 
     await setBackgroundImage();
 
@@ -563,10 +574,25 @@ setTimeout(async () => {
           setAdult({ withTransition: false });
         }
 
+        //calculate time in seconds between 2 events
+        if (timeBetweenCombo.startTime !== undefined) {
+          timeBetweenCombo.endTime = Date.now();
+          let timeBetweenComboInSeconds =
+            (timeBetweenCombo.endTime - timeBetweenCombo.startTime) / 1000;
+          console.log("timeBetweenComboInSeconds", timeBetweenComboInSeconds);
+
+          if (timeBetweenComboInSeconds < 0.168) {
+            activeFile.petInGrow.clickScore += 0.01;
+          }
+        }
+
+        timeBetweenCombo.startTime = Date.now();
         // if no new event detected in 2 seconds reset combo else reset the timer
         clearTimeout(timer);
 
         timer = setTimeout(() => {
+          timeBetweenCombo.startTime = undefined;
+          timeBetweenCombo.endTime = undefined;
           activeFile.numberOfCharacters = 0;
 
           if (activeFile.petInGrow.growth !== 0) {
@@ -634,74 +660,4 @@ setTimeout(async () => {
       launchQueueBossToKill();
     }
   });
-
-  /*
-   *  PixiJS Background Cover/Contain Script
-   *   Returns object
-   * . {
-   *       container: PixiJS Container
-   * .     doResize: Resize callback
-   *   }
-   *   ARGS:
-   *   bgSize: Object with x and y representing the width and height of background. Example: {x:1280,y:720}
-   *   inputSprite: Pixi Sprite containing a loaded image or other asset.  Make sure you preload assets into this sprite.
-   *   type: String, either "cover" or "contain".
-   *   forceSize: Optional object containing the width and height of the source sprite, example:  {x:1280,y:720}
-   */
-  function background(
-    bgSize: { x: number; y: number },
-    inputSprite: PIXI.Sprite,
-    type: string,
-    forceSize: { x: number; y: number } | undefined = undefined
-  ): BgCover {
-    var sprite = inputSprite;
-    var bgContainer = new PIXI.Container();
-    var mask = new PIXI.Graphics()
-      .beginFill(0x8bc5ff)
-      .drawRect(0, 0, bgSize.x, bgSize.y)
-      .endFill();
-    bgContainer.mask = mask;
-    bgContainer.addChild(mask as PIXI.DisplayObject);
-    bgContainer.addChild(sprite as PIXI.DisplayObject);
-
-    function resize() {
-      var sp = { x: sprite.width, y: sprite.height };
-      if (forceSize) sp = forceSize;
-      var winratio = bgSize.x / bgSize.y;
-      var spratio = sp.x / sp.y;
-      var scale = 1;
-      var pos = new PIXI.Point(0, 0);
-
-      if (type === "coverFromBottom") {
-        if (winratio > spratio) {
-          scale = bgSize.x / sp.x;
-        } else {
-          scale = bgSize.y / sp.y;
-          pos.x = (bgSize.x - sp.x * scale) / 2;
-        }
-        pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
-        // sprite.anchor.set(1, 1);
-      }
-      if (type === "cover") {
-        if (type == "cover" ? winratio > spratio : winratio < spratio) {
-          //photo is wider than background
-          scale = bgSize.x / sp.x;
-          pos.y = -(sp.y * scale - bgSize.y) / 2;
-        } else {
-          //photo is taller than background
-          scale = 1;
-          pos.x = -(sp.x * scale - bgSize.x) / 2;
-        }
-      }
-      sprite.scale = new PIXI.Point(scale, scale);
-      sprite.position = pos;
-    }
-
-    resize();
-    const res: BgCover = {
-      container: bgContainer,
-      doResize: resize,
-    };
-    return res;
-  }
 }, 0);

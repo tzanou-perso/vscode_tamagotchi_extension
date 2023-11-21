@@ -34,9 +34,13 @@ import PetHeader from "./pet_header";
 import SimpleListener, {
   ComposedListener,
 } from "../../../commons/simple_listener";
-import CommonsCompetitiveSingleton, { DEFAULT_PET } from "../../commons";
+import CommonsCompetitiveSingleton, {
+  COOLDOWN_COMBO,
+  DEFAULT_PET,
+} from "../../commons";
 import { activeFile } from "../../../main";
 import { t } from "@vscode/l10n";
+import TextTimer from "../../text_timer";
 
 export const tamagotchiesAnimation = [
   {
@@ -94,6 +98,8 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   attackSpeed: number;
   strength: number;
   indexInActiveFile: number;
+  clickScore: number;
+
   constructor({
     textures,
     autoUpdate,
@@ -114,6 +120,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     attackSpeed,
     strength,
     indexInActiveFile,
+    clickScore,
   }: {
     textures: ITexture[];
     autoUpdate?: boolean;
@@ -134,6 +141,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     attackSpeed: number;
     strength: number;
     indexInActiveFile: number;
+    clickScore: number;
   }) {
     super(textures, autoUpdate);
 
@@ -144,6 +152,8 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.maxXp = this.maxXpLogarithm;
     this.maxHealth = maxHealth;
     this.health = health;
+    this.clickScore = clickScore;
+    this.scale.set(1 * this.clickScore, 1 * this.clickScore);
     this.petHeader = new PetHeader({
       height: 3,
       width: 50,
@@ -191,13 +201,15 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     }
     this.petHeader.updateXpBarFill(this.xp);
     this.petHeader.updateHealthBarFill(this.health);
-    console.log("petheader", this.health, this.maxHealth);
     this.ticker.start();
     this.play();
   }
 
   get maxXpLogarithm(): number {
-    return Math.round(this.calculateLevelMultiplier(this.growth) * this.maxXp);
+    const multiplier = Math.round(
+      this.calculateLevelMultiplier(this.growth) * this.maxXp
+    );
+    return multiplier;
   }
 
   calculateLevelMultiplier(level: number) {
@@ -215,24 +227,52 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       multiplier = Math.round(Math.pow(level / 50 + 1, initialBase));
     } else {
       multiplier = Math.round(Math.pow(level, laterBase));
-      // console.log("multiplier", multiplier);
     }
 
     return multiplier;
   }
 
   giveBackHealth(amount: number): void {
+    let text = "";
     if (this.health === this.maxHealth) return;
+
     if (this.health + amount > this.maxHealth) {
       this.health = this.maxHealth;
+      `MAX`;
     } else {
       this.health += amount;
+      `+ ${amount}`;
     }
     this.petHeader.updateHealthBarFill(this.health);
     if (this.health === this.maxHealth) {
       this.petHeader.healthBarContainer.visible = false;
       this.petHeader.headerContainer.visible = false;
+      text = `MAX`;
     }
+
+    const comboText = new TextTimer({
+      app: this.app,
+      text: text,
+      timeToAnimInSeconds: 0.5,
+      animScale: { start: 1, end: 1 },
+      animAlpha: false,
+      translateAnim: { x: 30, y: -25 },
+      style: new PIXI.TextStyle({
+        fill: "#3BFF01", // yellow
+        fontSize: 20,
+        fontFamily: "Arial",
+        stroke: 0x000000,
+        strokeThickness: 0,
+        wordWrap: true,
+        wordWrapWidth: 800,
+        fontWeight: "bolder",
+      }),
+    });
+
+    this.app.stage.addChild(comboText);
+
+    comboText.x = this.x;
+    comboText.y = this.y - this.height;
   }
 
   replacePetHeader(newWidth?: number, offsetY: number = 0): void {
@@ -244,6 +284,31 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   }
   onHitByAttack(): void {
     this.health -= 1;
+
+    const comboText = new TextTimer({
+      app: this.app,
+      text: `- 1`,
+      timeToAnimInSeconds: 0.5,
+      animScale: { start: 1, end: 1 },
+      animAlpha: false,
+      translateAnim: { x: 30, y: -25 },
+      style: new PIXI.TextStyle({
+        fill: "#FF2D01", // yellow
+        fontSize: 20,
+        fontFamily: "Arial",
+        stroke: 0x000000,
+        strokeThickness: 0,
+        wordWrap: true,
+        wordWrapWidth: 800,
+        fontWeight: "bolder",
+      }),
+    });
+
+    this.app.stage.addChild(comboText);
+
+    comboText.x = this.x;
+    comboText.y = this.y - this.height;
+
     if (this.health > 0) {
       this.petHeader.healthBarContainer.visible = true;
       this.petHeader.headerContainer.visible = true;
@@ -268,7 +333,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
 
   move(): void {
     if (this.moveDir === +1 && this.state === EPetState.WALK && this.isAdult) {
-      this.scale.x = 1;
+      this.scale.x = +1 * this.clickScore;
       this.x += this.speed;
       if (
         this.app !== undefined &&
@@ -282,7 +347,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     // from right to left if move is -1 and he is not at the left side of the screen
     else if (this.moveDir === -1) {
       // transform pet to flip horizontally
-      this.scale.x = -1;
+      this.scale.x = -1 * this.clickScore;
       // Move the sprite to the left
       this.x -= this.speed;
       if (this.x <= 0 + this.width / 2) {
@@ -302,7 +367,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
           x: moveToX,
           y: moveToY,
           speed: 10,
-          scale: { start: 1.5, end: 1 },
+          scale: { start: 1.5, end: 1 * this.clickScore },
         });
       this.rotation += 0.1;
 
@@ -393,7 +458,6 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       this.maxHealth =
         this.growth === 0 ? 0 : this.growth * DEFAULT_PET.maxHealth;
       this.health = this.growth === 0 ? 0 : this.growth * DEFAULT_PET.health;
-      console.log("giveXp", this.health, this.maxHealth);
 
       if (tamagotchiesAnimation.length <= this.growth) {
         this.petHeader.xpBarContainer.visible = false;
@@ -420,7 +484,8 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   setToAdult(): void {
     setTimeout(() => {
       let commonCompetitive = CommonsCompetitiveSingleton.getInstance();
-      this.scale.set(1, 1);
+      let score = this.clickScore >= 2 ? 2 : this.clickScore;
+      this.scale.set(1 * score, 1 * score);
       this.alpha = 1;
       this.anchor.set(0.5, 1);
       this.rotation = 0;
@@ -487,7 +552,6 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
         textureArray.push({ texture: text, time: bossArrayFrame.duration });
       }
     }
-    console.log("createAnimations", textureArray);
     return textureArray;
   }
 
@@ -526,7 +590,6 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       }
     }
 
-    console.log("updateAnimations", textureArray);
     this.textures = textureArray;
     this.play();
   }
@@ -555,6 +618,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       speedFall: this.speedFall,
       savedX: this.x,
       savedY: this.y,
+      clickScore: this.clickScore,
     });
     return json;
   }
@@ -562,7 +626,6 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   static async fromJson(json: string, app: PIXI.Application): Promise<Pet> {
     const petToImport = JSON.parse(json);
     petToImport.app = app;
-    console.log("fromjson", petToImport);
     let textures = await Pet.createAnimation({
       state: petToImport.state,
       growth: petToImport.growth,

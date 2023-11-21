@@ -666,6 +666,12 @@ setTimeout(async () => {
         index: Number(event.data.message),
       });
       launchQueueBossToKill();
+    } else if (
+      event.data.type !== undefined &&
+      event.data.type === "splashscreenFinished"
+    ) {
+      app.stage.removeChild(portal as PIXI.DisplayObject);
+      app.stage.addChildAt(portal as PIXI.DisplayObject, 3);
     }
   });
 }, 0);

@@ -130,5 +130,9 @@ export default class Splashscreen {
       this._cloudResized2.container.destroy();
       this._cloudResized2 = undefined;
     }
+
+    window.postMessage({
+      type: "splashscreenFinished",
+    });
   }
 }

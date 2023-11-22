@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### Bug Fixes
+
+- Set portal in background when splashscreen finished
+
+### Features
+
+- Add trail to pet when is going back to the world
+- Fix/update the xp and heal bar
+
+### Miscellaneous Tasks
+
+- Removing some useless dev log
+
+### Refactor
+
+- Optimizing code from main.ts
+
+### Update
+
+- 0.3.0 changelog
+
 ## [0.3.0] - 2023-11-21
 
 ### Bug Fixes

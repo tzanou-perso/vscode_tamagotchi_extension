@@ -1,7 +1,9 @@
 # tamagotchi VS-Code extension README
 
 
-Embark on a Tamagotchi evolution, navigating captivating boss battles and immersive gameplay in our latest release with stunning visuals!
+Embark on a Tamagotchi evolution, Type code, grow Tamagotchis, defend against bosses.
+
+🚀 Welcome to Tamagotchi Clicker Beta! Dive into a coding realm where each keystroke births adorable Tamagotchis. Type your way to a thriving digital family, witnessing their growth in real-time. But beware, lurking bosses aim to challenge your coding prowess. Will you code efficiently to nurture your Tamagotchis or face the peril of relentless bosses? Join the beta, code, and witness the evolution of this unique VSCode extension game! 🎮✨ #TamagotchiClickerBeta #CodeAndGrow"
 
 ## Beta
 
@@ -12,7 +14,7 @@ Thanks for trying out the Tamagotchi VS-Code Extension!
 
 ## Features
 
-Embark on a coding journey where every character you write nurtures and evolves your Tamagotchi pet family, weaving a delightful narrative into your immersive coding experience with stunning visuals and captivating boss battles!
+Code, evolve Tamagotchis, face bosses. Balance speed, unlock achievements, join beta. Customize, compete, enjoy updates, engage in an evolving storyline.
 
 ![feature X](https://github.com/Tzanou123/vscode_tamagotchi_extension/blob/competitive/media/demo.gif?raw=true)
 
@@ -38,27 +40,28 @@ No special requirements or dependencies. Just install the extension and start gr
 
 ## Release Notes
 
-### 0.0.1
+### 0.3.1
 
-Initial beta release of Tamagotchi VS-Code Extension
+### Bug Fixes
 
-### 0.0.3
+- Set portal in background when splashscreen finished
 
-- Added one more pet sprite
-- Added one pet family for each file edited
-- When switching between files, if the file focused as already a pet family, the pet family is loaded
-- Support Copy and Paste
-- When opening a new file, the pet family is reset and a pets are created and feeded with the file content
+### Features
 
-### 0.0.4
+- Add trail to pet when is going back to the world
+- Fix/update the xp and heal bar
 
-- Change the decoration of the scene
-- Small bug fixes
+### Miscellaneous Tasks
 
-### 0.2.5
+- Removing some useless dev log
 
-- Add a logaritmic scale for the pet growth to avoid having to much pets with very large files and for more fun ^^
-- Some bug fixes
+### Refactor
+
+- Optimizing code from main.ts
+
+### Update
+
+- 0.3.0 changelog
 
 ### 0.3.0
 MAJOR BETA UPDATE
@@ -83,6 +86,29 @@ to click on boss to kill them and save your pet, for now you can regen your pets
 #### Update
 
 - Readme.md
+
+### 0.2.5
+
+- Add a logaritmic scale for the pet growth to avoid having to much pets with very large files and for more fun ^^
+- Some bug fixes
+
+### 0.0.4
+
+- Change the decoration of the scene
+- Small bug fixes
+
+### 0.0.3
+
+- Added one more pet sprite
+- Added one pet family for each file edited
+- When switching between files, if the file focused as already a pet family, the pet family is loaded
+- Support Copy and Paste
+- When opening a new file, the pet family is reset and a pets are created and feeded with the file content
+
+
+### 0.0.1
+
+Initial beta release of Tamagotchi VS-Code Extension
  
 
 ---

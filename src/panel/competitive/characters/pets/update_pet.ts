@@ -2,6 +2,7 @@ import { EPetState, moveToPosCurved } from "../commons";
 import Pet from "./pet";
 import * as PIXI from "pixi.js";
 import { moveTrail, removeTrail } from "./trail";
+import PetHeader from "./pet_header";
 
 let particleImgLoded: PIXI.Texture | undefined;
 

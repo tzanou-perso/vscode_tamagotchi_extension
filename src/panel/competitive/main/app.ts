@@ -7,7 +7,6 @@ import backgroundImageFull from "../../../../media/images/background/first/full.
 import { BgCover, imageCover } from "../commons";
 import platformImage from "../../../../media/images/background/first/platform.png";
 import Portal, { EPortalState } from "../portal/portal";
-import { getEventListeners } from "events";
 
 let splashscreen: Splashscreen;
 export default class App extends PIXI.Application<HTMLCanvasElement> {
@@ -211,9 +210,8 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
           pet.petHeader.healthBarContainer.visible = true;
           pet.petHeader.headerContainer.visible = true;
         }
-        pet.petHeader.headerContainer.width = 20;
-        pet.replacePetHeader(20, -5);
-        pet.petHeader.updateHealthBarFill(pet.health);
+
+        pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
       }
       for (let boss of this.activeFile.bosses) {
         this.stage.addChild(boss as PIXI.DisplayObject);

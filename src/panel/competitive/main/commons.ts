@@ -13,7 +13,7 @@ export async function addBoss({ app }: { app: App }) {
     textures: bossText,
     state: EPetState.WALK,
     moveDir: 1,
-    health: 10,
+    health: 20,
     maxHealth: 10,
     speed: Math.random() + 0.5,
     app: app,
@@ -47,10 +47,12 @@ export async function setAdult({
       app.activeFile.petInGrow.petHeader.healthBarContainer.visible = true;
       app.activeFile.petInGrow.petHeader.headerContainer.visible = true;
     }
-    app.activeFile.petInGrow.petHeader.headerContainer.width = 20;
-    app.activeFile.petInGrow.replacePetHeader(20, -5);
+    app.activeFile.petInGrow.petHeader.headerContainer.width =
+      20 / app.activeFile.petInGrow.scale.x;
+    app.activeFile.petInGrow.replacePetHeader();
     app.activeFile.petInGrow.petHeader.updateHealthBarFill(
       app.activeFile.petInGrow.health,
+      app.activeFile.petInGrow.scale.x,
       app.activeFile.petInGrow.maxHealth
     );
 

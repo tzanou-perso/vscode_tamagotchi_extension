@@ -92,14 +92,15 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.health = health;
     this.clickScore = clickScore;
     this.scale.set(1 * this.clickScore, 1 * this.clickScore);
+    this.isAdult = isAdult;
     this.petHeader = new PetHeader({
-      height: 3,
-      width: 50,
+      height: 2,
+      width: this.isAdult ? 20 : 50,
       maxXp: this.maxXp,
       health: health,
       maxHealth: maxHealth,
+      petScale: this.scale.x,
     });
-    this.isAdult = isAdult;
     this.speedFall = speedFall;
     this.state = state;
     this.moveDir = moveDir;
@@ -131,13 +132,13 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
         this.petHeader.healthBarContainer.visible = true;
         this.petHeader.headerContainer.visible = true;
       }
-      this.petHeader.headerContainer.width = 20;
+      this.petHeader.headerContainer.width = 20 / this.scale.x;
     } else {
       this.petHeader.xpBarContainer.visible = true;
       this.petHeader.healthBarContainer.visible = false;
     }
-    this.petHeader.updateXpBarFill(this.xp);
-    this.petHeader.updateHealthBarFill(this.health);
+    this.petHeader.updateXpBarFill(this.xp, this.scale.x);
+    this.petHeader.updateHealthBarFill(this.health, this.scale.x);
     this.ticker.start();
     this.play();
   }
@@ -156,11 +157,12 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   }
 
   replacePetHeader(newWidth?: number, offsetY: number = 0): void {
-    if (newWidth !== undefined) this.petHeader.headerContainer.width = newWidth;
-    this.petHeader.headerContainer.x =
-      -this.petHeader.headerContainer.width / 2;
-    2;
-    this.petHeader.headerContainer.y = -this.height + offsetY;
+    this.petHeader.petScale = this.scale.x;
+    if (newWidth !== undefined)
+      this.petHeader.headerContainer.width = newWidth / this.scale.x;
+    this.petHeader.headerContainer.x = 0;
+
+    this.petHeader.headerContainer.y = -this.texture.frame.height - 5;
   }
 
   onHitByAttack(): void {

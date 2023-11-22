@@ -61,7 +61,7 @@
       "view/title": [
         {
           "command": "tamagotchi.resetState",
-          "when": "tamagotchi.position == 'explorer'",
+          "when": "view == tamagotchi_garden",
           "group": "navigation@1"
         }
       ]

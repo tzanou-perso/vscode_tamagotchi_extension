@@ -36,7 +36,7 @@ export function giveBackHealth(pet: Pet, amount: number): void {
     pet.health += amount;
     `+ ${amount}`;
   }
-  pet.petHeader.updateHealthBarFill(pet.health);
+  pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
   if (pet.health === pet.maxHealth) {
     pet.petHeader.healthBarContainer.visible = false;
     pet.petHeader.headerContainer.visible = false;
@@ -98,7 +98,7 @@ export function onHitByAttack(pet: Pet): void {
   if (pet.health > 0) {
     pet.petHeader.healthBarContainer.visible = true;
     pet.petHeader.headerContainer.visible = true;
-    pet.petHeader.updateHealthBarFill(pet.health);
+    pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
   } else {
     window.postMessage({
       type: "petDeath",
@@ -124,8 +124,8 @@ export function giveXp(pet: Pet, xp: number): void {
         pet.petHeader.healthBarContainer.visible = true;
         pet.petHeader.headerContainer.visible = true;
       }
-      pet.petHeader.updateHealthBarFill(pet.health, pet.maxHealth);
-      pet.replacePetHeader(20, -5);
+      pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x, pet.maxHealth);
+      pet.replacePetHeader();
       pet.startTimeToPosAnim = Date.now();
       console.log("setToAdultQSQSQSQS");
       pet.state = EPetState.ADULTTRANSITION;
@@ -136,7 +136,8 @@ export function giveXp(pet: Pet, xp: number): void {
       pet.updateAnimations();
     }
   }
-  pet.petHeader.updateXpBarFill(pet.xp, pet.maxXp);
+  pet.replacePetHeader();
+  pet.petHeader.updateXpBarFill(pet.xp, pet.scale.x, pet.maxXp);
 }
 
 export function setToAdult(pet: Pet): void {
@@ -163,8 +164,8 @@ export function setToAdult(pet: Pet): void {
       pet.petHeader.healthBarContainer.visible = true;
       pet.petHeader.headerContainer.visible = true;
     }
-    pet.replacePetHeader(20, -5);
-    pet.petHeader.updateHealthBarFill(pet.health);
+    pet.replacePetHeader();
+    pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
     pet.updateAnimations();
   }, 1000);
 }

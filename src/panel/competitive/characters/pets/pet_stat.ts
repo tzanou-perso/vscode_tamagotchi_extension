@@ -127,7 +127,6 @@ export function giveXp(pet: Pet, xp: number): void {
       pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x, pet.maxHealth);
       pet.replacePetHeader();
       pet.startTimeToPosAnim = Date.now();
-      console.log("setToAdultQSQSQSQS");
       pet.state = EPetState.ADULTTRANSITION;
       pet.isAdult = true;
     } else {

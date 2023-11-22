@@ -120,10 +120,8 @@ export function imageCover(
     }
     if (type === "coverFromCenter") {
       if (winratio > spratio) {
-        console.log(1);
         scale = bgSize.x / sp.x;
       } else {
-        console.log(2);
         scale = bgSize.y / sp.y;
         pos.x = (bgSize.x - sp.x * scale) / 2;
       }

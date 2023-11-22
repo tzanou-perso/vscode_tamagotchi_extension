@@ -45,7 +45,6 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
 
   async init() {
     let state = vscode.getState();
-    console.log("state", state?.activeFile);
     if (state && state.activeFile !== undefined) {
       let fileFromFileSaved = JSON.parse(state.activeFile);
       console.log("fileFromFileSaved", fileFromFileSaved);
@@ -72,7 +71,6 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
         bossToImport.enemies = pets;
         bosses.push(bossToImport);
       }
-      console.log("bossToImport", bosses);
 
       this.activeFile = {
         numberOfCharacters: fileFromFileSaved.numberOfCharacters,
@@ -181,7 +179,6 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
       });
       // random speed between 0.5 and 1.5
       newPet.speed = 0.5 + Math.random();
-      console.log("new random speed", newPet.speed);
     }
 
     this.stage.addChild(newPet as PIXI.DisplayObject);
@@ -263,12 +260,10 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
 
     // set all adult pets y to bottom of screen
     let widthDifference = window.innerWidth - this.precendentWindowSizes.width;
-    console.log("resize event", widthDifference);
 
     for (let pet of this.activeFile.pets) {
       let newX = pet.x < 0 - pet.width / 2 ? 0 : pet.x;
       if (newX >= this.renderer.width - pet.width / 2) {
-        console.log("triggered");
         newX = this.renderer.width - pet.width / 2;
       }
       pet.x = newX;

@@ -83,8 +83,6 @@ export async function setAdult({
 
   app.activeFile.petInGrow.speed = 0.5 + Math.random();
 
-  console.log("new random speed", app.activeFile.petInGrow.speed);
-
   app.activeFile.petInGrow.play();
 
   app.stage.addChild(app.activeFile.petInGrow as PIXI.DisplayObject);

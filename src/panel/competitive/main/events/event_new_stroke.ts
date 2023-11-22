@@ -24,7 +24,6 @@ export async function newStroke({
   app: App;
 }) {
   if (app.activeFile.petInGrow.isAdult) {
-    console.log("what the fuck");
     let textures = await Pet.createAnimation({
       state: DEFAULT_PET.state,
       growth: DEFAULT_PET.growth,
@@ -56,11 +55,6 @@ export async function newStroke({
     app.activeFile.bestCombo = app.activeFile.numberOfCharacters;
     app.comboCharacter.text = `Best Combo: ${app.activeFile.bestCombo}`;
   }
-  console.log(
-    "slfksdflksdflskfsmlfksdmflksdfmskfm",
-    app.activeFile.numberOfCharacters,
-    app.activeFile.bestCombo
-  );
 
   if (app.activeFile.numberOfCharacters > 0) {
     // dont add boss if the last one spawned less than timeBetweenBossSpawnInSeconds
@@ -126,7 +120,6 @@ export async function newStroke({
       timeBetweenCombo.endTime = Date.now();
       let timeBetweenComboInSeconds =
         (timeBetweenCombo.endTime - timeBetweenCombo.startTime) / 1000;
-      console.log("timeBetweenComboInSeconds", timeBetweenComboInSeconds);
 
       if (timeBetweenComboInSeconds < 0.168) {
         app.activeFile.petInGrow.clickScore += 0.01;

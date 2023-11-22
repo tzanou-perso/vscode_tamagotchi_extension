@@ -99,7 +99,6 @@ setTimeout(async () => {
             animatedSprite.scale.x = -1;
             // Move the sprite to the left
             animatedSprite.x = Math.floor(app.renderer.width - (elapsed * 0.8 % app.renderer.width));
-            // console.log('sprite.x', sprite.x, elapsed);
             if (animatedSprite.x === 0 + animatedSprite.width) {
                 move = +1;
                 elapsed = 0.0;
@@ -129,11 +128,6 @@ setTimeout(async () => {
         animatedSprite.animationSpeed = 1;
         animatedSprite.play();
         app.stage.addChild(animatedSprite);
-
-        // animatedSprite.onLoop = () => {
-        //     console.log('loop', animatedSprite.currentFrame, textureArray);
-        // };
-
         return animatedSprite;
     }
 
@@ -159,7 +153,6 @@ setTimeout(async () => {
         console.log('event received', event.data);  // Outputs: Hello, world!
         if (event.data.stroke !== undefined) {
             keystrokeCount = event.data.stroke;
-            console.log(`stroke count: ${keystrokeCount}`);
             basicText.text = `code typed: ${keystrokeCount}`;
             if (keystrokeCount < 100) {
                 updateAnimatedSprite({
@@ -174,9 +167,6 @@ setTimeout(async () => {
                 });
             }
         }
-        // if (event.data.tamagotchiImages !== undefined) {
-        // const tamagotchiImages = event.data.tamagotchiImages;
-        console.log("event received", tamagotchiImages);  // Outputs: Hello, world!
 
         var containerApp = document.getElementById('app');
         // Create a PixiJS application of type cavas with specify background color and make it resizes to the iframe window

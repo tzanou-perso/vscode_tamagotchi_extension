@@ -122,15 +122,6 @@ export default class PetHeader {
     if (this.xpBarFill.width < 0) {
       this.xpBarFill.width = 0;
     }
-    // this.xpBarContainer.width = this.width;
-    console.log(
-      "xp bar fill width",
-      this.xpBarFill.width,
-      this.xpBarContainer.width,
-      this.width,
-      xp,
-      this.maxXp
-    );
   }
 
   updateHealthBarFill(health: number, petScale: number, newMaxHealth?: number) {
@@ -139,14 +130,6 @@ export default class PetHeader {
     this.healthBarContainer.width = this.width;
     this.healthBarFill.width = this.width * (health / this.maxHealth);
     this.height = this.height / petScale;
-    console.log(
-      "health bar fill width",
-      this.healthBarFill.width,
-      this.healthBarContainer.width,
-      this.width,
-      health,
-      this.maxHealth
-    );
   }
 
   getContainer() {

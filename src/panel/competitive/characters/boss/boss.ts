@@ -157,7 +157,6 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
       this.moveDir = 0;
       this.updateAnimations();
     }
-    console.log("decrease health", this.health);
   }
 
   static async createAnimation({

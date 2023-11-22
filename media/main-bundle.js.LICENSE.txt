@@ -1,1 +1,9 @@
+/*!
+ * @pixi/particle-emitter - v5.0.8
+ * Compiled Mon, 28 Nov 2022 04:01:38 UTC
+ *
+ * @pixi/particle-emitter is licensed under the MIT License.
+ * http://www.opensource.org/licenses/mit-license
+ */
+
 /*! https://mths.be/punycode v1.4.1 by @mathias */

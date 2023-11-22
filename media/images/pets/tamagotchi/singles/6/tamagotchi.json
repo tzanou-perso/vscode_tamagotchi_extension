@@ -1,0 +1,85 @@
+{ "frames": [
+   {
+    "filename": "idle.0",
+    "frame": { "x": 0, "y": 27, "w": 24, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 4, "w": 24, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.1",
+    "frame": { "x": 24, "y": 27, "w": 24, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 4, "w": 24, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.0",
+    "frame": { "x": 52, "y": 26, "w": 25, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 4, "w": 25, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.1",
+    "frame": { "x": 52, "y": 0, "w": 26, "h": 26 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 5, "w": 26, "h": 26 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "affraid.0",
+    "frame": { "x": 0, "y": 0, "w": 26, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 4, "w": 26, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "affraid.1",
+    "frame": { "x": 26, "y": 0, "w": 26, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 4, "w": 26, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   },
+   {
+    "filename": "dead.0",
+    "frame": { "x": 48, "y": 53, "w": 22, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 4, "w": 22, "h": 27 },
+    "sourceSize": { "w": 32, "h": 31 },
+    "duration": 300
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.40-x64",
+  "image": "tamagotchi.png",
+  "format": "I8",
+  "size": { "w": 78, "h": 80 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 1, "direction": "forward" },
+   { "name": "walk", "from": 2, "to": 3, "direction": "forward" },
+   { "name": "affraid", "from": 4, "to": 5, "direction": "forward" },
+   { "name": "dead", "from": 6, "to": 6, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

@@ -1,0 +1,85 @@
+{ "frames": [
+   {
+    "filename": "idle.0",
+    "frame": { "x": 28, "y": 0, "w": 26, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 2, "w": 26, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "idle.1",
+    "frame": { "x": 54, "y": 0, "w": 26, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 26, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "dead.0",
+    "frame": { "x": 0, "y": 28, "w": 26, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 2, "w": 26, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "dead.1",
+    "frame": { "x": 26, "y": 30, "w": 26, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 2, "w": 26, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "dead.0",
+    "frame": { "x": 0, "y": 0, "w": 28, "h": 28 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 2, "w": 28, "h": 28 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.0",
+    "frame": { "x": 52, "y": 30, "w": 25, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 2, "w": 25, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   },
+   {
+    "filename": "walk.1",
+    "frame": { "x": 0, "y": 58, "w": 24, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 2, "w": 24, "h": 30 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 300
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.40-x64",
+  "image": "tamagotchi.png",
+  "format": "I8",
+  "size": { "w": 80, "h": 88 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 1, "direction": "forward" },
+   { "name": "dead", "from": 2, "to": 3, "direction": "forward" },
+   { "name": "dead", "from": 4, "to": 4, "direction": "forward" },
+   { "name": "walk", "from": 5, "to": 6, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

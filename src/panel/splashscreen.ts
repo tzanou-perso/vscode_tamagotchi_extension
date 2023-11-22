@@ -2,7 +2,7 @@ import cloud from "../../media/images/splashscreen/clouds.png";
 import cloudR from "../../media/images/splashscreen/clouds_reversed.png";
 import title from "../../media/images/splashscreen/title.png";
 import * as PIXI from "pixi.js";
-import { BgCover, background } from "./competitive/commons";
+import { BgCover, imageCover } from "./competitive/commons";
 
 export default class Splashscreen {
   app: PIXI.Application<HTMLCanvasElement>;
@@ -55,19 +55,19 @@ export default class Splashscreen {
       y: this.app.renderer.height,
     };
 
-    this._cloudResized1 = background(
+    this._cloudResized1 = imageCover(
       containerSize,
       cloudsSpritePixi1,
       "coverFromBottom"
     );
 
-    this._cloudResized2 = background(
+    this._cloudResized2 = imageCover(
       containerSize,
       cloudsSpritePixi2,
       "coverFromBottom"
     );
 
-    this._title = background(containerSize, titleSpritePixi, "cover");
+    this._title = imageCover(containerSize, titleSpritePixi, "coverFromCenter");
 
     if (!this._cloudResized1 || !this._cloudResized2 || !this._title) return;
     this.app.stage.addChild(
@@ -90,7 +90,13 @@ export default class Splashscreen {
 
     setTimeout(() => {
       let ticker = new PIXI.Ticker().add((delta) => {
-        if (!this._cloudResized1 || !this._cloudResized2) return;
+        if (
+          !this._cloudResized1 ||
+          !this._cloudResized2 ||
+          this._cloudResized1.container.destroyed ||
+          this._cloudResized2.container.destroyed
+        )
+          return;
         /// move _cloudresized1 from left to right and _cloudresized2 from right to left
         this._cloudResized1!.container.position.x -= 4; // move left
         this._cloudResized2!.container.position.x += 4; // move right

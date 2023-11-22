@@ -16,7 +16,6 @@ export async function moveTrail(pet: Pet) {
   if (pet.trail !== undefined && !pet.trail.destroyed) {
     if (emitter === undefined) {
       emitter = getTrailEmitter({ pet });
-      console.log("emitter loaded");
       // Update the emitter
       emitter.emit = true;
       emitter.addAtBack = true;
@@ -25,14 +24,6 @@ export async function moveTrail(pet: Pet) {
     let now = Date.now();
     emitter.updateOwnerPos(pet.x, pet.y);
     emitter.update((now - elapsed) * 0.001);
-    console.log(
-      "emitter updated",
-      emitter,
-      pet.x,
-      pet.y,
-      pet.trail.x,
-      pet.trail.y
-    );
     elapsed = now;
   }
 }

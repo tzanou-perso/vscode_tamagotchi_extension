@@ -57,39 +57,42 @@ export default class TextTimer extends PIXI.Text {
     }
   }
 
-  private ticker: PIXI.Ticker = new PIXI.Ticker().add((delta) => {
-    if (this.destroyed) return;
-    this.timer += delta;
-    if (this.timer <= this.timeToAnimInSeconds * 60) {
-      if (this.animAlpha) {
-        this.alpha = this.timer / (this.timeToAnimInSeconds * 60);
+  private ticker: PIXI.Ticker = new PIXI.Ticker().add(this.update.bind(this));
+
+  update(delta: number) {
+    {
+      if (this.destroyed) return;
+      this.timer += delta;
+      if (this.timer <= this.timeToAnimInSeconds * 60) {
+        if (this.animAlpha) {
+          this.alpha = this.timer / (this.timeToAnimInSeconds * 60);
+        }
+        if (
+          this.animScale !== undefined &&
+          this.scale.x < this.animScale.end &&
+          this.scale.y < this.animScale.end
+        ) {
+          const scaleIncrease =
+            (this.animScale.end - this.animScale.start) /
+            (this.timeToAnimInSeconds * 60);
+          this.scale.x += scaleIncrease;
+          this.scale.y += scaleIncrease;
+        }
+        if (this.translateAnim) {
+          this.translateToPos();
+        }
+      } else {
+        this.finish();
       }
-      if (
-        this.animScale !== undefined &&
-        this.scale.x < this.animScale.end &&
-        this.scale.y < this.animScale.end
-      ) {
-        const scaleIncrease =
-          (this.animScale.end - this.animScale.start) /
-          (this.timeToAnimInSeconds * 60);
-        this.scale.x += scaleIncrease;
-        this.scale.y += scaleIncrease;
-      }
-      if (this.translateAnim) {
-        this.translateToPos();
-      }
-    } else {
-      this.finish();
     }
-  });
+  }
 
   finish(timeout?: number): void {
     setTimeout(
       () => {
         this.ticker.stop();
+        this.ticker.remove(this.update);
         this.app.stage.removeChild(this as PIXI.DisplayObject);
-        this.ticker.destroy();
-        this.destroy();
       },
       timeout !== undefined ? timeout : this.timeToAnimInSeconds
     );

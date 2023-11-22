@@ -84,7 +84,7 @@ export type BgCover = {
  *   type: String, either "cover" or "contain".
  *   forceSize: Optional object containing the width and height of the source sprite, example:  {x:1280,y:720}
  */
-export function background(
+export function imageCover(
   bgSize: { x: number; y: number },
   inputSprite: PIXI.Sprite,
   type: string,
@@ -112,6 +112,18 @@ export function background(
       if (winratio > spratio) {
         scale = bgSize.x / sp.x;
       } else {
+        scale = bgSize.y / sp.y;
+        pos.x = (bgSize.x - sp.x * scale) / 2;
+      }
+      pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
+      // sprite.anchor.set(1, 1);
+    }
+    if (type === "coverFromCenter") {
+      if (winratio > spratio) {
+        console.log(1);
+        scale = bgSize.x / sp.x;
+      } else {
+        console.log(2);
         scale = bgSize.y / sp.y;
         pos.x = (bgSize.x - sp.x * scale) / 2;
       }

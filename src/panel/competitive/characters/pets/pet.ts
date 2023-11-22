@@ -260,6 +260,10 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   destroy(): void {
     window.removeEventListener("petStateChange", (() =>
       this.updatePetState()) as EventListener);
+    this.ticker.remove((delta) => {
+      this.elapsed += delta;
+      this.updateLoop();
+    });
     this.ticker.stop();
     this.ticker.destroy();
     this.texture.destroy();

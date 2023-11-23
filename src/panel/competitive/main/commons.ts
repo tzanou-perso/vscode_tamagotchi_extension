@@ -9,15 +9,17 @@ import { bossList } from "../characters/boss/boss";
 export async function addBoss({
   app,
   pos,
+  bossName,
 }: {
   app: App;
   pos?: { x?: number; y?: number };
+  bossName?: string;
 }) {
   // random number between 1 and the number of bosses
   let randomNumber = Math.floor(Math.random() * Object.keys(bossList).length);
   console.log("randomNumber", randomNumber, Object.keys(bossList).length);
   let bossText = await Boss.createAnimation({
-    bossName: "boss" + randomNumber,
+    bossName: bossName ?? "boss" + randomNumber,
     state: EPetState.WALK,
   });
 
@@ -34,7 +36,7 @@ export async function addBoss({
     enemies: app.activeFile.pets,
     decreaseHealthMultiplier: 1,
     indexInActiveFile: app.activeFile.bosses.length,
-    bossName: "boss" + randomNumber,
+    bossName: bossName ?? "boss" + randomNumber,
     settingMaxEnemiesToAttack: 1,
     x: pos?.x,
     y: pos?.y,

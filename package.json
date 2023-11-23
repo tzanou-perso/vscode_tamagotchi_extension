@@ -60,9 +60,19 @@
     "menus": {
       "view/title": [
         {
-          "command": "tamagotchi.resetState",
+          "command": "tamagotchi.spawnRandomBoss",
           "when": "view == tamagotchi_garden",
           "group": "navigation@1"
+        },
+        {
+          "command": "tamagotchi.spawnBoss",
+          "when": "view == tamagotchi_garden",
+          "group": "navigation@2"
+        },
+        {
+          "command": "tamagotchi.resetState",
+          "when": "view == tamagotchi_garden",
+          "group": "navigation@3"
         }
       ]
     },
@@ -70,6 +80,24 @@
       {
         "command": "tamagotchi.openGarden",
         "title": "Tamagotchi: Open Garden"
+      },
+      {
+        "command": "tamagotchi.spawnRandomBoss",
+        "title": "Tamagotchi: Spawn Random Boss",
+        "category": "tamagotchi",
+        "icon": {
+          "dark": "media/icon/dark-spawn_random_boss.svg",
+          "light": "media/icon/light-spawn_random_boss.svg"
+        }
+      },
+      {
+        "command": "tamagotchi.spawnBoss",
+        "title": "Tamagotchi: Spawn Boss",
+        "category": "tamagotchi",
+        "icon": {
+          "dark": "media/icon/dark-spawn_boss.svg",
+          "light": "media/icon/light-spawn_boss.svg"
+        }
       },
       {
         "command": "tamagotchi.updateKeystrokeCount",

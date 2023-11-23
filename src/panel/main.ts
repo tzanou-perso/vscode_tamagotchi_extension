@@ -8,6 +8,7 @@ import { resetState } from "./competitive/main/events/event_reset_state";
 import App from "./competitive/main/app";
 import { launchQueuePetToKill } from "./competitive/main/queue/queue_pet";
 import { launchQueueBossToKill } from "./competitive/main/queue/queue_boss";
+import { addBoss } from "./competitive/main/commons";
 
 let activeFile: FilesSaved;
 declare global {
@@ -91,6 +92,26 @@ setTimeout(async () => {
       event.data.type === "splashscreenFinished"
     ) {
       app.setPortalToBack();
+    } else if (event.data.spawnRandomBoss !== undefined) {
+      let positionX = Math.floor(Math.random() * app.renderer.width);
+      if (event.data.spawnRandomBoss === "Random Boss") {
+        const boss = await addBoss({
+          app,
+          pos: { x: positionX, y: app.renderer.height },
+        });
+      } else if (event.data.spawnRandomBoss === "Thaurus Boss") {
+        const boss = await addBoss({
+          app,
+          pos: { x: positionX, y: app.renderer.height },
+          bossName: "boss0",
+        });
+      } else if (event.data.spawnRandomBoss === "Flame Boss") {
+        const boss = await addBoss({
+          app,
+          pos: { x: positionX, y: app.renderer.height },
+          bossName: "boss1",
+        });
+      }
     }
   });
 }, 0);

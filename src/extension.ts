@@ -115,6 +115,22 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
       });
     });
 
+    vscode.commands.registerCommand("tamagotchi.spawnBoss", async () => {
+      let userInput = await vscode.window.showQuickPick(
+        ["Random Boss", "Flame Boss", "Thaurus Boss"],
+        { placeHolder: "Select Boss" }
+      );
+      webviewView.webview.postMessage({
+        spawnRandomBoss: userInput,
+      });
+    });
+
+    vscode.commands.registerCommand("tamagotchi.spawnRandomBoss", async () => {
+      webviewView.webview.postMessage({
+        spawnRandomBoss: "Random Boss",
+      });
+    });
+
     this._view = webviewView;
     webviewView.webview.options = {
       enableScripts: true,

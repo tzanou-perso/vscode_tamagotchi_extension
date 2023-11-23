@@ -41,7 +41,7 @@ No special requirements or dependencies. Just install the extension and start gr
 
 ## Release Notes
 
-### 0.3.2
+### 0.4.0
 
 🚀🚀🚀 BOSS UPDATE 🚀🚀🚀
 

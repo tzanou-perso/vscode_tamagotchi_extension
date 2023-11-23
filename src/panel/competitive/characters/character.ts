@@ -53,5 +53,5 @@ export abstract class Character {
 
   abstract initEvents(): void;
 
-  abstract onHitByAttack(): void;
+  abstract onHitByAttack({}: any): void;
 }

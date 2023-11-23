@@ -2,7 +2,7 @@
   "name": "tamagotchi",
   "displayName": "Tamagotchi Clicker",
   "description": "Welcome to the Tamagotchi VS-Code Extension, a fun and interactive game that brings the joy of raising Tamagotchi pets right into your favorite code editor.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "homepage": "https://github.com/Tzanou123/vscode_tamagotchi_extension",
   "bugs": "https://github.com/Tzanou123/vscode_tamagotchi_extension/issues",
   "publisher": "Tzanou",

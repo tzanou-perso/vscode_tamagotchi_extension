@@ -27,7 +27,7 @@ export function calculateLevelMultiplier(level: number) {
 
 export function giveBackHealth(pet: Pet, amount: number): void {
   let text = "";
-  if (pet.health === pet.maxHealth) return;
+  if (pet.health === pet.maxHealth || pet.alpha === 0) return;
 
   if (pet.health + amount > pet.maxHealth) {
     pet.health = pet.maxHealth;
@@ -71,12 +71,12 @@ export function giveBackHealth(pet: Pet, amount: number): void {
   comboText.y = pet.y - pet.height;
 }
 
-export function onHitByAttack(pet: Pet): void {
-  pet.health -= 1;
+export function onHitByAttack(pet: Pet, strength: number): void {
+  pet.health -= strength;
 
   const comboText = new TextTimer({
     app: pet.app,
-    text: `- 1`,
+    text: `- ${strength}`,
     timeToAnimInSeconds: 0.5,
     animScale: { start: 1, end: 1 },
     animAlpha: false,

@@ -1,12 +1,15 @@
 import Pet from "../../characters/pets/pet";
+import smokeConfig from "../../../../../media/particles/smoke_spawn_boss.json";
+import smokeImg from "../../../../../media/particles/smokeparticle.png";
 import { COOLDOWN_COMBO, DEFAULT_PET, FilesSaved } from "../../commons";
 import * as PIXI from "pixi.js";
 import { addBoss, setAdult } from "../commons";
 import TextTimer from "../../text_timer";
+import * as particles from "@pixi/particle-emitter";
 import App from "../app";
+import ParticleView from "../../../commons/particle";
 let timerBetweenStrokes: NodeJS.Timeout;
 let bossSpawnTime: number = 0;
-const timeBetweenBossSpawnInSeconds = 60;
 let lastComboText: TextTimer | undefined;
 const timeBetweenCombo: {
   startTime: number | undefined;
@@ -35,7 +38,8 @@ export async function newStroke({
       app: app,
     });
 
-    newPet.speed = 0.5 + Math.random();
+    newPet.speed =
+      Math.random() * (app.settingMaxPetSpeed - app.settingMinPetSpeed);
 
     app.stage.addChild(newPet as PIXI.DisplayObject);
 
@@ -64,18 +68,36 @@ export async function newStroke({
     console.log("allHealthOfPetInBoard", allHealthOfPetInBoard);
     // dont add boss if the last one spawned less than timeBetweenBossSpawnInSeconds
     let currentTime = Date.now() / 1000; // Convert to seconds
-    if (currentTime >= bossSpawnTime + timeBetweenBossSpawnInSeconds) {
-      let randomChanceForBossToSpawn = Math.floor(Math.random() * 50);
+    if (
+      currentTime >=
+      bossSpawnTime + app.settingPreventBossSpawnTimeInSeconds
+    ) {
+      let randomChanceForBossToSpawn = Math.floor(
+        Math.random() * app.settingChanceToSpawnBoss
+      );
       if (
         app.activeFile.bosses.length === 0 &&
-        allHealthOfPetInBoard > 20 &&
+        allHealthOfPetInBoard > app.settingMinBoarPetTotalHealthToSpawnBoss &&
         randomChanceForBossToSpawn === 1
       ) {
         // add a boss each 20 health of pet in board
-        let numberOfBosses = Math.floor(allHealthOfPetInBoard / 20);
+        let numberOfBosses = Math.floor(
+          allHealthOfPetInBoard / app.settingMinBoarPetTotalHealthToSpawnBoss
+        );
         for (let i = 0; i < numberOfBosses; i++) {
-          setTimeout(() => {
-            addBoss({ app });
+          setTimeout(async () => {
+            let positionX =
+              ((app.renderer.width - 40 > 0
+                ? app.renderer.width - 40
+                : app.renderer.width) /
+                numberOfBosses) *
+                i +
+              1 +
+              (app.renderer.width - 40 > 0 ? 40 : 0);
+            const boss = await addBoss({
+              app,
+              pos: { x: positionX, y: app.renderer.height },
+            });
           }, i * 100);
         }
         bossSpawnTime = currentTime;

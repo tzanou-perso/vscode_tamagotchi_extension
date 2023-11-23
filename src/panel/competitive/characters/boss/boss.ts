@@ -12,6 +12,17 @@ import Pet from "../pets/pet";
 import PetHeader from "../pets/pet_header";
 import TextTimer from "../../text_timer";
 import App from "../../main/app";
+import ParticleView from "../../../commons/particle";
+
+import smokeConfig from "../../../../../media/particles/smoke_spawn_boss.json";
+import smokeImg from "../../../../../media/particles/smokeparticle.png";
+
+import explosionConfig from "../../../../../media/particles/explosion.json";
+import explosionImg from "../../../../../media/particles/explosion.png";
+
+import flameConfig from "../../../../../media/particles/flame.json";
+import flame1Img from "../../../../../media/particles/flame1particle.png";
+import flame2Img from "../../../../../media/particles/flame2particle.png";
 
 export const bossList = {
   boss0: { array: boss0Array, images: boss0Images },
@@ -32,6 +43,13 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
   decreaseHealthMultiplier: number;
   indexInActiveFile: number;
   bossName: string;
+  emitterContainer: ParticleView;
+
+  /// SETTINGS ///
+  settingMaxEnemiesToAttack = 1;
+  settingMinHealthEnemyToTouchAnyway = 3;
+  /// SETTINGS ///
+
   constructor({
     textures,
     autoUpdate,
@@ -49,6 +67,10 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     savedX,
     savedY,
     bossName,
+    settingMaxEnemiesToAttack,
+    settingMinHealthEnemyToTouchAniway,
+    x,
+    y,
   }: {
     state: EPortalState | EPetState;
     moveDir: number;
@@ -66,8 +88,17 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     savedX?: number;
     savedY?: number;
     bossName: string;
+    settingMaxEnemiesToAttack?: number;
+    settingMinHealthEnemyToTouchAniway?: number;
+    x?: number;
+    y?: number;
   }) {
     super(textures, autoUpdate);
+    if (settingMaxEnemiesToAttack !== undefined)
+      this.settingMaxEnemiesToAttack = settingMaxEnemiesToAttack;
+    if (settingMinHealthEnemyToTouchAniway !== undefined)
+      this.settingMinHealthEnemyToTouchAnyway =
+        settingMinHealthEnemyToTouchAniway;
     this.state = state;
     this.moveDir = moveDir;
     this.health = health;
@@ -81,9 +112,29 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     this.decreaseHealthMultiplier = decreaseHealthMultiplier;
     this.enemies = enemies;
     this.bossName = bossName;
-    if (savedX !== undefined && savedY !== undefined) {
-      this.x = savedX;
-      this.y = savedY;
+    if (x !== undefined) this.x = x;
+    if (y !== undefined) this.y = y;
+
+    const bossListRow = bossList[this.bossName as keyof typeof bossList];
+    if (bossListRow.array.meta.settingMaxEnemiesToAttack !== undefined)
+      this.settingMaxEnemiesToAttack =
+        bossListRow.array.meta.settingMaxEnemiesToAttack;
+
+    if (bossListRow.array.meta.settingMinHealthEnemyToTouchAnyway !== undefined)
+      this.settingMinHealthEnemyToTouchAnyway =
+        bossListRow.array.meta.settingMinHealthEnemyToTouchAnyway;
+
+    if (bossListRow.array.meta.strength !== undefined)
+      this.strength = bossListRow.array.meta.strength;
+
+    if (bossListRow.array.meta.maxHealth !== undefined) {
+      this.maxHealth = bossListRow.array.meta.maxHealth;
+      this.health = this.maxHealth;
+    }
+
+    if (x !== undefined && y !== undefined) {
+      this.x = x;
+      this.y = y;
     }
     this.anchor.set(0.5, 1);
     this.updateAnimations();
@@ -98,9 +149,9 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
       maxXp: 0,
       petScale: this.scale.x,
     });
-    this.addChild(this.bossHeader.headerContainer);
-    this.bossHeader.headerContainer.x = this.x;
-    this.bossHeader.headerContainer.y = this.y - this.height - 5;
+    this.addChild(this.bossHeader.headerContainer as PIXI.DisplayObject);
+    this.bossHeader.headerContainer.x = 0;
+    this.bossHeader.headerContainer.y = -this.height - 10;
     this.bossHeader.healthBarContainer.visible = true;
     this.bossHeader.healthBarFill.visible = true;
 
@@ -112,6 +163,31 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
         this.onHitByAttack(0.5);
       }
     });
+
+    app.activeFile.bosses.push(this);
+    app.stage.addChild(this as PIXI.DisplayObject);
+    let emitterImg: any[] = [];
+    let emitterConfig;
+    if (bossListRow.array.meta.particle === "flame") {
+      emitterImg = [flame1Img, flame2Img];
+      emitterConfig = flameConfig;
+    } else if (bossListRow.array.meta.particle === "smoke") {
+      emitterImg = [smokeImg];
+      emitterConfig = smokeConfig;
+    } else if (bossListRow.array.meta.particle === "explosion") {
+      emitterImg = [explosionImg];
+      emitterConfig = explosionConfig;
+    }
+    this.emitterContainer = new ParticleView({
+      app,
+      config: emitterConfig,
+      img: emitterImg,
+      timeToEmitInSeconds: 3,
+    });
+
+    app.stage.addChild(this.emitterContainer as PIXI.DisplayObject);
+    this.emitterContainer.x = x !== undefined ? x : this.x;
+    this.emitterContainer.y = app.renderer.height;
   }
 
   private elapsedHealthDeacrease: number = 0.0;
@@ -133,7 +209,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     } else if (this.state === EPetState.DEAD) {
       this.bossHeader.healthBarContainer.visible = false;
       this.bossHeader.healthBarFill.visible = false;
-      this.removeChild(this.bossHeader.headerContainer);
+      this.removeChild(this.bossHeader.headerContainer as PIXI.DisplayObject);
     }
   });
 
@@ -161,7 +237,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     }
     // Update the sprite's to let him walk across the screen horizontally
     // from right to left if move is -1 and he is not at the left side of the screen
-    else if (this.moveDir === -1) {
+    else if (this.moveDir === -1 && this.state === EPetState.WALK) {
       this.bossHeader.headerContainer.scale.x = +1;
       // transform pet to flip horizontally
       this.scale.x = +1;
@@ -292,8 +368,9 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
         ? "death"
         : "idle";
     const textureArray: ITexture[] = [];
-    const bossArray = bossList[this.bossName as keyof typeof bossList].array;
-    const bossImages = bossList[this.bossName as keyof typeof bossList].images;
+    const bossListRow = bossList[this.bossName as keyof typeof bossList];
+    const bossArray = bossListRow.array;
+    const bossImages = bossListRow.images;
     let frameTag = bossArray.meta.frameTags.find((tag) => tag.name === type);
     if (frameTag !== undefined) {
       const textLoaded = await PIXI.Assets.load(bossImages);
@@ -333,7 +410,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
         for (let pet of this.enemies) {
           petsNonReferenced.push(pet);
         }
-        const maxEnemiesToAttack = 3;
+
         let ennemyAttacked = 0;
         for (let enemy of this.app.activeFile.pets) {
           if (
@@ -343,10 +420,16 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
               object2: enemy as PIXI.DisplayObject,
             })
           ) {
-            if (enemy.maxHealth > 3 && ennemyAttacked >= maxEnemiesToAttack)
+            if (
+              enemy.maxHealth > this.settingMinHealthEnemyToTouchAnyway &&
+              ennemyAttacked >= this.settingMaxEnemiesToAttack
+            )
               break;
-            if (enemy.maxHealth > 3) ennemyAttacked++;
-            this.app.activeFile.pets[enemy.indexInActiveFile].onHitByAttack();
+            if (enemy.maxHealth > this.settingMinHealthEnemyToTouchAnyway)
+              ennemyAttacked++;
+            this.app.activeFile.pets[enemy.indexInActiveFile].onHitByAttack(
+              this.strength
+            );
           }
         }
         this.state = EPetState.WALK;

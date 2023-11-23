@@ -8,6 +8,7 @@ export enum EPetState {
   WALK,
   ADULTTRANSITION,
   ATTACK,
+  AFFRAID,
   HIT,
 }
 export type IPetHeader = {

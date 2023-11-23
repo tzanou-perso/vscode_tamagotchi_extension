@@ -6,7 +6,13 @@ import * as PIXI from "pixi.js";
 import App from "./app";
 import { bossList } from "../characters/boss/boss";
 
-export async function addBoss({ app }: { app: App }) {
+export async function addBoss({
+  app,
+  pos,
+}: {
+  app: App;
+  pos?: { x?: number; y?: number };
+}) {
   // random number between 1 and the number of bosses
   let randomNumber = Math.floor(Math.random() * Object.keys(bossList).length);
   console.log("randomNumber", randomNumber, Object.keys(bossList).length);
@@ -19,22 +25,22 @@ export async function addBoss({ app }: { app: App }) {
     textures: bossText,
     state: EPetState.WALK,
     moveDir: 1,
-    health: 20,
+    health: 15,
     maxHealth: 10,
     speed: Math.random() + 0.5,
     app: app,
     attackSpeed: 0,
-    strength: 0,
+    strength: 1,
     enemies: app.activeFile.pets,
     decreaseHealthMultiplier: 1,
     indexInActiveFile: app.activeFile.bosses.length,
     bossName: "boss" + randomNumber,
+    settingMaxEnemiesToAttack: 1,
+    x: pos?.x,
+    y: pos?.y,
   });
-  app.activeFile.bosses.push(boss);
-  app.stage.addChild(boss as PIXI.DisplayObject);
+  return boss;
   // boss in random range x inside the screen
-  boss.x = Math.random() * app.renderer.width;
-  boss.y = app.renderer.height;
 }
 
 export async function setAdult({

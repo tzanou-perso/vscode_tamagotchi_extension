@@ -39,6 +39,14 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   clickScore: number;
 
   trail?: PIXI.Container<PIXI.DisplayObject>;
+  get scaleAffraidSpeedToAdd(): number {
+    return (
+      ((this.app.settingAffraidMultiplierRange - 0) /
+        (this.app.settingMaxPetSpeed - this.app.settingMinPetSpeed)) *
+        (this.speed - this.app.settingMinPetSpeed) +
+      0
+    );
+  }
 
   constructor({
     textures,
@@ -170,8 +178,8 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.petHeader.headerContainer.y = -this.texture.frame.height - 5;
   }
 
-  onHitByAttack(): void {
-    onHitByAttack(this);
+  onHitByAttack(strength: number): void {
+    onHitByAttack(this, strength);
   }
 
   private _events: string[] = [];
@@ -309,7 +317,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     this.healthAmountText.scale.set(0.4);
     this.healthAmountText.x = Math.round(-10);
     this.healthAmountText.y = Math.round(-15);
-    this.debugContainer.addChild(this.healthAmountText);
-    this.app.stage.addChild(this.debugContainer);
+    this.debugContainer.addChild(this.healthAmountText as PIXI.DisplayObject);
+    this.app.stage.addChild(this.debugContainer as PIXI.DisplayObject);
   }
 }

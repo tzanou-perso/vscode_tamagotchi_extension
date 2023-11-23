@@ -15,6 +15,16 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
   comboCharacter: PIXI.Text;
   portal?: Portal;
   debug: boolean = false;
+
+  /// SETTINGS ///
+  settingPetAffraidSpeed: number = 1.5;
+  settingAffraidMultiplierRange: number = 0.3;
+  settingPreventBossSpawnTimeInSeconds: number = 60;
+  settingChanceToSpawnBoss: number = 50;
+  settingMinBoarPetTotalHealthToSpawnBoss: number = 20;
+  settingMinPetSpeed: number = 0.5;
+  settingMaxPetSpeed: number = 1.5;
+  /// END SETTINGS ///
   constructor({
     activeFile,
     basicText,
@@ -180,7 +190,8 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
         app: this,
       });
       // random speed between 0.5 and 1.5
-      newPet.speed = 0.5 + Math.random();
+      newPet.speed =
+        Math.random() * (this.settingMaxPetSpeed - this.settingMinPetSpeed);
     }
 
     this.stage.addChild(newPet as PIXI.DisplayObject);

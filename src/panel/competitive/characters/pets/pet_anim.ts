@@ -83,6 +83,8 @@ export async function createOrUpdateAnimation({
       ? "eat"
       : state === EPetState.WALK
       ? "walk"
+      : state === EPetState.AFFRAID
+      ? "affraid"
       : "idle";
   const textureArray: ITexture[] = [];
   if (growth >= tamagotchiesAnimation.length) {

@@ -1,563 +1,1380 @@
-{ "frames": [
-   {
-    "filename": "demon_slime_FREE_v1.0 0.aseprite",
-    "frame": { "x": 1016, "y": 431, "w": 80, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 54, "w": 80, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 1.aseprite",
-    "frame": { "x": 482, "y": 333, "w": 87, "h": 104 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 103, "y": 55, "w": 87, "h": 104 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 2.aseprite",
-    "frame": { "x": 839, "y": 237, "w": 91, "h": 107 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 101, "y": 52, "w": 91, "h": 107 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 3.aseprite",
-    "frame": { "x": 0, "y": 245, "w": 91, "h": 106 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 100, "y": 53, "w": 91, "h": 106 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 4.aseprite",
-    "frame": { "x": 215, "y": 239, "w": 91, "h": 107 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 101, "y": 52, "w": 91, "h": 107 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 5.aseprite",
-    "frame": { "x": 569, "y": 333, "w": 87, "h": 102 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 103, "y": 57, "w": 87, "h": 102 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 6.aseprite",
-    "frame": { "x": 478, "y": 537, "w": 64, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 59, "w": 64, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 7.aseprite",
-    "frame": { "x": 233, "y": 536, "w": 68, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 60, "w": 68, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 8.aseprite",
-    "frame": { "x": 1000, "y": 536, "w": 67, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 59, "w": 67, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 9.aseprite",
-    "frame": { "x": 736, "y": 456, "w": 70, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 60, "w": 70, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 10.aseprite",
-    "frame": { "x": 472, "y": 437, "w": 74, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 59, "w": 74, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 11.aseprite",
-    "frame": { "x": 264, "y": 436, "w": 78, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 59, "w": 78, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 12.aseprite",
-    "frame": { "x": 179, "y": 346, "w": 85, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 60, "w": 85, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 13.aseprite",
-    "frame": { "x": 569, "y": 435, "w": 80, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 60, "w": 80, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 14.aseprite",
-    "frame": { "x": 392, "y": 435, "w": 80, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 59, "w": 80, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 15.aseprite",
-    "frame": { "x": 160, "y": 445, "w": 73, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 108, "y": 60, "w": 73, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 16.aseprite",
-    "frame": { "x": 473, "y": 123, "w": 70, "h": 100 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 59, "w": 70, "h": 100 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 17.aseprite",
-    "frame": { "x": 342, "y": 535, "w": 68, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 60, "w": 68, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 18.aseprite",
-    "frame": { "x": 80, "y": 434, "w": 80, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 54, "w": 80, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 19.aseprite",
-    "frame": { "x": 924, "y": 435, "w": 76, "h": 104 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 108, "y": 55, "w": 76, "h": 104 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 20.aseprite",
-    "frame": { "x": 473, "y": 224, "w": 93, "h": 109 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 107, "y": 50, "w": 93, "h": 109 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 21.aseprite",
-    "frame": { "x": 306, "y": 329, "w": 86, "h": 107 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 116, "y": 52, "w": 86, "h": 107 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 22.aseprite",
-    "frame": { "x": 566, "y": 224, "w": 90, "h": 109 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 115, "y": 50, "w": 90, "h": 109 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 23.aseprite",
-    "frame": { "x": 1016, "y": 326, "w": 89, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 116, "y": 54, "w": 89, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 24.aseprite",
-    "frame": { "x": 930, "y": 326, "w": 86, "h": 109 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 117, "y": 50, "w": 86, "h": 109 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 25.aseprite",
-    "frame": { "x": 753, "y": 237, "w": 86, "h": 114 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 117, "y": 45, "w": 86, "h": 114 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 26.aseprite",
-    "frame": { "x": 656, "y": 323, "w": 86, "h": 111 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 117, "y": 48, "w": 86, "h": 111 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 27.aseprite",
-    "frame": { "x": 544, "y": 0, "w": 154, "h": 101 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 25, "y": 58, "w": 154, "h": 101 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 28.aseprite",
-    "frame": { "x": 128, "y": 0, "w": 157, "h": 101 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 57, "w": 157, "h": 101 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 29.aseprite",
-    "frame": { "x": 698, "y": 0, "w": 160, "h": 97 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 20, "y": 62, "w": 160, "h": 97 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 30.aseprite",
-    "frame": { "x": 942, "y": 224, "w": 99, "h": 102 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 80, "y": 57, "w": 99, "h": 102 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 31.aseprite",
-    "frame": { "x": 1041, "y": 224, "w": 78, "h": 102 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 101, "y": 57, "w": 78, "h": 102 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 32.aseprite",
-    "frame": { "x": 0, "y": 351, "w": 80, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 54, "w": 80, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 33.aseprite",
-    "frame": { "x": 742, "y": 351, "w": 80, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 54, "w": 80, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 34.aseprite",
-    "frame": { "x": 839, "y": 344, "w": 85, "h": 103 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 116, "y": 56, "w": 85, "h": 103 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 35.aseprite",
-    "frame": { "x": 113, "y": 224, "w": 102, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 113, "y": 54, "w": 102, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 36.aseprite",
-    "frame": { "x": 392, "y": 333, "w": 90, "h": 102 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 111, "y": 57, "w": 90, "h": 102 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 37.aseprite",
-    "frame": { "x": 656, "y": 434, "w": 80, "h": 103 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 56, "w": 80, "h": 103 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 38.aseprite",
-    "frame": { "x": 0, "y": 456, "w": 80, "h": 89 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 106, "y": 70, "w": 80, "h": 89 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 39.aseprite",
-    "frame": { "x": 546, "y": 534, "w": 70, "h": 97 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 62, "w": 70, "h": 97 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 40.aseprite",
-    "frame": { "x": 410, "y": 537, "w": 68, "h": 96 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 111, "y": 63, "w": 68, "h": 96 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 41.aseprite",
-    "frame": { "x": 822, "y": 447, "w": 72, "h": 99 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 107, "y": 60, "w": 72, "h": 99 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 42.aseprite",
-    "frame": { "x": 91, "y": 329, "w": 88, "h": 105 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 107, "y": 54, "w": 88, "h": 105 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 43.aseprite",
-    "frame": { "x": 658, "y": 210, "w": 95, "h": 113 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 118, "y": 46, "w": 95, "h": 113 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 44.aseprite",
-    "frame": { "x": 242, "y": 121, "w": 117, "h": 118 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 103, "y": 41, "w": 117, "h": 118 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 45.aseprite",
-    "frame": { "x": 285, "y": 0, "w": 131, "h": 121 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 99, "y": 38, "w": 131, "h": 121 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 46.aseprite",
-    "frame": { "x": 416, "y": 0, "w": 128, "h": 123 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 100, "y": 36, "w": 128, "h": 123 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 47.aseprite",
-    "frame": { "x": 858, "y": 0, "w": 128, "h": 121 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 100, "y": 38, "w": 128, "h": 121 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 48.aseprite",
-    "frame": { "x": 0, "y": 0, "w": 128, "h": 124 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 100, "y": 35, "w": 128, "h": 124 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 49.aseprite",
-    "frame": { "x": 986, "y": 115, "w": 128, "h": 109 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 100, "y": 50, "w": 128, "h": 109 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 50.aseprite",
-    "frame": { "x": 698, "y": 97, "w": 125, "h": 113 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 103, "y": 46, "w": 125, "h": 113 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 51.aseprite",
-    "frame": { "x": 986, "y": 0, "w": 125, "h": 115 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 103, "y": 44, "w": 125, "h": 115 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 52.aseprite",
-    "frame": { "x": 823, "y": 121, "w": 119, "h": 116 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 43, "w": 119, "h": 116 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 53.aseprite",
-    "frame": { "x": 0, "y": 124, "w": 113, "h": 121 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 111, "y": 38, "w": 113, "h": 121 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 54.aseprite",
-    "frame": { "x": 544, "y": 101, "w": 114, "h": 123 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 36, "w": 114, "h": 123 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 55.aseprite",
-    "frame": { "x": 128, "y": 101, "w": 114, "h": 123 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 36, "w": 114, "h": 123 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 56.aseprite",
-    "frame": { "x": 359, "y": 123, "w": 114, "h": 121 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 38, "w": 114, "h": 121 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 57.aseprite",
-    "frame": { "x": 306, "y": 244, "w": 114, "h": 85 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 74, "w": 114, "h": 85 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 58.aseprite",
-    "frame": { "x": 616, "y": 537, "w": 114, "h": 2 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 157, "w": 114, "h": 2 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   },
-   {
-    "filename": "demon_slime_FREE_v1.0 59.aseprite",
-    "frame": { "x": 616, "y": 537, "w": 114, "h": 2 },
-    "rotated": false,
-    "trimmed": true,
-    "spriteSourceSize": { "x": 109, "y": 157, "w": 114, "h": 2 },
-    "sourceSize": { "w": 288, "h": 160 },
-    "duration": 100
-   }
- ],
- "meta": {
-  "app": "https://www.aseprite.org/",
-  "version": "1.2.40-x64",
-  "image": "boss2.png",
-  "format": "RGBA8888",
-  "size": { "w": 1119, "h": 637 },
-  "scale": "1",
-  "frameTags": [
-   { "name": "idle", "from": 0, "to": 5, "direction": "forward" },
-   { "name": "walk", "from": 6, "to": 17, "direction": "forward" },
-   { "name": "1_atk", "from": 18, "to": 32, "direction": "forward" },
-   { "name": "take_hit", "from": 33, "to": 37, "direction": "forward" },
-   { "name": "death", "from": 38, "to": 59, "direction": "forward" }
+{
+  "frames": [
+    {
+      "filename": "demon_slime_FREE_v1.0 0.aseprite",
+      "frame": {
+        "x": 1016,
+        "y": 431,
+        "w": 80,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 54,
+        "w": 80,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 1.aseprite",
+      "frame": {
+        "x": 482,
+        "y": 333,
+        "w": 87,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 103,
+        "y": 55,
+        "w": 87,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 2.aseprite",
+      "frame": {
+        "x": 839,
+        "y": 237,
+        "w": 91,
+        "h": 107
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 101,
+        "y": 52,
+        "w": 91,
+        "h": 107
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 3.aseprite",
+      "frame": {
+        "x": 0,
+        "y": 245,
+        "w": 91,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 53,
+        "w": 91,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 4.aseprite",
+      "frame": {
+        "x": 215,
+        "y": 239,
+        "w": 91,
+        "h": 107
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 101,
+        "y": 52,
+        "w": 91,
+        "h": 107
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 5.aseprite",
+      "frame": {
+        "x": 569,
+        "y": 333,
+        "w": 87,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 103,
+        "y": 57,
+        "w": 87,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 6.aseprite",
+      "frame": {
+        "x": 478,
+        "y": 537,
+        "w": 64,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 59,
+        "w": 64,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 7.aseprite",
+      "frame": {
+        "x": 233,
+        "y": 536,
+        "w": 68,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 60,
+        "w": 68,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 8.aseprite",
+      "frame": {
+        "x": 1000,
+        "y": 536,
+        "w": 67,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 59,
+        "w": 67,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 9.aseprite",
+      "frame": {
+        "x": 736,
+        "y": 456,
+        "w": 70,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 60,
+        "w": 70,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 10.aseprite",
+      "frame": {
+        "x": 472,
+        "y": 437,
+        "w": 74,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 59,
+        "w": 74,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 11.aseprite",
+      "frame": {
+        "x": 264,
+        "y": 436,
+        "w": 78,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 59,
+        "w": 78,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 12.aseprite",
+      "frame": {
+        "x": 179,
+        "y": 346,
+        "w": 85,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 60,
+        "w": 85,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 13.aseprite",
+      "frame": {
+        "x": 569,
+        "y": 435,
+        "w": 80,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 60,
+        "w": 80,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 14.aseprite",
+      "frame": {
+        "x": 392,
+        "y": 435,
+        "w": 80,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 59,
+        "w": 80,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 15.aseprite",
+      "frame": {
+        "x": 160,
+        "y": 445,
+        "w": 73,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 108,
+        "y": 60,
+        "w": 73,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 16.aseprite",
+      "frame": {
+        "x": 473,
+        "y": 123,
+        "w": 70,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 59,
+        "w": 70,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 17.aseprite",
+      "frame": {
+        "x": 342,
+        "y": 535,
+        "w": 68,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 60,
+        "w": 68,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 18.aseprite",
+      "frame": {
+        "x": 80,
+        "y": 434,
+        "w": 80,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 54,
+        "w": 80,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 19.aseprite",
+      "frame": {
+        "x": 924,
+        "y": 435,
+        "w": 76,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 108,
+        "y": 55,
+        "w": 76,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 20.aseprite",
+      "frame": {
+        "x": 473,
+        "y": 224,
+        "w": 93,
+        "h": 109
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 107,
+        "y": 50,
+        "w": 93,
+        "h": 109
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 21.aseprite",
+      "frame": {
+        "x": 306,
+        "y": 329,
+        "w": 86,
+        "h": 107
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 116,
+        "y": 52,
+        "w": 86,
+        "h": 107
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 22.aseprite",
+      "frame": {
+        "x": 566,
+        "y": 224,
+        "w": 90,
+        "h": 109
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 115,
+        "y": 50,
+        "w": 90,
+        "h": 109
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 23.aseprite",
+      "frame": {
+        "x": 1016,
+        "y": 326,
+        "w": 89,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 116,
+        "y": 54,
+        "w": 89,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 24.aseprite",
+      "frame": {
+        "x": 930,
+        "y": 326,
+        "w": 86,
+        "h": 109
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 117,
+        "y": 50,
+        "w": 86,
+        "h": 109
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 25.aseprite",
+      "frame": {
+        "x": 753,
+        "y": 237,
+        "w": 86,
+        "h": 114
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 117,
+        "y": 45,
+        "w": 86,
+        "h": 114
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 26.aseprite",
+      "frame": {
+        "x": 656,
+        "y": 323,
+        "w": 86,
+        "h": 111
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 117,
+        "y": 48,
+        "w": 86,
+        "h": 111
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 27.aseprite",
+      "frame": {
+        "x": 544,
+        "y": 0,
+        "w": 154,
+        "h": 101
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 58,
+        "w": 154,
+        "h": 101
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 28.aseprite",
+      "frame": {
+        "x": 128,
+        "y": 0,
+        "w": 157,
+        "h": 101
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 57,
+        "w": 157,
+        "h": 101
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 29.aseprite",
+      "frame": {
+        "x": 698,
+        "y": 0,
+        "w": 160,
+        "h": 97
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 62,
+        "w": 160,
+        "h": 97
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 30.aseprite",
+      "frame": {
+        "x": 942,
+        "y": 224,
+        "w": 99,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 57,
+        "w": 99,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 31.aseprite",
+      "frame": {
+        "x": 1041,
+        "y": 224,
+        "w": 78,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 101,
+        "y": 57,
+        "w": 78,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 32.aseprite",
+      "frame": {
+        "x": 0,
+        "y": 351,
+        "w": 80,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 54,
+        "w": 80,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 33.aseprite",
+      "frame": {
+        "x": 742,
+        "y": 351,
+        "w": 80,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 54,
+        "w": 80,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 34.aseprite",
+      "frame": {
+        "x": 839,
+        "y": 344,
+        "w": 85,
+        "h": 103
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 116,
+        "y": 56,
+        "w": 85,
+        "h": 103
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 35.aseprite",
+      "frame": {
+        "x": 113,
+        "y": 224,
+        "w": 102,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 113,
+        "y": 54,
+        "w": 102,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 36.aseprite",
+      "frame": {
+        "x": 392,
+        "y": 333,
+        "w": 90,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 111,
+        "y": 57,
+        "w": 90,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 37.aseprite",
+      "frame": {
+        "x": 656,
+        "y": 434,
+        "w": 80,
+        "h": 103
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 56,
+        "w": 80,
+        "h": 103
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 38.aseprite",
+      "frame": {
+        "x": 0,
+        "y": 456,
+        "w": 80,
+        "h": 89
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 106,
+        "y": 70,
+        "w": 80,
+        "h": 89
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 39.aseprite",
+      "frame": {
+        "x": 546,
+        "y": 534,
+        "w": 70,
+        "h": 97
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 62,
+        "w": 70,
+        "h": 97
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 40.aseprite",
+      "frame": {
+        "x": 410,
+        "y": 537,
+        "w": 68,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 111,
+        "y": 63,
+        "w": 68,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 41.aseprite",
+      "frame": {
+        "x": 822,
+        "y": 447,
+        "w": 72,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 107,
+        "y": 60,
+        "w": 72,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 42.aseprite",
+      "frame": {
+        "x": 91,
+        "y": 329,
+        "w": 88,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 107,
+        "y": 54,
+        "w": 88,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 43.aseprite",
+      "frame": {
+        "x": 658,
+        "y": 210,
+        "w": 95,
+        "h": 113
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 118,
+        "y": 46,
+        "w": 95,
+        "h": 113
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 44.aseprite",
+      "frame": {
+        "x": 242,
+        "y": 121,
+        "w": 117,
+        "h": 118
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 103,
+        "y": 41,
+        "w": 117,
+        "h": 118
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 45.aseprite",
+      "frame": {
+        "x": 285,
+        "y": 0,
+        "w": 131,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 99,
+        "y": 38,
+        "w": 131,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 46.aseprite",
+      "frame": {
+        "x": 416,
+        "y": 0,
+        "w": 128,
+        "h": 123
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 36,
+        "w": 128,
+        "h": 123
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 47.aseprite",
+      "frame": {
+        "x": 858,
+        "y": 0,
+        "w": 128,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 38,
+        "w": 128,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 48.aseprite",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 124
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 35,
+        "w": 128,
+        "h": 124
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 49.aseprite",
+      "frame": {
+        "x": 986,
+        "y": 115,
+        "w": 128,
+        "h": 109
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 50,
+        "w": 128,
+        "h": 109
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 50.aseprite",
+      "frame": {
+        "x": 698,
+        "y": 97,
+        "w": 125,
+        "h": 113
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 103,
+        "y": 46,
+        "w": 125,
+        "h": 113
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 51.aseprite",
+      "frame": {
+        "x": 986,
+        "y": 0,
+        "w": 125,
+        "h": 115
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 103,
+        "y": 44,
+        "w": 125,
+        "h": 115
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 52.aseprite",
+      "frame": {
+        "x": 823,
+        "y": 121,
+        "w": 119,
+        "h": 116
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 43,
+        "w": 119,
+        "h": 116
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 53.aseprite",
+      "frame": {
+        "x": 0,
+        "y": 124,
+        "w": 113,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 111,
+        "y": 38,
+        "w": 113,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 54.aseprite",
+      "frame": {
+        "x": 544,
+        "y": 101,
+        "w": 114,
+        "h": 123
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 36,
+        "w": 114,
+        "h": 123
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 55.aseprite",
+      "frame": {
+        "x": 128,
+        "y": 101,
+        "w": 114,
+        "h": 123
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 36,
+        "w": 114,
+        "h": 123
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 56.aseprite",
+      "frame": {
+        "x": 359,
+        "y": 123,
+        "w": 114,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 38,
+        "w": 114,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 57.aseprite",
+      "frame": {
+        "x": 306,
+        "y": 244,
+        "w": 114,
+        "h": 85
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 74,
+        "w": 114,
+        "h": 85
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 58.aseprite",
+      "frame": {
+        "x": 616,
+        "y": 537,
+        "w": 114,
+        "h": 2
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 157,
+        "w": 114,
+        "h": 2
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    },
+    {
+      "filename": "demon_slime_FREE_v1.0 59.aseprite",
+      "frame": {
+        "x": 616,
+        "y": 537,
+        "w": 114,
+        "h": 2
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 109,
+        "y": 157,
+        "w": 114,
+        "h": 2
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 160
+      },
+      "duration": 100
+    }
   ],
-  "layers": [
-   { "name": "base", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
-  ]
- }
+  "meta": {
+    "app": "https://www.aseprite.org/",
+    "version": "1.2.40-x64",
+    "image": "boss2.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1119,
+      "h": 637
+    },
+    "scale": "1",
+    "settingMaxEnemiesToAttack": 1,
+    "settingMinHealthEnemyToTouchAnyway": 3,
+    "strength": 1,
+    "maxHealth": 15,
+    "particle": "explosion",
+    "frameTags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 5,
+        "direction": "forward"
+      },
+      {
+        "name": "walk",
+        "from": 6,
+        "to": 17,
+        "direction": "forward"
+      },
+      {
+        "name": "1_atk",
+        "from": 18,
+        "to": 32,
+        "direction": "forward"
+      },
+      {
+        "name": "take_hit",
+        "from": 33,
+        "to": 37,
+        "direction": "forward"
+      },
+      {
+        "name": "death",
+        "from": 38,
+        "to": 59,
+        "direction": "forward"
+      }
+    ],
+    "layers": [
+      {
+        "name": "base",
+        "opacity": 255,
+        "blendMode": "normal"
+      }
+    ],
+    "slices": []
+  }
 }

@@ -24,7 +24,9 @@ export async function resetState({ app }: { app: App }) {
     app: app,
   });
   // random speed between 0.5 and 1.5
-  newPet.speed = 0.5 + Math.random();
+  newPet.speed =
+    app.settingMinPetSpeed +
+    Math.random() * (app.settingMaxPetSpeed - app.settingMinPetSpeed);
   app.activeFile = {
     numberOfCharacters: 0,
     fileId: "",

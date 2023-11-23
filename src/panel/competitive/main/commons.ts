@@ -41,6 +41,7 @@ export async function addBoss({
     x: pos?.x,
     y: pos?.y,
   });
+  app.activeFile.bosses.push(boss);
   return boss;
   // boss in random range x inside the screen
 }

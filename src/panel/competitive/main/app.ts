@@ -57,7 +57,12 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
 
   async init() {
     let state = vscode.getState();
-    if (state && state.activeFile !== undefined) {
+
+    if (
+      state &&
+      state.activeFile !== undefined &&
+      JSON.parse(state.activeFile) !== undefined
+    ) {
       let fileFromFileSaved = JSON.parse(state.activeFile);
       console.log("fileFromFileSaved", fileFromFileSaved);
       const pets = [];

@@ -164,7 +164,6 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
       }
     });
 
-    app.activeFile.bosses.push(this);
     app.stage.addChild(this as PIXI.DisplayObject);
     let emitterImg: any[] = [];
     let emitterConfig;

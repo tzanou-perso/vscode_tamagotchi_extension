@@ -6,6 +6,18 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- Boss and pet delete queue
+
+### Features
+
+- Add a new boss
+- Boss can now be attacker on user click on it
+- Add particle on boss spawn
+
+## [0.3.1] - 2023-11-22
+
+### Bug Fixes
+
 - Set portal in background when splashscreen finished
 
 ### Features
@@ -24,6 +36,7 @@ All notable changes to this project will be documented in this file.
 ### Update
 
 - 0.3.0 changelog
+- Readme and changelog
 
 ## [0.3.0] - 2023-11-21
 

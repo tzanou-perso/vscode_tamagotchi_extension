@@ -31,6 +31,7 @@ No special requirements or dependencies. Just install the extension and start gr
 2. Open the command palette (Ctrl+Shift+P on Windows/Linux, Cmd+Shift+P on Mac)
 3. Type "Tamagotchi" and select "Tamagotchi: Start"
 4. Start coding and watch your pets grow!
+5. If bosses appear, you can click on them to defeat them and save your pets!
 
 ## Roadmap
 
@@ -39,6 +40,20 @@ No special requirements or dependencies. Just install the extension and start gr
 * Upgrade ux and ui
 
 ## Release Notes
+
+### 0.3.2
+
+🚀🚀🚀 BOSS UPDATE 🚀🚀🚀
+
+### Bug Fixes
+
+- Boss and pet delete queue
+
+### Features
+
+- Add a new boss
+- Boss can now be attacker on user click on it
+- Add particle on boss spawn
 
 ### 0.3.1
 

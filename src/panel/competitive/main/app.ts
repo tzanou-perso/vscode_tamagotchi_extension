@@ -14,6 +14,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
   basicText: PIXI.Text;
   comboCharacter: PIXI.Text;
   portal?: Portal;
+  debug: boolean = false;
   constructor({
     activeFile,
     basicText,
@@ -32,7 +33,8 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
     this.basicText = basicText;
     this.comboCharacter = comboCharacter;
   }
-
+  queueBossRunning: boolean = false;
+  queuePetRunning: boolean = false;
   queuePetToKill: { index: number; pet: Pet }[] = [];
   queueBossToKill: { index: number; boss: Boss }[] = [];
 
@@ -209,6 +211,9 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
         }
 
         pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
+        if (pet.healthAmountText) {
+          pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+        }
       }
       for (let boss of this.activeFile.bosses) {
         this.stage.addChild(boss as PIXI.DisplayObject);

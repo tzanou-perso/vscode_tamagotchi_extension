@@ -13,6 +13,7 @@ export async function update({ pet }: { pet: Pet }): Promise<void> {
 
 function move(pet: Pet) {
   if (pet.moveDir === +1 && pet.state === EPetState.WALK && pet.isAdult) {
+    pet.petHeader.headerContainer.scale.x = 1;
     pet.scale.x = +1 * pet.clickScore;
     pet.x += pet.speed;
     if (
@@ -26,6 +27,7 @@ function move(pet: Pet) {
   // Update the sprite's to let him walk across the screen horizontally
   // from right to left if move is -1 and he is not at the left side of the screen
   else if (pet.moveDir === -1) {
+    pet.petHeader.headerContainer.scale.x = -1;
     // transform pet to flip horizontally
     pet.scale.x = -1 * pet.clickScore;
     // Move the sprite to the left
@@ -84,5 +86,16 @@ async function petTransition(pet: Pet) {
         pet.y += pet.speedFall;
       }
     }
+  }
+  if (pet.healthAmountText !== undefined) {
+    pet.healthAmountText.x = pet.x - pet.width / 2;
+    pet.healthAmountText.y = pet.y - pet.height - 40;
+  }
+  if (
+    pet.debugContainer !== undefined &&
+    pet.debugContainer.children.length === 0
+  ) {
+    pet.app.stage.removeChild(pet.debugContainer);
+    pet.debugContainer = undefined;
   }
 }

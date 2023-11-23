@@ -57,18 +57,27 @@ export async function newStroke({
   }
 
   if (app.activeFile.numberOfCharacters > 0) {
+    let allHealthOfPetInBoard = app.activeFile.pets.reduce(
+      (acc, pet) => acc + pet.health,
+      0
+    );
+    console.log("allHealthOfPetInBoard", allHealthOfPetInBoard);
     // dont add boss if the last one spawned less than timeBetweenBossSpawnInSeconds
     let currentTime = Date.now() / 1000; // Convert to seconds
     if (currentTime >= bossSpawnTime + timeBetweenBossSpawnInSeconds) {
+      let randomChanceForBossToSpawn = Math.floor(Math.random() * 50);
       if (
-        app.activeFile.pets.length > 9 &&
         app.activeFile.bosses.length === 0 &&
-        app.activeFile.pets.filter((pet) => pet.health < pet.maxHealth)
-          .length === 0
+        allHealthOfPetInBoard > 20 &&
+        randomChanceForBossToSpawn === 1
       ) {
-        addBoss({
-          app,
-        });
+        // add a boss each 20 health of pet in board
+        let numberOfBosses = Math.floor(allHealthOfPetInBoard / 20);
+        for (let i = 0; i < numberOfBosses; i++) {
+          setTimeout(() => {
+            addBoss({ app });
+          }, i * 100);
+        }
         bossSpawnTime = currentTime;
       }
     }

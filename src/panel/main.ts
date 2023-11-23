@@ -39,8 +39,22 @@ setTimeout(async () => {
   await app.init();
 
   setInterval(() => {
-    if (app.activeFile === undefined) return;
-    let petsJson = app.activeFile.pets.map((pet) => pet.toJson());
+    if (
+      app.activeFile.bosses.filter((boss) => boss.alpha === 0).length ===
+      app.activeFile.bosses.length
+    )
+      launchQueueBossToKill({ app });
+    if (app.activeFile.bosses.length === 0) launchQueuePetToKill({ app });
+  }, 100);
+
+  setInterval(() => {
+    if (
+      app.activeFile === undefined ||
+      app.activeFile.pets.filter((pet) => pet.health <= 0).length !== 0
+    )
+      return;
+    let petDefined = app.activeFile.pets.filter((pet) => pet !== undefined);
+    let petsJson = petDefined.map((pet) => pet.toJson());
 
     let petJson = app.activeFile.petInGrow.toJson();
 
@@ -72,28 +86,6 @@ setTimeout(async () => {
       app = await resetState({
         app,
       });
-    } else if (
-      event.data.type !== undefined &&
-      event.data.type === "petDeath"
-    ) {
-      console.log("pet deathin", event.data);
-      let petToKill = app.activeFile.pets[Number(event.data.message)];
-      app.queuePetToKill.push({
-        pet: petToKill,
-        index: Number(event.data.message),
-      });
-      launchQueuePetToKill({ app });
-    } else if (
-      event.data.type !== undefined &&
-      event.data.type === "bossDeath"
-    ) {
-      console.log("boss deathin", event.data);
-      let bossToKill = app.activeFile.bosses[Number(event.data.message)];
-      app.queueBossToKill.push({
-        boss: bossToKill,
-        index: Number(event.data.message),
-      });
-      launchQueueBossToKill({ app });
     } else if (
       event.data.type !== undefined &&
       event.data.type === "splashscreenFinished"

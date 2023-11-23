@@ -2,25 +2,27 @@ import Pet from "../../characters/pets/pet";
 import App from "../app";
 import * as PIXI from "pixi.js";
 
-export function launchQueuePetToKill({ app }: { app: App }) {
-  if (app.queuePetToKill.length > 0) {
-    console.log("launching queue pet to kill", app.queuePetToKill);
-    let petToKill = app.queuePetToKill[0].pet;
-    if (petToKill === undefined) {
-      app.queuePetToKill.shift();
-      launchQueuePetToKill({ app });
-      return;
-    }
-    petToKill.ticker.stop();
-    let index = app.queuePetToKill[0].index;
-    app.activeFile.pets.splice(index, 1);
-    // give to other pets the right index
-    for (let pet of app.activeFile.pets) {
-      pet.indexInActiveFile = app.activeFile.pets.indexOf(pet);
-    }
-    app.stage.removeChild(petToKill as PIXI.DisplayObject);
+export async function launchQueuePetToKill({ app }: { app: App }) {
+  if (!app.queuePetRunning) {
+    let petToRemove = app.activeFile.pets.filter((pet) => pet.health <= 0);
+    if (petToRemove.length === 0) return;
+    app.queuePetRunning = true;
+
+    let petToKill = petToRemove[0];
+    console.log(
+      "launching queue pet to kill | index : ",
+      petToKill.indexInActiveFile,
+      " | length : ",
+      app.activeFile.pets.length
+    );
+    // petToKill.ticker.stop();
+    // app.stage.removeChild(petToKill as PIXI.DisplayObject);
     petToKill.destroy();
-    app.queuePetToKill.shift();
-    launchQueuePetToKill({ app });
+    app.queuePetRunning = false;
+    console.log(
+      "Queue finished",
+      app.activeFile.pets.length,
+      app.activeFile.pets
+    );
   }
 }

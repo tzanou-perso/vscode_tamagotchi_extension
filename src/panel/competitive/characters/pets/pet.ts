@@ -17,6 +17,7 @@ import {
   giveXp,
   setToAdult,
 } from "./pet_stat";
+import App from "../../main/app";
 
 export default class Pet extends PIXI.AnimatedSprite implements Character {
   growth: number;
@@ -31,7 +32,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   health: number;
   maxHealth: number;
   speed: number;
-  app: PIXI.Application<HTMLCanvasElement>;
+  app: App;
   attackSpeed: number;
   strength: number;
   indexInActiveFile: number;
@@ -74,7 +75,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     maxXp: number;
     isAdult: boolean;
     speedFall: number;
-    app: PIXI.Application<HTMLCanvasElement>;
+    app: App;
     savedX?: number;
     savedY?: number;
     attackSpeed: number;
@@ -139,8 +140,12 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     }
     this.petHeader.updateXpBarFill(this.xp, this.scale.x);
     this.petHeader.updateHealthBarFill(this.health, this.scale.x);
+    if (this.healthAmountText) {
+      this.healthAmountText.text = `Health: ${this.health} / ${this.maxHealth}`;
+    }
     this.ticker.start();
     this.play();
+    if (this.app.debug) this.debug();
   }
 
   startTimeToPosAnim = Date.now();
@@ -262,14 +267,20 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   destroy(): void {
     window.removeEventListener("petStateChange", (() =>
       this.updatePetState()) as EventListener);
-    this.ticker.remove((delta) => {
+    this.ticker.stop();
+    PIXI.Ticker.shared.remove((delta) => {
       this.elapsed += delta;
       this.updateLoop();
     });
-    this.ticker.stop();
-    this.ticker.destroy();
-    this.texture.destroy();
+    if (this.texture) this.texture.destroy();
     super.destroy();
+    this.app.stage.removeChild(this as PIXI.DisplayObject);
+    this.app.activeFile.pets.splice(this.indexInActiveFile, 1);
+    for (let pet of this.app.activeFile.pets) {
+      if (pet.indexInActiveFile > this.indexInActiveFile) {
+        pet.indexInActiveFile -= 1;
+      }
+    }
   }
 
   initEvents(): void {
@@ -279,5 +290,26 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
 
   async updatePetState() {
     await this.updateAnimations();
+  }
+  debugContainer: PIXI.Container | undefined;
+  healthAmountText: PIXI.Text | undefined;
+  debug() {
+    this.healthAmountText = new PIXI.Text(
+      `Health: ${this.health} / ${this.maxHealth}`,
+      {
+        fill: "white", // yellow
+        fontSize: 40,
+        fontFamily: "Arial",
+        stroke: 0x000000,
+        strokeThickness: 4,
+        align: "center",
+      }
+    );
+    this.debugContainer = new PIXI.Container();
+    this.healthAmountText.scale.set(0.4);
+    this.healthAmountText.x = Math.round(-10);
+    this.healthAmountText.y = Math.round(-15);
+    this.debugContainer.addChild(this.healthAmountText);
+    this.app.stage.addChild(this.debugContainer);
   }
 }

@@ -37,6 +37,9 @@ export function giveBackHealth(pet: Pet, amount: number): void {
     `+ ${amount}`;
   }
   pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
+  if (pet.healthAmountText) {
+    pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+  }
   if (pet.health === pet.maxHealth) {
     pet.petHeader.healthBarContainer.visible = false;
     pet.petHeader.headerContainer.visible = false;
@@ -99,11 +102,18 @@ export function onHitByAttack(pet: Pet): void {
     pet.petHeader.healthBarContainer.visible = true;
     pet.petHeader.headerContainer.visible = true;
     pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
+    if (pet.healthAmountText) {
+      pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+    }
   } else {
-    window.postMessage({
-      type: "petDeath",
-      message: pet.indexInActiveFile,
-    });
+    pet.alpha = 0;
+    if (pet.healthAmountText) {
+      pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+      setTimeout(() => {
+        pet.app.stage.removeChild(pet.debugContainer as PIXI.DisplayObject);
+      });
+    }
+    pet.app.queuePetToKill.push({ pet: pet, index: pet.indexInActiveFile });
   }
   console.log("onHitByAttack", pet.health, pet.maxHealth);
 }
@@ -125,6 +135,9 @@ export function giveXp(pet: Pet, xp: number): void {
         pet.petHeader.headerContainer.visible = true;
       }
       pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x, pet.maxHealth);
+      if (pet.healthAmountText) {
+        pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+      }
       pet.replacePetHeader();
       pet.startTimeToPosAnim = Date.now();
       pet.state = EPetState.ADULTTRANSITION;
@@ -165,6 +178,9 @@ export function setToAdult(pet: Pet): void {
     }
     pet.replacePetHeader();
     pet.petHeader.updateHealthBarFill(pet.health, pet.scale.x);
+    if (pet.healthAmountText) {
+      pet.healthAmountText.text = `Health: ${pet.health} / ${pet.maxHealth}`;
+    }
     pet.updateAnimations();
   }, 1000);
 }

@@ -4,11 +4,17 @@ import Pet from "../characters/pets/pet";
 import { DEFAULT_PET, FilesSaved } from "../commons";
 import * as PIXI from "pixi.js";
 import App from "./app";
+import { bossList } from "../characters/boss/boss";
 
 export async function addBoss({ app }: { app: App }) {
+  // random number between 1 and the number of bosses
+  let randomNumber = Math.floor(Math.random() * Object.keys(bossList).length);
+  console.log("randomNumber", randomNumber, Object.keys(bossList).length);
   let bossText = await Boss.createAnimation({
+    bossName: "boss" + randomNumber,
     state: EPetState.WALK,
   });
+
   const boss = new Boss({
     textures: bossText,
     state: EPetState.WALK,
@@ -22,10 +28,12 @@ export async function addBoss({ app }: { app: App }) {
     enemies: app.activeFile.pets,
     decreaseHealthMultiplier: 1,
     indexInActiveFile: app.activeFile.bosses.length,
+    bossName: "boss" + randomNumber,
   });
   app.activeFile.bosses.push(boss);
   app.stage.addChild(boss as PIXI.DisplayObject);
-  boss.x = app.renderer.width / 2 - boss.width;
+  // boss in random range x inside the screen
+  boss.x = Math.random() * app.renderer.width;
   boss.y = app.renderer.height;
 }
 
@@ -55,6 +63,9 @@ export async function setAdult({
       app.activeFile.petInGrow.scale.x,
       app.activeFile.petInGrow.maxHealth
     );
+    if (app.activeFile.petInGrow.healthAmountText) {
+      app.activeFile.petInGrow.healthAmountText.text = `Health: ${app.activeFile.petInGrow.health} / ${app.activeFile.petInGrow.maxHealth}`;
+    }
 
     if (app.activeFile.petInGrow !== undefined) {
       app.activeFile.petInGrow.y =

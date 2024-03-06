@@ -250,6 +250,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
       this.portal as PIXI.DisplayObject,
       this.stage.children.length - 1
     );
+    this.windowResizeEvent(new UIEvent("resize"));
     return this;
   }
 

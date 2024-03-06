@@ -14,10 +14,11 @@ declare namespace GlobalMixins {
     [x: string | number | symbol]: any;
   }
 }
-
+let contextSaved: vscode.ExtensionContext;
 let fileId = "";
 let filesSaved: string;
 export function activate(context: vscode.ExtensionContext) {
+  contextSaved = context;
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
       "tamagotchi_garden",
@@ -81,6 +82,11 @@ export function activate(context: vscode.ExtensionContext) {
 class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
   private _extensionUri: vscode.Uri;
+  private _updateKeystrokeCountCommand?: vscode.Disposable;
+  private _documentOpenedCommand?: vscode.Disposable;
+  private _resetStateCommand?: vscode.Disposable;
+  private _spawnBossCommand?: vscode.Disposable;
+  private _spawnRandomBossCommand?: vscode.Disposable;
 
   constructor(extensionUri: vscode.Uri) {
     this._extensionUri = extensionUri;
@@ -94,13 +100,28 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
     // Send a message to the webview
     // webviewView.webview.postMessage({ tamagotchiImages: imageDataUrl });
     // let stroke = 0;
-    vscode.commands.registerCommand(
+
+    // Store the new webview
+    this._view = webviewView;
+    if (this._updateKeystrokeCountCommand) {
+      this._updateKeystrokeCountCommand.dispose();
+    }
+    this._updateKeystrokeCountCommand = vscode.commands.registerCommand(
       "tamagotchi.updateKeystrokeCount",
       (numberOfCharacters) => {
         webviewView.webview.postMessage({ stroke: numberOfCharacters });
       }
     );
-    vscode.commands.registerCommand(
+    // vscode.commands.registerCommand(
+    //   "tamagotchi.updateKeystrokeCount",
+    //   (numberOfCharacters) => {
+    //     webviewView.webview.postMessage({ stroke: numberOfCharacters });
+    //   }
+    // );
+    if (this._documentOpenedCommand) {
+      this._documentOpenedCommand.dispose();
+    }
+    this._documentOpenedCommand = vscode.commands.registerCommand(
       "tamagotchi.documentOpened",
       (numberOfCharacter) => {
         webviewView.webview.postMessage({
@@ -109,27 +130,45 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
       }
     );
 
-    vscode.commands.registerCommand("tamagotchi.resetState", () => {
-      webviewView.webview.postMessage({
-        resetState: true,
-      });
-    });
+    if (this._resetStateCommand) {
+      this._resetStateCommand.dispose();
+    }
+    this._resetStateCommand = vscode.commands.registerCommand(
+      "tamagotchi.resetState",
+      () => {
+        webviewView.webview.postMessage({
+          resetState: true,
+        });
+      }
+    );
 
-    vscode.commands.registerCommand("tamagotchi.spawnBoss", async () => {
-      let userInput = await vscode.window.showQuickPick(
-        ["Random Boss", "Flame Boss", "Thaurus Boss"],
-        { placeHolder: "Select Boss" }
-      );
-      webviewView.webview.postMessage({
-        spawnRandomBoss: userInput,
-      });
-    });
+    if (this._spawnBossCommand) {
+      this._spawnBossCommand.dispose();
+    }
+    this._spawnBossCommand = vscode.commands.registerCommand(
+      "tamagotchi.spawnBoss",
+      async () => {
+        let userInput = await vscode.window.showQuickPick(
+          ["Random Boss", "Flame Boss", "Thaurus Boss"],
+          { placeHolder: "Select Boss" }
+        );
+        webviewView.webview.postMessage({
+          spawnRandomBoss: userInput,
+        });
+      }
+    );
 
-    vscode.commands.registerCommand("tamagotchi.spawnRandomBoss", async () => {
-      webviewView.webview.postMessage({
-        spawnRandomBoss: "Random Boss",
-      });
-    });
+    if (this._spawnRandomBossCommand) {
+      this._spawnRandomBossCommand.dispose();
+    }
+    this._spawnRandomBossCommand = vscode.commands.registerCommand(
+      "tamagotchi.spawnRandomBoss",
+      async () => {
+        webviewView.webview.postMessage({
+          spawnRandomBoss: "Random Boss",
+        });
+      }
+    );
 
     this._view = webviewView;
     webviewView.webview.options = {
@@ -196,7 +235,7 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
                 }
                 canvas {
                   width: 100%;
-                  height: 100%;
+                  height: 100vh;
                 }
               </style>
             </head>

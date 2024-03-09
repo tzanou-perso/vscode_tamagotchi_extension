@@ -128,6 +128,11 @@ export function imageCover(
       pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
       // sprite.anchor.set(1, 1);
     }
+    if (type === "coverAlwaysCentered") {
+      scale = bgSize.y / sp.y;
+      pos.x = (bgSize.x - sp.x * scale) / 2;
+      pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
+    }
     if (type === "cover") {
       if (type == "cover" ? winratio > spratio : winratio < spratio) {
         //photo is wider than background

@@ -272,7 +272,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
 
     this.stage.removeChild(this.portal as PIXI.DisplayObject);
 
-    this.renderer.resize(window.innerWidth - 50, window.innerHeight - 50);
+    this.renderer.resize(window.innerWidth, window.innerHeight);
 
     splashscreen.resize();
 

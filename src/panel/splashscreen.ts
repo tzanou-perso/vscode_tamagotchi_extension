@@ -67,7 +67,11 @@ export default class Splashscreen {
       "coverFromBottom"
     );
 
-    this._title = imageCover(containerSize, titleSpritePixi, "coverFromCenter");
+    this._title = imageCover(
+      containerSize,
+      titleSpritePixi,
+      "coverAlwaysCentered"
+    );
 
     if (!this._cloudResized1 || !this._cloudResized2 || !this._title) return;
     this.app.stage.addChild(

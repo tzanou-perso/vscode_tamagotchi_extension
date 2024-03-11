@@ -69,11 +69,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
         const pets = [];
         const bosses = [];
 
-        console.log("tzanou debug 1");
-
         let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, this);
-
-        console.log("tzanou debug 2");
 
         if (fileFromFileSaved.pets === undefined) fileFromFileSaved.pets = [];
         for (let pet of fileFromFileSaved.pets) {

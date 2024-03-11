@@ -63,41 +63,50 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
       state.activeFile !== undefined &&
       JSON.parse(state.activeFile) !== undefined
     ) {
-      let fileFromFileSaved = JSON.parse(state.activeFile);
-      console.log("fileFromFileSaved", fileFromFileSaved);
-      const pets = [];
-      const bosses = [];
+      try {
+        let fileFromFileSaved = JSON.parse(state.activeFile);
+        console.log("fileFromFileSaved", fileFromFileSaved);
+        const pets = [];
+        const bosses = [];
 
-      let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, this);
+        console.log("tzanou debug 1");
 
-      if (fileFromFileSaved.pets === undefined) fileFromFileSaved.pets = [];
-      for (let pet of fileFromFileSaved.pets) {
-        const petToImport = await Pet.fromJson(pet, this);
-        // // set pos in random position inside the screen
-        // petToImport.setPos({
-        //   x: pet.x,
-        //   y: pet.y,
-        // });
-        petToImport.indexInActiveFile = pets.length;
-        pets.push(petToImport);
+        let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, this);
+
+        console.log("tzanou debug 2");
+
+        if (fileFromFileSaved.pets === undefined) fileFromFileSaved.pets = [];
+        for (let pet of fileFromFileSaved.pets) {
+          const petToImport = await Pet.fromJson(pet, this);
+          // // set pos in random position inside the screen
+          // petToImport.setPos({
+          //   x: pet.x,
+          //   y: pet.y,
+          // });
+          petToImport.indexInActiveFile = pets.length;
+          pets.push(petToImport);
+        }
+        if (fileFromFileSaved.bosses === undefined)
+          fileFromFileSaved.bosses = [];
+        for (let boss of fileFromFileSaved.bosses) {
+          const bossToImport = await Boss.fromJson(boss, this);
+          bossToImport.indexInActiveFile = bosses.length;
+          bossToImport.enemies = pets;
+          bosses.push(bossToImport);
+        }
+
+        this.activeFile = {
+          numberOfCharacters: fileFromFileSaved.numberOfCharacters,
+          fileId: fileFromFileSaved.fileId,
+          pets: pets,
+          petInGrow: petToInsert,
+          keystrokeCount: fileFromFileSaved.keystrokeCount,
+          bosses: bosses,
+          bestCombo: fileFromFileSaved.bestCombo,
+        };
+      } catch (error) {
+        console.log("error from state : ", error);
       }
-      if (fileFromFileSaved.bosses === undefined) fileFromFileSaved.bosses = [];
-      for (let boss of fileFromFileSaved.bosses) {
-        const bossToImport = await Boss.fromJson(boss, this);
-        bossToImport.indexInActiveFile = bosses.length;
-        bossToImport.enemies = pets;
-        bosses.push(bossToImport);
-      }
-
-      this.activeFile = {
-        numberOfCharacters: fileFromFileSaved.numberOfCharacters,
-        fileId: fileFromFileSaved.fileId,
-        pets: pets,
-        petInGrow: petToInsert,
-        keystrokeCount: fileFromFileSaved.keystrokeCount,
-        bosses: bosses,
-        bestCombo: fileFromFileSaved.bestCombo,
-      };
     }
 
     // clear document body

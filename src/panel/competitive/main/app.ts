@@ -42,6 +42,21 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
     this.activeFile = activeFile;
     this.basicText = basicText;
     this.comboCharacter = comboCharacter;
+
+    // Cap main render loop to 30 FPS to reduce CPU usage in the webview process.
+    // A tamagotchi scene does not need 60 FPS and this roughly halves CPU cost.
+    this.ticker.maxFPS = 24;
+
+    // Pause the renderer when the webview is hidden (tab switched, panel collapsed).
+    // VSCode does not retain context when hidden in this extension, but during the
+    // short window before disposal this still avoids wasted frames.
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        this.ticker.stop();
+      } else {
+        this.ticker.start();
+      }
+    });
   }
   queueBossRunning: boolean = false;
   queuePetRunning: boolean = false;

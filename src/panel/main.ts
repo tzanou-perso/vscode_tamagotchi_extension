@@ -10,7 +10,7 @@ import { launchQueuePetToKill } from "./competitive/main/queue/queue_pet";
 import { launchQueueBossToKill } from "./competitive/main/queue/queue_boss";
 import { addBoss } from "./competitive/main/commons";
 
-let activeFile: FilesSaved;
+let activeFile!: FilesSaved;
 declare global {
   interface VscodeStateApi {
     postMessage(message: WebviewMessage): void;
@@ -22,9 +22,9 @@ declare global {
 
 console.log("main.js loaded");
 
-let basicText: PIXI.Text;
+let basicText!: PIXI.Text;
 
-let comboCharacter: PIXI.Text;
+let comboCharacter!: PIXI.Text;
 setTimeout(async () => {
   vscode.postMessage({
     text: "isInitialized",
@@ -39,26 +39,26 @@ setTimeout(async () => {
 
   await app.init();
 
+  // Merged housekeeping loop. Was two setInterval at 100ms each (20 wakeups/sec)
+  // doing full JSON serialization on every tick — now a single 500ms interval
+  // that only serializes when the saved state actually changed.
+  let lastSavedJson: string | undefined;
   setInterval(() => {
+    if (app.activeFile === undefined) return;
+
     if (
       app.activeFile.bosses.filter((boss) => boss.alpha === 0).length ===
       app.activeFile.bosses.length
     )
       launchQueueBossToKill({ app });
     if (app.activeFile.bosses.length === 0) launchQueuePetToKill({ app });
-  }, 100);
 
-  setInterval(() => {
-    if (
-      app.activeFile === undefined ||
-      app.activeFile.pets.filter((pet) => pet.health <= 0).length !== 0
-    )
+    if (app.activeFile.pets.filter((pet) => pet.health <= 0).length !== 0)
       return;
+
     let petDefined = app.activeFile.pets.filter((pet) => pet !== undefined);
     let petsJson = petDefined.map((pet) => pet.toJson());
-
     let petJson = app.activeFile.petInGrow.toJson();
-
     let bossJson = app.activeFile.bosses.map((boss) => boss.toJson());
 
     let activeFileJson = JSON.stringify({
@@ -69,9 +69,12 @@ setTimeout(async () => {
       bosses: bossJson,
       bestCombo: app.activeFile.bestCombo,
     });
-    // Update the saved state
-    vscode.setState({ activeFile: activeFileJson });
-  }, 100);
+
+    if (activeFileJson !== lastSavedJson) {
+      lastSavedJson = activeFileJson;
+      vscode.setState({ activeFile: activeFileJson });
+    }
+  }, 500);
 
   window.addEventListener("message", async (event) => {
     console.log("event received", event.data);

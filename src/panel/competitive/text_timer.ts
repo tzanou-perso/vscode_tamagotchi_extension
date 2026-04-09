@@ -61,7 +61,7 @@ export default class TextTimer extends PIXI.Text {
 
   update(delta: number) {
     {
-      if (this.destroyed) return;
+      if (this.destroyed) {return;}
       this.timer += delta;
       if (this.timer <= this.timeToAnimInSeconds * 60) {
         if (this.animAlpha) {
@@ -99,7 +99,7 @@ export default class TextTimer extends PIXI.Text {
   }
 
   translateToPos(): void {
-    if (!this.translateAnim) return;
+    if (!this.translateAnim) {return;}
     const x = this.position.x + this.translateAnim.x;
     const y = this.position.y + this.translateAnim.y;
     const dx = x - this.position.x;

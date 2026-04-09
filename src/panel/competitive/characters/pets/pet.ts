@@ -153,7 +153,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     }
     this.ticker.start();
     this.play();
-    if (this.app.debug) this.debug();
+    if (this.app.debug) {this.debug();}
   }
 
   startTimeToPosAnim = Date.now();
@@ -172,7 +172,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   replacePetHeader(newWidth?: number, offsetY: number = 0): void {
     this.petHeader.petScale = this.scale.x;
     if (newWidth !== undefined)
-      this.petHeader.headerContainer.width = newWidth / this.scale.x;
+      {this.petHeader.headerContainer.width = newWidth / this.scale.x;}
     this.petHeader.headerContainer.x = 0;
 
     this.petHeader.headerContainer.y = -this.texture.frame.height - 5;
@@ -280,7 +280,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       this.elapsed += delta;
       this.updateLoop();
     });
-    if (this.texture) this.texture.destroy();
+    if (this.texture) {this.texture.destroy();}
     super.destroy();
     this.app.stage.removeChild(this as PIXI.DisplayObject);
     this.app.activeFile.pets.splice(this.indexInActiveFile, 1);

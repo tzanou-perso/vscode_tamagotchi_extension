@@ -5,7 +5,7 @@ import * as PIXI from "pixi.js";
 export async function launchQueuePetToKill({ app }: { app: App }) {
   if (!app.queuePetRunning) {
     let petToRemove = app.activeFile.pets.filter((pet) => pet.health <= 0);
-    if (petToRemove.length === 0) return;
+    if (petToRemove.length === 0) {return;}
     app.queuePetRunning = true;
 
     let petToKill = petToRemove[0];

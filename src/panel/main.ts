@@ -44,17 +44,17 @@ setTimeout(async () => {
   // that only serializes when the saved state actually changed.
   let lastSavedJson: string | undefined;
   setInterval(() => {
-    if (app.activeFile === undefined) return;
+    if (app.activeFile === undefined) {return;}
 
     if (
       app.activeFile.bosses.filter((boss) => boss.alpha === 0).length ===
       app.activeFile.bosses.length
     )
-      launchQueueBossToKill({ app });
-    if (app.activeFile.bosses.length === 0) launchQueuePetToKill({ app });
+      {launchQueueBossToKill({ app });}
+    if (app.activeFile.bosses.length === 0) {launchQueuePetToKill({ app });}
 
     if (app.activeFile.pets.filter((pet) => pet.health <= 0).length !== 0)
-      return;
+      {return;}
 
     let petDefined = app.activeFile.pets.filter((pet) => pet !== undefined);
     let petsJson = petDefined.map((pet) => pet.toJson());

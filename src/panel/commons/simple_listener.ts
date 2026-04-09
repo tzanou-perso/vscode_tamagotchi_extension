@@ -80,7 +80,7 @@ export class ComposedListener {
 
   public remove = (event: string, action: ListenerAction): boolean => {
     const entry = this.listeners[event];
-    if (entry == null) {
+    if (entry === undefined) {
       return false;
     }
     if (action) {

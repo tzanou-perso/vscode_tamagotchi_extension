@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 export function launchQueueBossToKill({ app }: { app: App }) {
   if (!app.queueBossRunning) {
     let bossToRemove = app.activeFile.bosses.filter((pet) => pet.health <= 0);
-    if (bossToRemove.length === 0) return;
+    if (bossToRemove.length === 0) {return;}
     app.queueBossRunning = true;
 
     let bossToKill = bossToRemove[0];

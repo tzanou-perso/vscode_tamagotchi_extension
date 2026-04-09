@@ -24,7 +24,7 @@ export default class Splashscreen {
   public loaded: boolean = false;
 
   public async resize(): Promise<void> {
-    if (this.loaded) return;
+    if (this.loaded) {return;}
     if (this._cloudResized1 && this._cloudResized2 && this._title) {
       this.app.stage.removeChild(
         this._cloudResized1.container as PIXI.DisplayObject
@@ -73,7 +73,7 @@ export default class Splashscreen {
       "coverAlwaysCentered"
     );
 
-    if (!this._cloudResized1 || !this._cloudResized2 || !this._title) return;
+    if (!this._cloudResized1 || !this._cloudResized2 || !this._title) {return;}
     this.app.stage.addChild(
       this._cloudResized1.container as PIXI.DisplayObject
     );
@@ -100,7 +100,7 @@ export default class Splashscreen {
           this._cloudResized1.container.destroyed ||
           this._cloudResized2.container.destroyed
         )
-          return;
+          {return;}
         /// move _cloudresized1 from left to right and _cloudresized2 from right to left
         this._cloudResized1!.container.position.x -= 4; // move left
         this._cloudResized2!.container.position.x += 4; // move right
@@ -108,8 +108,8 @@ export default class Splashscreen {
 
         if (this._cloudResized2!.container.x >= this.app.renderer.width) {
           if (this._title!.container.alpha > 0)
-            this._title!.container.alpha -= 0.02;
-          else this.destroy(ticker);
+            {this._title!.container.alpha -= 0.02;}
+          else {this.destroy(ticker);}
         }
       });
       ticker.start();

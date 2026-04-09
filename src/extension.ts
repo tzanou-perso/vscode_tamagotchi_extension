@@ -199,7 +199,7 @@ class TamagotchiGardenProvider implements vscode.WebviewViewProvider {
     });
     webviewView.webview.html = this.getHtmlForWebview(webview);
     setTimeout(() => {
-      if (vscode.window.activeTextEditor != null) {
+      if (vscode.window.activeTextEditor !== undefined) {
         let activeDocument = vscode.window.activeTextEditor.document;
         let numberOfCharacters = activeDocument.getText().length;
         let fileId = activeDocument.uri.path;

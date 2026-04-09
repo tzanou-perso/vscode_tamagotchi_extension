@@ -102,7 +102,7 @@ export function imageCover(
 
   function resize() {
     var sp = { x: sprite.width, y: sprite.height };
-    if (forceSize) sp = forceSize;
+    if (forceSize) {sp = forceSize;}
     var winratio = bgSize.x / bgSize.y;
     var spratio = sp.x / sp.y;
     var scale = 1;
@@ -134,7 +134,7 @@ export function imageCover(
       pos.y = bgSize.y - sp.y * scale; // Position sprite at the bottom of the screen
     }
     if (type === "cover") {
-      if (type == "cover" ? winratio > spratio : winratio < spratio) {
+      if (winratio > spratio) {
         //photo is wider than background
         scale = bgSize.x / sp.x;
         pos.y = -(sp.y * scale - bgSize.y) / 2;

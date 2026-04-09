@@ -86,7 +86,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
 
         let petToInsert = await Pet.fromJson(fileFromFileSaved.petInGrow, this);
 
-        if (fileFromFileSaved.pets === undefined) fileFromFileSaved.pets = [];
+        if (fileFromFileSaved.pets === undefined) {fileFromFileSaved.pets = [];}
         for (let pet of fileFromFileSaved.pets) {
           const petToImport = await Pet.fromJson(pet, this);
           // // set pos in random position inside the screen
@@ -98,7 +98,7 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
           pets.push(petToImport);
         }
         if (fileFromFileSaved.bosses === undefined)
-          fileFromFileSaved.bosses = [];
+          {fileFromFileSaved.bosses = [];}
         for (let boss of fileFromFileSaved.bosses) {
           const bossToImport = await Boss.fromJson(boss, this);
           bossToImport.indexInActiveFile = bosses.length;

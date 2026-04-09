@@ -95,10 +95,10 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
   }) {
     super(textures, autoUpdate);
     if (settingMaxEnemiesToAttack !== undefined)
-      this.settingMaxEnemiesToAttack = settingMaxEnemiesToAttack;
+      {this.settingMaxEnemiesToAttack = settingMaxEnemiesToAttack;}
     if (settingMinHealthEnemyToTouchAniway !== undefined)
-      this.settingMinHealthEnemyToTouchAnyway =
-        settingMinHealthEnemyToTouchAniway;
+      {this.settingMinHealthEnemyToTouchAnyway =
+        settingMinHealthEnemyToTouchAniway;}
     this.state = state;
     this.moveDir = moveDir;
     this.health = health;
@@ -112,20 +112,20 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
     this.decreaseHealthMultiplier = decreaseHealthMultiplier;
     this.enemies = enemies;
     this.bossName = bossName;
-    if (x !== undefined) this.x = x;
-    if (y !== undefined) this.y = y;
+    if (x !== undefined) {this.x = x;}
+    if (y !== undefined) {this.y = y;}
 
     const bossListRow = bossList[this.bossName as keyof typeof bossList];
     if (bossListRow.array.meta.settingMaxEnemiesToAttack !== undefined)
-      this.settingMaxEnemiesToAttack =
-        bossListRow.array.meta.settingMaxEnemiesToAttack;
+      {this.settingMaxEnemiesToAttack =
+        bossListRow.array.meta.settingMaxEnemiesToAttack;}
 
     if (bossListRow.array.meta.settingMinHealthEnemyToTouchAnyway !== undefined)
-      this.settingMinHealthEnemyToTouchAnyway =
-        bossListRow.array.meta.settingMinHealthEnemyToTouchAnyway;
+      {this.settingMinHealthEnemyToTouchAnyway =
+        bossListRow.array.meta.settingMinHealthEnemyToTouchAnyway;}
 
     if (bossListRow.array.meta.strength !== undefined)
-      this.strength = bossListRow.array.meta.strength;
+      {this.strength = bossListRow.array.meta.strength;}
 
     if (bossListRow.array.meta.maxHealth !== undefined) {
       this.maxHealth = bossListRow.array.meta.maxHealth;
@@ -295,7 +295,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
   }
 
   decreaseHealth(multiplier: number): void {
-    if (this.state === EPetState.DEAD) return;
+    if (this.state === EPetState.DEAD) {return;}
     if (this.health > 0) {
       this.health -= this.decreaseHealthMultiplier * multiplier;
       this.bossHeader.updateHealthBarFill(
@@ -423,9 +423,9 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
               enemy.maxHealth > this.settingMinHealthEnemyToTouchAnyway &&
               ennemyAttacked >= this.settingMaxEnemiesToAttack
             )
-              break;
+              {break;}
             if (enemy.maxHealth > this.settingMinHealthEnemyToTouchAnyway)
-              ennemyAttacked++;
+              {ennemyAttacked++;}
             this.app.activeFile.pets[enemy.indexInActiveFile].onHitByAttack(
               this.strength
             );
@@ -455,7 +455,7 @@ export default class Boss extends PIXI.AnimatedSprite implements Character {
   }
   destroy(): void {
     this.ticker.stop();
-    if (this.texture) this.texture.destroy();
+    if (this.texture) {this.texture.destroy();}
     super.destroy();
     this.app.stage.removeChild(this as PIXI.DisplayObject);
     this.app.activeFile.bosses.splice(this.indexInActiveFile, 1);

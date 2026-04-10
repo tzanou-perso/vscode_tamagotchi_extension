@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { DEFAULT_PET, FilesSaved } from "../../commons";
 import Pet from "../../characters/pets/pet";
+import { pickRandomVariant } from "../../characters/pets/pet_anim";
 import App from "../app";
 import portalImages from "../../../../../media/images/portal.png";
 
@@ -13,14 +14,17 @@ export async function resetState({ app }: { app: App }) {
   app.stage.removeChildren();
   app.destroy(true, { children: true, texture: true, baseTexture: true });
   let newPet: Pet;
+  const variant = pickRandomVariant(DEFAULT_PET.growth);
   let textures = await Pet.createAnimation({
     state: DEFAULT_PET.state,
     growth: DEFAULT_PET.growth,
+    variant,
   });
 
   newPet = new Pet({
     textures: textures,
     ...DEFAULT_PET,
+    variant,
     app: app,
   });
   // random speed between 0.5 and 1.5

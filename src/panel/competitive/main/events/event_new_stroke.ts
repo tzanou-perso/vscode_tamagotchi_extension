@@ -1,4 +1,5 @@
 import Pet from "../../characters/pets/pet";
+import { pickRandomVariant } from "../../characters/pets/pet_anim";
 import smokeConfig from "../../../../../media/particles/smoke_spawn_boss.json";
 import smokeImg from "../../../../../media/particles/smokeparticle.png";
 import { COOLDOWN_COMBO, DEFAULT_PET, FilesSaved } from "../../commons";
@@ -27,14 +28,17 @@ export async function newStroke({
   app: App;
 }) {
   if (app.activeFile.petInGrow.isAdult) {
+    const variant = pickRandomVariant(DEFAULT_PET.growth);
     let textures = await Pet.createAnimation({
       state: DEFAULT_PET.state,
       growth: DEFAULT_PET.growth,
+      variant,
     });
 
     let newPet: Pet = new Pet({
       textures: textures,
       ...DEFAULT_PET,
+      variant,
       app: app,
     });
 

@@ -1,80 +1,89 @@
 import * as PIXI from "pixi.js";
 
-import tamagotchiSheet0 from "../../../../../media/images/pets/tamagotchi/singles/0/tamagotchi.png";
-import tamagotchiJson0 from "../../../../../media/images/pets/tamagotchi/singles/0/tamagotchi.json";
-
-import tamagotchiSheet1 from "../../../../../media/images/pets/tamagotchi/singles/1/tamagotchi.png";
-import tamagotchiJson1 from "../../../../../media/images/pets/tamagotchi/singles/1/tamagotchi.json";
-
-import tamagotchiSheet2 from "../../../../../media/images/pets/tamagotchi/singles/2/tamagotchi.png";
-import tamagotchiJson2 from "../../../../../media/images/pets/tamagotchi/singles/2/tamagotchi.json";
-
-import tamagotchiSheet3 from "../../../../../media/images/pets/tamagotchi/singles/3/tamagotchi.png";
-import tamagotchiJson3 from "../../../../../media/images/pets/tamagotchi/singles/3/tamagotchi.json";
-
-import tamagotchiSheet4 from "../../../../../media/images/pets/tamagotchi/singles/4/tamagotchi.png";
-import tamagotchiJson4 from "../../../../../media/images/pets/tamagotchi/singles/4/tamagotchi.json";
-
-import tamagotchiSheet5 from "../../../../../media/images/pets/tamagotchi/singles/5/tamagotchi.png";
-import tamagotchiJson5 from "../../../../../media/images/pets/tamagotchi/singles/5/tamagotchi.json";
-
-import tamagotchiSheet6 from "../../../../../media/images/pets/tamagotchi/singles/6/tamagotchi.png";
-import tamagotchiJson6 from "../../../../../media/images/pets/tamagotchi/singles/6/tamagotchi.json";
-
-import tamagotchiSheet7 from "../../../../../media/images/pets/tamagotchi/singles/7/tamagotchi.png";
-import tamagotchiJson7 from "../../../../../media/images/pets/tamagotchi/singles/7/tamagotchi.json";
-
-import tamagotchiSheet8 from "../../../../../media/images/pets/tamagotchi/singles/8/tamagotchi.png";
-import tamagotchiJson8 from "../../../../../media/images/pets/tamagotchi/singles/8/tamagotchi.json";
 import { EPetState } from "../commons";
 import { ITexture } from "../../sprite/sprite_element";
-import Pet from "./pet";
 
-export const tamagotchiesAnimation = [
-  {
-    animation: tamagotchiJson0,
-    sheet: tamagotchiSheet0,
-  },
-  {
-    animation: tamagotchiJson1,
-    sheet: tamagotchiSheet1,
-  },
-  {
-    animation: tamagotchiJson2,
-    sheet: tamagotchiSheet2,
-  },
-  {
-    animation: tamagotchiJson3,
-    sheet: tamagotchiSheet3,
-  },
-  {
-    animation: tamagotchiJson4,
-    sheet: tamagotchiSheet4,
-  },
-  {
-    animation: tamagotchiJson5,
-    sheet: tamagotchiSheet5,
-  },
-  {
-    animation: tamagotchiJson6,
-    sheet: tamagotchiSheet6,
-  },
-  {
-    animation: tamagotchiJson7,
-    sheet: tamagotchiSheet7,
-  },
-  {
-    animation: tamagotchiJson8,
-    sheet: tamagotchiSheet8,
-  },
-];
+// Auto-discover all PNG and JSON files in the singles directory
+const pngContext = require.context(
+  "../../../../../media/images/pets/tamagotchi/singles/",
+  true,
+  /\.png$/
+);
+const jsonContext = require.context(
+  "../../../../../media/images/pets/tamagotchi/singles/",
+  true,
+  /\.json$/
+);
+
+// Build tamagotchiesAnimation: for each stage, one JSON + multiple PNG variants
+// Keys look like "./0/tamagotchi.png", "./0/tamagotchi_v2.png", "./1/tamagotchi.json", etc.
+
+type StageData = {
+  animation: any;
+  sheets: string[]; // array of PNG variants (data URLs from url-loader)
+};
+
+function buildAnimationData(): StageData[] {
+  const stageMap = new Map<number, StageData>();
+
+  // Load JSONs (one per stage)
+  for (const key of jsonContext.keys()) {
+    const match = key.match(/^\.\/(\d+)\//);
+    if (!match) {continue;}
+    const stageIndex = parseInt(match[1], 10);
+    if (!stageMap.has(stageIndex)) {
+      stageMap.set(stageIndex, { animation: null, sheets: [] });
+    }
+    const jsonModule = jsonContext(key);
+    stageMap.get(stageIndex)!.animation = jsonModule.default || jsonModule;
+  }
+
+  // Load PNGs (multiple per stage)
+  for (const key of pngContext.keys()) {
+    const match = key.match(/^\.\/(\d+)\//);
+    if (!match) {continue;}
+    const stageIndex = parseInt(match[1], 10);
+    if (!stageMap.has(stageIndex)) {
+      stageMap.set(stageIndex, { animation: null, sheets: [] });
+    }
+    const pngModule = pngContext(key);
+    stageMap.get(stageIndex)!.sheets.push(pngModule.default || pngModule);
+  }
+
+  // Convert to sorted array
+  const maxStage = Math.max(...stageMap.keys());
+  const result: StageData[] = [];
+  for (let i = 0; i <= maxStage; i++) {
+    const data = stageMap.get(i);
+    if (data) {
+      result.push(data);
+    }
+  }
+
+  return result;
+}
+
+export const tamagotchiesAnimation: StageData[] = buildAnimationData();
+
+export function getVariantCount(growth: number): number {
+  if (growth >= tamagotchiesAnimation.length) {
+    growth = tamagotchiesAnimation.length - 1;
+  }
+  return tamagotchiesAnimation[growth].sheets.length;
+}
+
+export function pickRandomVariant(growth: number): number {
+  return Math.floor(Math.random() * getVariantCount(growth));
+}
 
 export async function createOrUpdateAnimation({
   state,
   growth,
+  variant = 0,
 }: {
   state: EPetState;
   growth: number;
+  variant?: number;
 }): Promise<ITexture[]> {
   const type =
     state === EPetState.IDLE
@@ -90,14 +99,17 @@ export async function createOrUpdateAnimation({
   if (growth >= tamagotchiesAnimation.length) {
     growth = tamagotchiesAnimation.length - 1;
   }
-  const animationJson = tamagotchiesAnimation[growth].animation;
-  let frameTag = animationJson.meta.frameTags.find((tag) => tag.name === type);
+  const stageData = tamagotchiesAnimation[growth];
+  const animationJson = stageData.animation;
+
+  // Clamp variant to available sheets
+  const safeVariant = variant < stageData.sheets.length ? variant : 0;
+  const sheetToUse = stageData.sheets[safeVariant];
+
+  let frameTag = animationJson.meta.frameTags.find((tag: any) => tag.name === type);
   if (frameTag !== undefined) {
-    const textLoaded = await PIXI.Assets.load(
-      tamagotchiesAnimation[growth].sheet
-    );
+    const textLoaded = await PIXI.Assets.load(sheetToUse);
     for (let i = frameTag.from; i <= frameTag.to; i++) {
-      // const row = `${type}.${i}` as keyof typeof bossArray.frames;
       const bossArrayFrame = animationJson.frames[i];
       let frame = new PIXI.Rectangle(
         bossArrayFrame.frame.x,

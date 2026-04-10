@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-04-10
+
+### Features
+
+- Add color variants for all tamagotchi growth stages (egg to adult)
+- Each pet randomly picks a color variant at birth and keeps it through all stages
+- Variant is persisted between sessions
+- Easily extensible: just drop new PNG files (tamagotchi_v2.png, v3, v4...) in any stage folder
+
 ## [unreleased]
 
 ### Bug Fixes

@@ -6,7 +6,7 @@ import { ITexture, SpriteElement } from "../../sprite/sprite_element";
 import PetHeader from "./pet_header";
 import CommonsCompetitiveSingleton, { DEFAULT_PET } from "../../commons";
 import TextTimer from "../../text_timer";
-import { createOrUpdateAnimation, tamagotchiesAnimation } from "./pet_anim";
+import { createOrUpdateAnimation, tamagotchiesAnimation, pickRandomVariant } from "./pet_anim";
 import { update } from "./update_pet";
 import { get } from "http";
 import { getTrailEmitter } from "./trail";
@@ -21,6 +21,7 @@ import App from "../../main/app";
 
 export default class Pet extends PIXI.AnimatedSprite implements Character {
   growth: number;
+  variant: number;
   xp: number;
   elapsed: number;
   petHeader: PetHeader;
@@ -57,6 +58,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     maxHealth,
     speed,
     growth,
+    variant,
     xp,
     elapsed,
     maxXp,
@@ -78,6 +80,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     maxHealth: number;
     speed: number;
     growth: number;
+    variant?: number;
     xp: number;
     elapsed: number;
     maxXp: number;
@@ -93,6 +96,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   }) {
     super(textures, autoUpdate);
     this.growth = growth;
+    this.variant = variant ?? pickRandomVariant(growth);
     this.xp = xp;
     this.elapsed = elapsed;
     this.maxXp = maxXp;
@@ -215,17 +219,20 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
   static async createAnimation({
     state,
     growth,
+    variant = 0,
   }: {
     state: EPetState;
     growth: number;
+    variant?: number;
   }): Promise<ITexture[]> {
-    return await createOrUpdateAnimation({ state, growth });
+    return await createOrUpdateAnimation({ state, growth, variant });
   }
 
   async updateAnimations(): Promise<void> {
     let texturesToAdd = await createOrUpdateAnimation({
       state: this.state,
       growth: this.growth,
+      variant: this.variant,
     });
     this.textures = texturesToAdd;
     this.play();
@@ -248,6 +255,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
       maxHealth: this.maxHealth,
       speed: this.speed,
       growth: this.growth,
+      variant: this.variant,
       xp: this.xp,
       elapsed: this.elapsed,
       maxXp: this.maxXp,
@@ -266,6 +274,7 @@ export default class Pet extends PIXI.AnimatedSprite implements Character {
     let textures = await Pet.createAnimation({
       state: petToImport.state,
       growth: petToImport.growth,
+      variant: petToImport.variant,
     });
     petToImport.textures = textures;
     let character = new Pet(petToImport);

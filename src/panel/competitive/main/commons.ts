@@ -1,6 +1,7 @@
 import Boss from "../characters/boss/boss";
 import { EPetState } from "../characters/commons";
 import Pet from "../characters/pets/pet";
+import { pickRandomVariant } from "../characters/pets/pet_anim";
 import { DEFAULT_PET, FilesSaved } from "../commons";
 import * as PIXI from "pixi.js";
 import App from "./app";
@@ -90,14 +91,17 @@ export async function setAdult({
 
   const lastPet = app.activeFile.petInGrow;
 
+  const variant = pickRandomVariant(DEFAULT_PET.growth);
   let textures = await Pet.createAnimation({
     state: DEFAULT_PET.state,
     growth: DEFAULT_PET.growth,
+    variant,
   });
 
   app.activeFile.petInGrow = new Pet({
     textures: textures,
     ...DEFAULT_PET,
+    variant,
     app: app,
   });
 

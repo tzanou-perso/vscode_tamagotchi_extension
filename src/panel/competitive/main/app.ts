@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import Pet from "../characters/pets/pet";
+import { pickRandomVariant } from "../characters/pets/pet_anim";
 import Boss from "../characters/boss/boss";
 import { DEFAULT_PET, FilesSaved } from "../commons";
 import Splashscreen from "../../splashscreen";
@@ -204,14 +205,17 @@ export default class App extends PIXI.Application<HTMLCanvasElement> {
     ) {
       newPet = this.activeFile.petInGrow;
     } else {
+      const variant = pickRandomVariant(DEFAULT_PET.growth);
       let textures = await Pet.createAnimation({
         state: DEFAULT_PET.state,
         growth: DEFAULT_PET.growth,
+        variant,
       });
 
       newPet = new Pet({
         textures: textures,
         ...DEFAULT_PET,
+        variant,
         app: this,
       });
       // random speed between 0.5 and 1.5

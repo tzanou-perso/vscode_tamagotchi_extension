@@ -41,6 +41,16 @@ No special requirements or dependencies. Just install the extension and start gr
 
 ## Release Notes
 
+### 0.5.0
+
+🚀🚀🚀 COLORS UPDATE 🚀🚀🚀
+
+### Features
+
+- Add color variants for all tamagotchi growth stages (egg to adult)
+- Each pet randomly picks a color variant at birth and keeps it through all stages
+- Variant is persisted between sessions
+
 ### 0.4.0
 
 🚀🚀🚀 BOSS UPDATE 🚀🚀🚀
